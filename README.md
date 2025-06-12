@@ -14,7 +14,7 @@ We invite all partners, integrators, and developers to join us in expanding the 
 
 ### Alredy created your flow?
 
-- Reach us on [](integrations@2n.com)
+Reach us at [integrations@2n.com](mailto:integrations@2n.com)
 
 ## Caution
 
@@ -38,5 +38,5 @@ The Automation feature is available in 2N Access Commander under the **Advanced*
 
 ## Additional Resources
 
-- [Automation feature in the 2N manuals](https://www.2n.com/en-GB/manuals/22111/3_03/automation/)
+- [Automation feature in 2N manuals](https://www.2n.com/en-GB/manuals/22111/3_03/automation/)
 - []
