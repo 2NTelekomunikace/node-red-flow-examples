@@ -40,4 +40,4 @@ The Automation feature is available in 2N Access Commander under the **Advanced*
 ## Additional Resources
 
 - ***REMOVED***Automation feature in 2N manuals***REMOVED***(https://www.2n.com/en-GB/manuals/22111/3_03/automation/)
-- ***REMOVED******REMOVED***
+- ***REMOVED***Official Node-RED documentation***REMOVED***(https://nodered.org/docs/)
