@@ -12,7 +12,7 @@ At 2N, we have **integrated Node-RED directly into 2N Access Commander** to prov
 
 We invite all partners, integrators, and developers to join us in expanding the possibilities of access automation with Node-RED. Have you created your own Node-RED nodes or flows that work with 2N Access Commander? **Share them with the community!** We're building a library of reusable Node-RED flows and integrations here, on our official 2N GitHub profile, and we’d love to include your contributions. Let’s collaborate to accelerate innovation and empower each other across the 2N ecosystem. 
 
-### Alredy created your flow?
+### Already created your flow?
 
 Reach us at [integrations@2n.com](mailto:integrations@2n.com)
 - Do not forget to provide detailed documentation of your flow, limitations and prerequisites.
