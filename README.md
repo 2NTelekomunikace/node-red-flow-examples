@@ -1,10 +1,10 @@
 ## Node-RED
 
-Node-RED is a powerful, flow-based development tool designed for the visual programming of event-driven applications. Originally developed by IBM, it enables users to connect devices, services, and APIs using an intuitive browser-based editor. Thanks to its low-code approach, Node-RED has gained popularity among developers and system integrators for creating automation workflows quickly and efficiently without requiring extensive coding.
+Node-RED is a powerful, flow-based **development tool** designed for the visual programming of event-driven applications. Originally developed by IBM, it enables users to connect devices, services, and APIs using an **intuitive browser-based editor**. Thanks to its low-code approach, Node-RED has gained popularity among developers and system integrators for creating automation workflows quickly and efficiently without requiring extensive coding.
 
 ## Automation feature
 
-Built on the Node-RED platform, this addition directly offers extensive flow-based programming capabilities to 2N Access Commander. It allows users to connect 2N Access Commander with various third-party systems and automate custom workflows based on events within the platform.
+At 2N, we have **integrated Node-RED directly into 2N Access Commander** to provide our partners and customers with even greater flexibility and customisation options. With Node-RED, you can automate access control workflows, trigger external actions based on events from 2N intercoms and access units, and easily integrate with third-party systems. This brings powerful scripting capabilities into the hands of system administrators — no need for complex backend development. 
 
 !***REMOVED***Automation feature***REMOVED***(automation_feature.png "Automation feature")
 
@@ -22,9 +22,9 @@ To fully utilize this versatile automation tool, it is necessary to bear in mind
 
 ## Supported versions
 
-The Automation feature is available in 2N Access Commander from version 3.2.
+The Automation feature is available in 2N Access Commander from version **3.2**.
 
 ## License
 
-The Automation feature is available in 2N Access Commander under the Advanced, Pro, and Unlimited licenses.
+The Automation feature is available in 2N Access Commander under the **Advanced**, **Pro**, and **Unlimited licenses**.
 
