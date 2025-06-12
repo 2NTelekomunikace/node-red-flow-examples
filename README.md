@@ -6,7 +6,7 @@ Node-RED is a powerful, flow-based development tool designed for the visual prog
 
 Built on the Node-RED platform, this addition directly offers extensive flow-based programming capabilities to 2N Access Commander. It allows users to connect 2N Access Commander with various third-party systems and automate custom workflows based on events within the platform.
 
-![Automation feature](/automation feature.png "Automation feature")
+![Automation feature](automation feature.png "Automation feature")
 
 ## Caution
 
