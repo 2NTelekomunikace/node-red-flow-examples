@@ -15,7 +15,7 @@ We invite all partners, integrators, and developers to join us in expanding the 
 ### Already created your flow?
 
 Reach us at [integrations@2n.com](mailto:integrations@2n.com)
-- Do not forget to provide detailed documentation of your flow, limitations and prerequisites.
+- Do not forget to provide **detailed documentation** of your flow, **limitations** and **prerequisites**.
 
 ## Caution
 
