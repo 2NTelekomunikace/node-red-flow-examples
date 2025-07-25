@@ -16,6 +16,7 @@ We invite all partners, integrators, and developers to join us in expanding the 
 
 Reach us at [integrations@2n.com](mailto:integrations@2n.com)
 - Do not forget to provide **detailed documentation** of your flow, including all relevant **limitations** and **prerequisites**.
+- Please use our [documentation template](node-red-flow-documentation.md) 
 
 ## Caution
 
