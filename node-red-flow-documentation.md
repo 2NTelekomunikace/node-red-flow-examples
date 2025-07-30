@@ -28,11 +28,19 @@ List the key features of the flow using bullet points. For example:
 
 #### Hardware
 
-If the flow requires specific hardware, list it here.
+If the flow requires specific hardware, list it here. List either a specific device or a group of devices if it's relevant to multiple devices.
 
-* **2N Access Unit** 
+* **2N Access Unit** or **2N IP Intercom**
 
-* **2N IP Verso** Mention any hardware specifications if relevant (e.g., `Touch Display module`, `Touch Keypad & RFID module`).
+  * Mention any hardware specifications if relevant (e.g., `Touch Display module`, `Touch Keypad & RFID module`).
+
+* **2N Answering Unit**
+
+* **2N Indoor View**
+
+* **2N IP Verso 2.0**
+
+  * `Touch Display module`
 
 #### Palettes (Nodes)
 
@@ -44,13 +52,15 @@ List all the non-standard nodes required for the flow to work. You should includ
 
 * `node-red-contrib-another-node` (e.g., for a specific function)
 
+* this flow `does not require` any 3<sup>rd</sup> party nodes
+
 ### Installation and Setup
 
 #### 1. Importing the Flow
 
-1. Copy the JSON code from the `flow.json` file (or the raw JSON content if provided directly).
+1. Download the JSON code [flows.json](flows.json) file.
 
-2. In your Node-RED editor (Access Commander Automation), go to the menu (top right) and select **Import**.
+2. In your Node-RED editor (`Access Commander Automation`), go to the menu (top right) and select **Import**.
 
 3. Choose **Clipboard** and paste the JSON code or **select a file to import**.
 
