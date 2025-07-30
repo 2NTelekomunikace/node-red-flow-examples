@@ -173,15 +173,9 @@ Provide a detailed explanation of each major section or logical block of the flo
 
   * `Flow not triggering`: Check the `Inject` node settings or any preceding nodes for correct configuration.
 
-  * `Node-RED not starting`: Check the Node-RED logs for errors related to missing nodes or incorrect syntax in `Function` nodes.
+### Limitations and Known issues:
 
-* **Debugging Tips:**
-
-  * Use `Debug` nodes extensively to inspect message payloads at different stages of the flow.
-
-  * Check the Node-RED console for error messages.
-
-  * Ensure all required nodes are installed via the Palette Manager.
+  * List any possible limitations you have discovered.
 
 ### Author and Versioning
 
