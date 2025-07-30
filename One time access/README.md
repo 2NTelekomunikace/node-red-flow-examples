@@ -50,7 +50,7 @@ This flow provides one-time access for visitors. Once a visitor's credential is 
 
 ### Usage
 
-* Once the flow is deployed, a visitor's credentials will be terminated immediately after their first successful access on any devices added into the 2N Access Commander.
+* Once the flow is deployed, a visitor's credentials will be terminated immediately after their first successful access on **any** devices added into the 2N Access Commander.
 
 ### Flow Diagram
 
@@ -75,6 +75,10 @@ This flow provides one-time access for visitors. Once a visitor's credential is 
 * **Nodes Used:** `REST API`
 
 * **Logic:** Previously constructed payload from the `fuction` node is used to update the visitor via REST API to block any subsequent access attempts using the same credentials, thereby suspending the visitor.
+
+### Limitations and Known issues:
+
+  * The current setup of the flow monitors the Access log from every single device connected to the 2N Access Commander. This means that once visitors use access on any device, their credentials will be suspended. However, you can configure the `Access log` node to monitor only certain devices.s
 
 ### Author and Versioning
 
