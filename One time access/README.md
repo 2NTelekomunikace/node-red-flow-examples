@@ -1,4 +1,4 @@
-# Node-RED Flow Documentation Template
+# Node-RED Flow Documentation
 
 ### Description
 
@@ -58,31 +58,23 @@ This flow provides one-time access for visitors. Once a visitor's credential is 
 
 ### Flow Details and Explanation
 
-Provide a detailed explanation of each major section or logical block of the flow. Use headings to structure this section clearly.
+#### 1. Input Trigger
 
-#### 1. Input Trigger (e.g., "Schedule Checker")
+* **Nodes Used:** `Access log`
 
-* **Purpose:** Briefly describe what this section does.
+* **Logic:** This node monitors access logs from all devices in 2N Access Commander. It is configured to filter only events with the category `Granted`. The output of this node is a message (msg) containing the event data, including information about the person who attempted access.
 
-* **Nodes Used:** List the key nodes (e.g., `Inject`, `Function`, `MQTT In`).
+#### 2. Data Processing
 
-* **Logic:** Explain the logic within this section. For example, "This `Inject` node is configured to trigger every 5 minutes, sending a message to the `Function` node. The `Function` node then checks the current time and day to determine if the automation should proceed."
+* **Nodes Used:** `switch`, `function`
 
-#### 2. Data Processing (e.g., "API Call and Data Transformation")
+* **Logic:** Using a `switch` node, the flow evaluates the incoming message from the `Access log` to determine whether the access was made by a visitor. If so, the message is forwarded to a `function` node, which constructs a JSON payload using the current time as the end validity of the visitor. 
 
-* **Purpose:** Describe the processing steps.
+#### 3. Output Action
 
-* **Nodes Used:** List relevant nodes (e.g., `HTTP Request`, `JSON`, `Change`).
+* **Nodes Used:** `REST API`
 
-* **Logic:** Explain how data is fetched, parsed, and transformed. "The `HTTP Request` node calls the weather API. The response is then parsed by the `JSON` node. Finally, the `Change` node extracts the temperature and humidity values from `msg.payload` and renames them to `msg.temperature` and `msg.humidity`."
-
-#### 3. Output Action (e.g., "Notification Sender")
-
-* **Purpose:** Describe the final action.
-
-* **Nodes Used:** List relevant nodes (e.g., `Telegram Sender`, `Debug`).
-
-* **Logic:** Explain how the processed data is used. "The `Telegram Sender` node constructs a message using `msg.temperature` and `msg.humidity` and sends it to the configured chat ID. A `Debug` node is also connected to show the final message in the debug sidebar."
+* **Logic:** Previously constructed payload from the `fuction` node is used to update the visitor via REST API to block any subsequent access attempts using the same credentials, thereby suspending the visitor.
 
 ### Author and Versioning
 
