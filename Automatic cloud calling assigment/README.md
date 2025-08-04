@@ -20,7 +20,7 @@ This flow automatically creates and assigns phone numbers from the My2N cloud to
 
 #### My2N account
 
-* Cloud calling is a paid feature and requires a license
+* Cloud calling is a paid feature and **requires a license**.
 
 ### Installation and Setup
 
@@ -36,19 +36,15 @@ This flow automatically creates and assigns phone numbers from the My2N cloud to
 
 #### 2. Configuration
 
-* Provide clear, step-by-step instructions on how to configure the flow.
+  * **My2N Settings**
 
-* Explain which nodes need to be edited and what parameters need to be set.
+    * Locate the `change` node (*setMy2NDetails*).
 
-  * **Example: MQTT Broker Settings**
+    * Double-click on the node to open its properties.
 
-    * Locate the `MQTT In` and `MQTT Out` nodes.
+    * Configure the My2N details (username, password, companyId and siteId).
 
-    * Double-click each node to open its properties.
-
-    * Configure the MQTT broker details (Server, Port, Client ID, Username, Password if required).
-
-    * Ensure the topics are correctly set for your application.
+    * Ensure everyting is set correctly.
 
   * **Example: API Key Configuration**
 

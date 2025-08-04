@@ -84,40 +84,34 @@ If you haven't already installed the required palettes, you can do so via the No
 
   * **Example: MQTT Broker Settings**
 
-    * Locate the `MQTT In` and `MQTT Out` nodes.
+    1. Locate the `MQTT In` and `MQTT Out` nodes.
 
-    * Double-click each node to open its properties.
+    2. Double-click each node to open its properties.
 
-    * Configure the MQTT broker details (Server, Port, Client ID, Username, Password if required).
+    3. Configure the MQTT broker details (Server, Port, Client ID, Username, Password if required).
 
-    * Ensure the topics are correctly set for your application.
+    4. Ensure the topics are correctly set for your application and click on `Done`.
 
   * **Example: API Key Configuration**
 
     * For nodes requiring API keys (e.g., `HTTP Request` to an external service), explain where to obtain the key.
 
-    * Instruct the user to store the API key securely, preferably in a Node-RED `Context` variable (e.g., `global.get('apiKey')`) or environment variable, rather than directly in the node.
+    * Instruct the user to store the API key securely, preferably in a Node-RED `Context` variable or environment variable, rather than directly in the node.
 
-    * **How to set a global context variable:**
+    * **Example: Change variable in node:**
 
-      1. Open your Node-RED `settings.js` file (usually located in `~/.node-red`).
+      1. Locate the `function` (*customNameOfFunction*) node.
 
-      2. Find the `contextStorage` section and enable `memory` or `file` storage if not already.
+      2. Double-click the node to open its properties.
 
-      3. Add or modify the `functionGlobalContext` section to include your variable:
+      3. Modify the `validity` variable:
 
          ```javascript
-         functionGlobalContext: {
-             // Example: API Key
-             apiKey: "YOUR_API_KEY_HERE",
-             // Example: Another secret
-             anotherSecret: process.env.ANOTHER_SECRET_ENV_VAR
-     ***REMOVED***
+          // Set the validity period for the session cookie
+          var validity = 6000; // milliseconds
          ```
 
-      4. Restart Node-RED.
-
-      5. In your function nodes, you can then access it using `global.get('apiKey')`.
+      4. Save the change by pressing `Done`.
 
 * Include details on setting up any external services or dependencies.
 
