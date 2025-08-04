@@ -1,58 +1,26 @@
-# Node-RED Flow Documentation Template
+# Node-RED Flow Documentation
 
 ### Description
 
-Briefly explain what this flow does, what problem it solves, or what functionality it provides. Include the main purpose and a high-level summary of its operation.
+This flow automatically creates and assigns phone numbers from the My2N cloud to newly created users in the 2N Access Commander. It solves the problem of manual number provisioning by using the My2N cloud API to create a mobile video device and then assigning its number to the newly created users, thereby automating the setup of My2N cloud calling.
 
 ### Features
 
-List the key features of the flow using bullet points. For example:
+* Automated assignment of My2N phone numbers, eliminating manual configuration.
 
-* Integrates with a specific API (e.g., weather data, smart home devices).
+* Uses the My2N cloud API to create mobile video devices and assigns their phone numbers to the created users.
 
-* Sends notifications (e.g., via email, Telegram, Pushover).
-
-* Processes data and performs calculations.
-
-* Automates a specific task.
+* Handles automatic deletion on the My2N when a user is deleted from the 2N Access Commander.
 
 ### Requirements
 
 #### 2N Access Commander
 
-* Specify the minimum required version (e.g., `3.4.0` or later).
+* `3.4.0`
 
-#### 2N OS
+#### My2N account
 
-* Specify the minimum required version (e.g., `2.48.0` or later).
-
-#### Hardware
-
-If the flow requires specific hardware, list it here. List either a specific device or a group of devices if it's relevant to multiple devices.
-
-* **2N Access Unit** or **2N IP Intercom**
-
-  * Mention any hardware specifications if relevant (e.g., `Touch Display module`, `Touch Keypad & RFID module`).
-
-* **2N Answering Unit**
-
-* **2N Indoor View**
-
-* **2N IP Verso 2.0**
-
-  * `Touch Display module`
-
-#### Palettes (Nodes)
-
-List all the non-standard nodes required for the flow to work. You should include the name of the package and a link to its npm or GitHub page for easy installation.
-
-* `node-red-node-email` (e.g., for integrating with a specific service)
-
-* `@flowfuse/node-red-dashboard` (if a dashboard is used)
-
-* `node-red-contrib-another-node` (e.g., for a specific function)
-
-* this flow `does not require` any 3<sup>rd</sup> party nodes
+* Cloud calling is a paid feature and requires a license
 
 ### Installation and Setup
 
@@ -66,17 +34,7 @@ List all the non-standard nodes required for the flow to work. You should includ
 
 4. Click **Import**.
 
-#### 2. Installing Required Nodes
-
-If you haven't already installed the required palettes, you can do so via the Node-RED Palette Manager:
-
-1. Go to the Node-RED menu (top right) and select **Manage palette**.
-
-2. Switch to the **Install** tab.
-
-3. Search for each required node (e.g., `@flowfuse/node-red-dashboard`) and click **install**.
-
-#### 3. Configuration
+#### 2. Configuration
 
 * Provide clear, step-by-step instructions on how to configure the flow.
 
@@ -179,17 +137,15 @@ Provide a detailed explanation of each major section or logical block of the flo
 
 ### Author and Versioning
 
-* **Author:** \***REMOVED***Your Name or GitHub Handle\***REMOVED***
+* **Author:** ***REMOVED***Kristian Velen***REMOVED***(https://github.com/kv-0000)
 
-* **Created On:** `***REMOVED***YYYY-MM-DD***REMOVED***`
+* **Created On:** `***REMOVED***2025-08-04***REMOVED***`
 
-* **Last Verified Working On:** `***REMOVED***YYYY-MM-DD***REMOVED***` (Date when it was last confirmed to be fully functional in a production/test environment)
+* **Last Verified Working On:** `***REMOVED***2025-08-04***REMOVED***`
 
 * **Verified with:**
 
-  * **2N Access Commander:** `***REMOVED***Specific Version, e.g., 3.1.0***REMOVED***`
-
-  * **2N OS:** `***REMOVED***Specific Version, e.g., 18.17.1***REMOVED***`
+  * **2N Access Commander:** `***REMOVED***3.4.0***REMOVED***`
 
 
 ### License
