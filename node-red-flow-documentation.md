@@ -147,23 +147,17 @@ Provide a detailed explanation of each major section or logical block of the flo
 
 #### 1. Input Trigger (e.g., "Schedule Checker")
 
-* **Purpose:** Briefly describe what this section does.
-
 * **Nodes Used:** List the key nodes (e.g., `Inject`, `Function`, `MQTT In`).
 
 * **Logic:** Explain the logic within this section. For example, "This `Inject` node is configured to trigger every 5 minutes, sending a message to the `Function` node. The `Function` node then checks the current time and day to determine if the automation should proceed."
 
 #### 2. Data Processing (e.g., "API Call and Data Transformation")
 
-* **Purpose:** Describe the processing steps.
-
 * **Nodes Used:** List relevant nodes (e.g., `HTTP Request`, `JSON`, `Change`).
 
 * **Logic:** Explain how data is fetched, parsed, and transformed. "The `HTTP Request` node calls the weather API. The response is then parsed by the `JSON` node. Finally, the `Change` node extracts the temperature and humidity values from `msg.payload` and renames them to `msg.temperature` and `msg.humidity`."
 
 #### 3. Output Action (e.g., "Notification Sender")
-
-* **Purpose:** Describe the final action.
 
 * **Nodes Used:** List relevant nodes (e.g., `Email Sender`, `Debug`).
 
