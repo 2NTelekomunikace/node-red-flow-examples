@@ -66,7 +66,7 @@ This flow automatically creates and assigns phone numbers from the My2N cloud to
 
 * **Nodes Used:** `inject`, `System log`
 
-* **Logic:** The `inject` node is configured to trigger after deployment and then every 50 minutes, sending a message to the `http request` (authRequest) node to authenticate with the My2N API and receive an authentication token.  
+* **Logic:** The `inject` node is configured to trigger after deployment and then every 50 minutes, sending a message to the `http request` (authRequest) node to authenticate with the My2N API and receive an authentication token.
 This token must be periodically refreshed.\Once the System is blah blah
 
 #### 2. Data Processing (e.g., "API Call and Data Transformation")
