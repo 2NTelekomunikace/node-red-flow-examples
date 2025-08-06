@@ -564,7 +564,7 @@
                 "p": "companyId",
                 "pt": "flow",
                 "to": "48287",
-                "tot": "env"
+                "tot": "num"
             },
             {
                 "t": "set",

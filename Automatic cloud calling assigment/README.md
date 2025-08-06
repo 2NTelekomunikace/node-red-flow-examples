@@ -48,7 +48,7 @@ This flow automatically creates and assigns phone numbers from the My2N cloud to
     
       * ![Where to locate company and site ID](comany_site_ID.png "CompanyID&SiteID")
 
-    4. Ensure everyting is set correctly, clikc on `Done` and `Deploy` the flow.
+    4. Ensure everyting is set correctly, click on `Done` and `Deploy` the flow.
 
 ### Usage
 
@@ -86,9 +86,9 @@ If a user was deleted from the 2N Access Commander, any associated device found 
 
 * **Common Issues:**
 
-  * `Warn: "Unauthorized, wrong username or password."`: Ensure the username and password are correctly configured in the `change` (*setMy2NDetails*) node.
+  * **Node Warn: "Unauthorized, wrong username or password.":** Ensure the username and password are correctly configured in the `change` (*setMy2NDetails*) node.
 
-  * `Phone numbers are not created`: The Company ID or Site ID are not set up properly, or a device with the same name (user's name) already exists on My2N site.
+  * **Phone numbers are not created**: The Company ID or Site ID are not set up properly, or a device with the same name (user's name) already exists on My2N site.
 
 ### Limitations and Known issues:
 
