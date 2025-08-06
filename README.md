@@ -6,7 +6,7 @@ Node-RED is a powerful, flow-based **development tool** designed for the visual 
 
 At 2N, we have **integrated Node-RED directly into 2N Access Commander** to provide our partners and customers with even greater flexibility and customisation options. With Node-RED, you can automate workflows, trigger external actions, and easily integrate with third-party systems. This brings powerful scripting capabilities into the hands of system administrators — no need for complex backend development. 
 
-!***REMOVED***Automation feature***REMOVED***(automation_feature.png "Automation feature")
+![Automation feature](automation_feature.png "Automation feature")
 
 ## Share Your Node-RED Solutions
 
@@ -14,9 +14,9 @@ We invite all partners, integrators, and developers to join us in expanding the 
 
 ### Already created your flow?
 
-Reach us at ***REMOVED***integrations@2n.com***REMOVED***(mailto:integrations@2n.com)
+Reach us at [integrations@2n.com](mailto:integrations@2n.com)
 - Do not forget to provide **detailed documentation** of your flow, including all relevant **limitations** and **prerequisites**.
-- Please use our ***REMOVED***documentation template***REMOVED***(node-red-flow-documentation.md) 
+- Please use our [documentation template](node-red-flow-documentation.md) 
 
 ## Caution
 
@@ -36,5 +36,5 @@ The Automation feature is available in 2N Access Commander from version **3.2** 
 
 ## Additional Resources
 
-- ***REMOVED***Automation feature in 2N manuals***REMOVED***(https://www.2n.com/en-GB/manuals/22111/3_03/automation/)
-- ***REMOVED***Official Node-RED documentation***REMOVED***(https://nodered.org/docs/)
+- [Automation feature in 2N manuals](https://www.2n.com/en-GB/manuals/22111/3_03/automation/)
+- [Official Node-RED documentation](https://nodered.org/docs/)
