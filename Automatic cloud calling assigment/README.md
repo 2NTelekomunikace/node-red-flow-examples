@@ -88,7 +88,7 @@ If a user was deleted from the 2N Access Commander, any associated device found 
 
   * `Warn: "Unauthorized, wrong username or password."`: Ensure the username and password are correctly configured in the `change` (*setMy2NDetails*) node.
 
-  * `Phone numbers are not created`: The Company ID or Site ID are not set up properly, or a device with the same name (user's name) already exists.
+  * `Phone numbers are not created`: The Company ID or Site ID are not set up properly, or a device with the same name (user's name) already exists on My2N site.
 
 ### Limitations and Known issues:
 
@@ -102,7 +102,7 @@ If a user was deleted from the 2N Access Commander, any associated device found 
 
   * Phone numbers won't be created for users with **duplicate names** in the 2N Access Commander (My2N does not allow duplicate names on calling devices).
 
-  * It is not possible to select which users receive the phone number and which do not.
+  * It is not possible to **select** which **users** receive the phone number and which do not.
 
 ### Author and Versioning
 
