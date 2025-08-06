@@ -96,22 +96,32 @@ If you haven't already installed the required palettes, you can do so via the No
 
     * For nodes requiring API keys (e.g., `HTTP Request` to an external service), explain where to obtain the key.
 
-    * Instruct the user to store the API key securely, preferably in a Node-RED `Context` variable or environment variable, rather than directly in the node.
+    * Instruct the user where to store the API key securely, preferably in a Node-RED `Context` variable or environment variable.
 
-    * **Example: Change variable in node:**
+      * **Set Global Environment Variables** 
 
-      1. Locate the `function` (*customNameOfFunction*) node.
+        1. Go to the Node-RED menu (top right) and select **Settings**.
 
-      2. Double-click the node to open its properties.
+        2. From the left menu select **Environment**.
 
-      3. Modify the `validity` variable:
+        3. Add or edit (if prefilled) variable `API key`, select `credential` variable type and fill in your API key.
+        
+        4. Once filled in, you can **Close** the window.  
 
-         ```javascript
-          // Set the validity period for the session cookie
-          var validity = 6000; // milliseconds
-         ```
+  * **Example: Change variable in node**
 
-      4. Save the change by pressing `Done`.
+    1. Locate the `function` (*customNameOfFunction*) node.
+
+    2. Double-click the node to open its properties.
+
+    3. Modify the `validity` variable:
+
+        ```javascript
+        // Set the validity period for the session cookie
+        var validity = 6000; // milliseconds
+        ```
+
+    4. Save the change by pressing `Done`.
 
 * Include details on setting up any external services or dependencies.
 
