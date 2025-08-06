@@ -66,22 +66,21 @@ This flow automatically creates and assigns phone numbers from the My2N cloud to
 
 * **Nodes Used:** `inject`, `System log`
 
-* **Logic:** The `inject` node is configured to trigger after deployment and then every 50 minutes, sending a message to the `http request` (authRequest) node to authenticate with the My2N API and receive an authentication token.
-This token must be periodically refreshed.\Once the System is blah blah
+* **Logic:** The `inject` node is configured to trigger after deployment and then every 50 minutes, sending a message to the `http request` (authRequest) node to authenticate with the My2N API and receive an authentication token. This token must be periodically refreshed.  
+The `System log` node listens for `UserAction` events. It sends each log to a `switch` node that checks if a user was created or deleted. Based on that check, it either calls a request to create a new phone number or to delete an existing one.
 
-#### 2. Data Processing (e.g., "API Call and Data Transformation")
+#### 2. Data Processing
 
-* **Purpose:** Describe the processing steps.
+* **Nodes Used:** `http request`, `function`
 
-* **Nodes Used:** List relevant nodes (e.g., `HTTP Request`, `JSON`, `Change`).
-
-* **Logic:** Explain how data is fetched, parsed, and transformed. "The `HTTP Request` node calls the weather API. The response is then parsed by the `JSON` node. Finally, the `Change` node extracts the temperature and humidity values from `msg.payload` and renames them to `msg.temperature` and `msg.humidity`."
+* **Logic:** If a new user is created, the `function` (*compositeUser*) node constructs a JSON body that will be forwarded to the `http request` (*createUser&Device*) node, which will call the My2N API to create a new calling device using the name and email of the newly created user. If the user is deleted, the `http request` node is used to filter devices with the deleted user's name.
 
 #### 3. Output Action
 
-* **Nodes Used:** List relevant nodes (e.g., `Telegram Sender`, `Debug`).
+* **Nodes Used:** `REST API`, `Write system log`, `http request`
 
-* **Logic:** Explain how the processed data is used. "The `Telegram Sender` node constructs a message using `msg.temperature` and `msg.humidity` and sends it to the configured chat ID. A `Debug` node is also connected to show the final message in the debug sidebar."
+* **Logic:** The received phone number from My2N is sent to the `REST API` (*setPhoneNumber*) node, this node updates the newly created user's phone number and then makes a final call using `http request` (*consumeLicense*) to activate the license. If there aren't enough available licenses, the flow will use the `Write system log` node to notify the administrator.  
+If a user was deleted from the 2N Access Commander, any associated device found on My2N will be also removed. If the user did not have administrator rights on the My2N site, their account (email) will also be deleted.
 
 ### Troubleshooting
 
@@ -102,6 +101,8 @@ This token must be periodically refreshed.\Once the System is blah blah
   * If you manually delete a device (phone number) from the My2N portal, it **will not** automatically delete the corresponding phone number for that user in 2N Access Commander.
 
   * Phone numbers won't be created for users with **duplicate names** in the 2N Access Commander (My2N does not allow duplicate names on calling devices).
+
+  * It is not possible to select which users receive the phone number and which do not.
 
 ### Author and Versioning
 
