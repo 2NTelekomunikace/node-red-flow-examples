@@ -58,7 +58,7 @@ List all the non-standard nodes required for the flow to work. You should includ
 
 #### 1. Importing the Flow
 
-1. Download the JSON code ***REMOVED***flows.json***REMOVED***(flows.json) file.
+1. Download the JSON code [flows.json](flows.json) file.
 
 2. In your Node-RED editor (`Access Commander Automation`), go to the menu (top right) and select **Import**.
 
@@ -139,7 +139,7 @@ If you haven't already installed the required palettes, you can do so via the No
 
 ### Flow Diagram
 
-!***REMOVED***Flow Diagram***REMOVED***(diagram.png "Flow Diagram")
+![Flow Diagram](diagram.png "Flow Diagram")
 
 ### Flow Details and Explanation
 
@@ -183,19 +183,19 @@ Provide a detailed explanation of each major section or logical block of the flo
 
 ### Author and Versioning
 
-* **Author:** \***REMOVED***Your Name or GitHub Handle\***REMOVED***
+* **Author:** \[Your Name or GitHub Handle\]
 
-* **Created On:** `***REMOVED***YYYY-MM-DD***REMOVED***`
+* **Created On:** `[YYYY-MM-DD]`
 
-* **Last Verified Working On:** `***REMOVED***YYYY-MM-DD***REMOVED***` (Date when it was last confirmed to be fully functional in a production/test environment)
+* **Last Verified Working On:** `[YYYY-MM-DD]` (Date when it was last confirmed to be fully functional in a production/test environment)
 
 * **Verified with:**
 
-  * **2N Access Commander:** `***REMOVED***Specific Version, e.g., 3.1.0***REMOVED***`
+  * **2N Access Commander:** `[Specific Version, e.g., 3.1.0]`
 
-  * **2N OS:** `***REMOVED***Specific Version, e.g., 18.17.1***REMOVED***`
+  * **2N OS:** `[Specific Version, e.g., 18.17.1]`
 
 
 ### License
 
-This Node-RED flow is released under the ***REMOVED***MIT License***REMOVED***(https://opensource.org/licenses/MIT).
+This Node-RED flow is released under the [MIT License](https://opensource.org/licenses/MIT).

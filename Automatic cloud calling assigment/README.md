@@ -26,7 +26,7 @@ This flow automatically creates and assigns phone numbers from the My2N cloud to
 
 #### 1. Importing the Flow
 
-1. Download the JSON code ***REMOVED***flows.json***REMOVED***(flows.json) file.
+1. Download the JSON code [flows.json](flows.json) file.
 
 2. In your Node-RED editor (`Access Commander Automation`), go to the menu (top right) and select **Import**.
 
@@ -42,7 +42,8 @@ This flow automatically creates and assigns phone numbers from the My2N cloud to
 
     * Double-click on the node to open its properties.
 
-    * Configure the My2N details (username, password, companyId and siteId).
+    * Configure the My2N details (username, password, companyId and siteId), to retreive the companyId and siteId open the site in the My2N.com and check the URL:
+    
 
     * Ensure everyting is set correctly.
 
@@ -66,7 +67,7 @@ This flow automatically creates and assigns phone numbers from the My2N cloud to
              apiKey: "YOUR_API_KEY_HERE",
              // Example: Another secret
              anotherSecret: process.env.ANOTHER_SECRET_ENV_VAR
-     ***REMOVED***
+         },
          ```
 
       4. Restart Node-RED.
@@ -89,7 +90,7 @@ This flow automatically creates and assigns phone numbers from the My2N cloud to
 
 ### Flow Diagram
 
-!***REMOVED***Flow Diagram***REMOVED***(diagram.png "Flow Diagram")
+![Flow Diagram](diagram.png "Flow Diagram")
 
 ### Flow Details and Explanation
 
@@ -133,17 +134,17 @@ Provide a detailed explanation of each major section or logical block of the flo
 
 ### Author and Versioning
 
-* **Author:** ***REMOVED***Kristian Velen***REMOVED***(https://github.com/kv-0000)
+* **Author:** [Kristian Velen](https://github.com/kv-0000)
 
-* **Created On:** `***REMOVED***2025-08-04***REMOVED***`
+* **Created On:** `[2025-08-04]`
 
-* **Last Verified Working On:** `***REMOVED***2025-08-04***REMOVED***`
+* **Last Verified Working On:** `[2025-08-04]`
 
 * **Verified with:**
 
-  * **2N Access Commander:** `***REMOVED***3.4.0***REMOVED***`
+  * **2N Access Commander:** `[3.4.0]`
 
 
 ### License
 
-This Node-RED flow is released under the ***REMOVED***MIT License***REMOVED***(https://opensource.org/licenses/MIT).
+This Node-RED flow is released under the [MIT License](https://opensource.org/licenses/MIT).
