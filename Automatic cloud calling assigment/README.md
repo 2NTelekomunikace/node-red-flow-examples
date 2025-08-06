@@ -118,4 +118,4 @@ If a user was deleted from the 2N Access Commander, any associated device found 
 
 ### License
 
-This Node-RED flow is released under the [MIT License](https://opensource.org/licenses/MIT).
+This Node-RED flow is released under the [MIT License](https://opensource.org/licenses/MIT).P
