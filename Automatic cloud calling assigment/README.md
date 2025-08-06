@@ -43,7 +43,8 @@ This flow automatically creates and assigns phone numbers from the My2N cloud to
     * Double-click on the node to open its properties.
 
     * Configure the My2N details (username, password, companyId and siteId), to retreive the companyId and siteId open the site in the My2N.com and check the URL: 
-    ![Where to locate company and site ID](comany_site_ID.png "CompanyID&SiteID")
+    
+    * ![Where to locate company and site ID](comany_site_ID.png "CompanyID&SiteID")
 
     * Ensure everyting is set correctly.
 
