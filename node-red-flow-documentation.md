@@ -10,7 +10,7 @@ List the key features of the flow using bullet points. For example:
 
 * Integrates with a specific API (e.g., weather data, smart home devices).
 
-* Sends notifications (e.g., via email, Telegram, Pushover).
+* Sends notifications (e.g., via email, Pushover).
 
 * Processes data and performs calculations.
 
@@ -133,7 +133,7 @@ If you haven't already installed the required palettes, you can do so via the No
 
 * Describe the expected inputs that trigger the flow (e.g., `Inject a timestamp`, `Send a message to the "start" topic with a payload of "true"`, `HTTP POST request to /my-endpoint`).
 
-* Describe the expected outputs or behavior (e.g., `The flow will send a notification to Telegram`, `It will update a dashboard chart`, `It will log data to a database`).
+* Describe the expected outputs or behavior (e.g., `The flow will send a notification via email`, `It will update a dashboard chart`, `It will log data to a database`).
 
 * Provide examples of input messages if relevant.
 
@@ -165,9 +165,9 @@ Provide a detailed explanation of each major section or logical block of the flo
 
 * **Purpose:** Describe the final action.
 
-* **Nodes Used:** List relevant nodes (e.g., `Telegram Sender`, `Debug`).
+* **Nodes Used:** List relevant nodes (e.g., `Email Sender`, `Debug`).
 
-* **Logic:** Explain how the processed data is used. "The `Telegram Sender` node constructs a message using `msg.temperature` and `msg.humidity` and sends it to the configured chat ID. A `Debug` node is also connected to show the final message in the debug sidebar."
+* **Logic:** Explain how the processed data is used. "The `Email Sender` node constructs a message using `msg.temperature` and `msg.humidity` and sends it to the configured chat ID. A `Debug` node is also connected to show the final message in the debug sidebar."
 
 ### Troubleshooting
 
