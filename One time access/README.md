@@ -36,7 +36,7 @@ This flow provides one-time access for visitors. Once a visitor's credential is 
 
 #### 1. Importing the Flow
 
-1. Download the JSON code [flows.json](flows.json) file.
+1. Download the JSON code [flows.json](flows.json) file or copy its contents.
 
 2. In your Node-RED editor (`Access Commander Automation`), go to the menu (top right) and select **Import**.
 

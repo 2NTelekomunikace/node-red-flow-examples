@@ -28,7 +28,7 @@ This flow automatically creates and assigns phone numbers from the My2N cloud to
 
 #### 1. Importing the Flow
 
-1. Download the JSON code [flows.json](flows.json) file.
+1. Download the JSON code [flows.json](flows.json) file or copy its contents.
 
 2. In your Node-RED editor (`Access Commander Automation`), go to the menu (top right) and select **Import**.
 
