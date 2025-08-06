@@ -22,6 +22,8 @@ This flow automatically creates and assigns phone numbers from the My2N cloud to
 
 * Cloud calling is a paid feature and **requires a license**.
 
+* My2N site **must** be a type of **Commercial**.
+
 ### Installation and Setup
 
 #### 1. Importing the Flow
@@ -38,56 +40,21 @@ This flow automatically creates and assigns phone numbers from the My2N cloud to
 
   * **My2N Settings**
 
-    * Locate the `change` node (*setMy2NDetails*).
+    1. Locate the `change` node (*setMy2NDetails*).
 
-    * Double-click on the node to open its properties.
+    2. Double-click on the node to open its properties.
 
-    * Configure the My2N details (username, password, companyId, and siteId). To retrieve the company ID and site ID, open the site in [my2n.com](https://my2n.com) and check the URL:
+    3. Configure the My2N details (username, password, companyId, and siteId). To retrieve the company ID and site ID, open the site in [my2n.com](https://my2n.com) and check the URL:
     
       * ![Where to locate company and site ID](comany_site_ID.png "CompanyID&SiteID")
 
-    * Ensure everyting is set correctly.
-
-  * **Example: API Key Configuration**
-
-    * For nodes requiring API keys (e.g., `HTTP Request` to an external service), explain where to obtain the key.
-
-    * Instruct the user to store the API key securely, preferably in a Node-RED `Context` variable (e.g., `global.get('apiKey')`) or environment variable, rather than directly in the node.
-
-    * **How to set a global context variable:**
-
-      1. Open your Node-RED `settings.js` file (usually located in `~/.node-red`).
-
-      2. Find the `contextStorage` section and enable `memory` or `file` storage if not already.
-
-      3. Add or modify the `functionGlobalContext` section to include your variable:
-
-         ```javascript
-         functionGlobalContext: {
-             // Example: API Key
-             apiKey: "YOUR_API_KEY_HERE",
-             // Example: Another secret
-             anotherSecret: process.env.ANOTHER_SECRET_ENV_VAR
-         },
-         ```
-
-      4. Restart Node-RED.
-
-      5. In your function nodes, you can then access it using `global.get('apiKey')`.
-
-* Include details on setting up any external services or dependencies.
-
-* Use screenshots or animated GIFs if the configuration is complex.
+    4. Ensure everyting is set correctly, clikc on `Done` and `Deploy` the flow.
 
 ### Usage
 
-* Explain how to use the flow after it has been configured and deployed.
+* Once the flow is deployed, any newly created user in the 2N Access Commander will automatically receive a phone number from the My2N Cloud.
 
-* Describe the expected inputs that trigger the flow (e.g., `Inject a timestamp`, `Send a message to the "start" topic with a payload of "true"`, `HTTP POST request to /my-endpoint`).
-
-* Describe the expected outputs or behavior (e.g., `The flow will send a notification to Telegram`, `It will update a dashboard chart`, `It will log data to a database`).
-
-* Provide examples of input messages if relevant.
+* It is strongly recommended to **fill in the user's email address** during creation so that they can use their My2N login details for the My2N application and be notified via email. Without a filled email address, the notification will be sent to the user whose username was used to connect with the My2N API.
 
 ### Flow Diagram
 
@@ -95,15 +62,12 @@ This flow automatically creates and assigns phone numbers from the My2N cloud to
 
 ### Flow Details and Explanation
 
-Provide a detailed explanation of each major section or logical block of the flow. Use headings to structure this section clearly.
+#### 1. Input Trigger
 
-#### 1. Input Trigger (e.g., "Schedule Checker")
+* **Nodes Used:** `inject`, `System log`
 
-* **Purpose:** Briefly describe what this section does.
-
-* **Nodes Used:** List the key nodes (e.g., `Inject`, `Function`, `MQTT In`).
-
-* **Logic:** Explain the logic within this section. For example, "This `Inject` node is configured to trigger every 5 minutes, sending a message to the `Function` node. The `Function` node then checks the current time and day to determine if the automation should proceed."
+* **Logic:** The `inject` node is configured to trigger after deployment and then every 50 minutes, sending a message to the `http request` (authRequest) node to authenticate with the My2N API and receive an authentication token.  
+This token must be periodically refreshed.\Once the System is blah blah
 
 #### 2. Data Processing (e.g., "API Call and Data Transformation")
 
@@ -113,9 +77,7 @@ Provide a detailed explanation of each major section or logical block of the flo
 
 * **Logic:** Explain how data is fetched, parsed, and transformed. "The `HTTP Request` node calls the weather API. The response is then parsed by the `JSON` node. Finally, the `Change` node extracts the temperature and humidity values from `msg.payload` and renames them to `msg.temperature` and `msg.humidity`."
 
-#### 3. Output Action (e.g., "Notification Sender")
-
-* **Purpose:** Describe the final action.
+#### 3. Output Action
 
 * **Nodes Used:** List relevant nodes (e.g., `Telegram Sender`, `Debug`).
 
@@ -123,15 +85,23 @@ Provide a detailed explanation of each major section or logical block of the flo
 
 ### Troubleshooting
 
-* **Common Issues:** List any known issues and their solutions.
+* **Common Issues:**
 
-  * `Error: "Missing credentials"`: Ensure all API keys and sensitive information are correctly configured in the respective nodes or global context.
+  * `Warn: "Unauthorized, wrong username or password."`: Ensure the username and password are correctly configured in the `change` (*setMy2NDetails*) node.
 
-  * `Flow not triggering`: Check the `Inject` node settings or any preceding nodes for correct configuration.
+  * `Phone numbers are not created`: The Company ID or Site ID are not set up properly, or a device with the same name (user's name) already exists.
 
 ### Limitations and Known issues:
 
-  * List any possible limitations you have discovered.
+  * This flow works only for **newly created users**, old users will not be affected.
+  
+  * All phone numbers are created in the first position, potentially overwriting whatever was in that position (e.g. a user with a phone number created by CSV import).
+
+  * If you manually delete a phone number from a user in 2N Access Commander, it **will not** be synchronised back or deleted from the My2N portal.
+
+  * If you manually delete a device (phone number) from the My2N portal, it **will not** automatically delete the corresponding phone number for that user in 2N Access Commander.
+
+  * Phone numbers won't be created for users with **duplicate names** in the 2N Access Commander (My2N does not allow duplicate names on calling devices).
 
 ### Author and Versioning
 
@@ -139,12 +109,11 @@ Provide a detailed explanation of each major section or logical block of the flo
 
 * **Created On:** `[2025-08-04]`
 
-* **Last Verified Working On:** `[2025-08-04]`
+* **Last Verified Working On:** `[2025-08-06]`
 
 * **Verified with:**
 
   * **2N Access Commander:** `[3.4.0]`
-
 
 ### License
 

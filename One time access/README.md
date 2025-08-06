@@ -94,7 +94,6 @@ This flow provides one-time access for visitors. Once a visitor's credential is 
 
   * **2N OS:** `[2.46.0]`
 
-
 ### License
 
 This Node-RED flow is released under the [MIT License](https://opensource.org/licenses/MIT).

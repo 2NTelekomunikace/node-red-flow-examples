@@ -195,7 +195,6 @@ Provide a detailed explanation of each major section or logical block of the flo
 
   * **2N OS:** `[Specific Version, e.g., 18.17.1]`
 
-
 ### License
 
 This Node-RED flow is released under the [MIT License](https://opensource.org/licenses/MIT).
