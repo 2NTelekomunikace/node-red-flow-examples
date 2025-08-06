@@ -1,0 +1,83 @@
+[
+    {
+        "id": "2e1170f91599e528",
+        "type": "tab",
+        "label": "one time access for visitors",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "80ba4a03259462fd",
+        "type": "2nac-access-log",
+        "z": "2e1170f91599e528",
+        "filter": "{\"category\":\"Granted\"}",
+        "name": "",
+        "filtertype": "json",
+        "x": 200,
+        "y": 220,
+        "wires": [
+            [
+                "98870d1ca58de779"
+            ]
+        ]
+    },
+    {
+        "id": "d16f92f64af7cc37",
+        "type": "2nac-rest-api",
+        "z": "2e1170f91599e528",
+        "name": "end validity",
+        "method": "PATCH",
+        "endpoint": "visitors/{visitorId}",
+        "query": "",
+        "senderr": true,
+        "x": 650,
+        "y": 220,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "21f320fc21a2a596",
+        "type": "function",
+        "z": "2e1170f91599e528",
+        "name": "getVisitorId",
+        "func": "var time = new Date().toLocaleString()\nmsg.visitorId = msg.payload.Person.Id\nmsg.body = [{\"op\":\"replace\",\"path\":\"/VisitTo\",\"value\":time},{\"op\":\"replace\",\"path\":\"/IsSuspended\",\"value\":true}]\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 490,
+        "y": 220,
+        "wires": [
+            [
+                "d16f92f64af7cc37"
+            ]
+        ]
+    },
+    {
+        "id": "98870d1ca58de779",
+        "type": "switch",
+        "z": "2e1170f91599e528",
+        "name": "isVisitor?",
+        "property": "payload.Person.IsVisitor",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "true"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 340,
+        "y": 220,
+        "wires": [
+            [
+                "21f320fc21a2a596"
+            ]
+        ]
+    }
+]
