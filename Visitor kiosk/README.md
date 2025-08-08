@@ -2,57 +2,23 @@
 
 ### Description
 
-Briefly explain what this flow does, what problem it solves, or what functionality it provides. Include the main purpose and a high-level summary of its operation.
+This flow powers a web-based visitor kiosk hosted in 2N Access Commander, streamlining the visitor check-in process. Visitors can easily self-onboard by entering their details into a user-friendly interface. The flow then automatically creates a visitor record in the Access Commander, generates a unique QR code for access, and emails the credentials directly to the visitor.
+
+This automated system allows for a seamless and efficient arrival experience, providing visitors with the necessary access credentials for the building and lifts without manual intervention from a receptionist.
 
 ### Features
 
-List the key features of the flow using bullet points. For example:
+* **Self-Onboarding:** Provides a user-friendly web interface for visitors to input their details directly.
 
-* Integrates with a specific API (e.g., weather data, smart home devices).
+* **Visitor Management:** Creates a new visitor record in the 2N Access Commander using the submitted information.
 
-* Sends notifications (e.g., via email, Pushover).
-
-* Processes data and performs calculations.
-
-* Automates a specific task.
+* **Automated Credential Delivery:** Automatically generates a QR code for the new visitor and sends it to their email address.
 
 ### Requirements
 
 #### 2N Access Commander
 
-* Specify the minimum required version (e.g., `3.4.0` or later).
-
-#### 2N OS
-
-* Specify the minimum required version (e.g., `2.48.0` or later).
-
-#### Hardware
-
-If the flow requires specific hardware, list it here. List either a specific device or a group of devices if it's relevant to multiple devices.
-
-* **2N Access Unit** or **2N IP Intercom**
-
-  * Mention any hardware specifications if relevant (e.g., `Touch Display module`, `Touch Keypad & RFID module`).
-
-* **2N Answering Unit**
-
-* **2N Indoor View**
-
-* **2N IP Verso 2.0**
-
-  * `Touch Display module`
-
-#### Palettes (Nodes)
-
-List all the non-standard nodes required for the flow to work. You should include the name of the package and a link to its npm or GitHub page for easy installation.
-
-* `node-red-node-email` (e.g., for integrating with a specific service)
-
-* `@flowfuse/node-red-dashboard` (if a dashboard is used)
-
-* `node-red-contrib-another-node` (e.g., for a specific function)
-
-* this flow `does not require` any 3<sup>rd</sup> party nodes
+* `3.4.0`
 
 ### Installation and Setup
 
@@ -66,66 +32,9 @@ List all the non-standard nodes required for the flow to work. You should includ
 
 4. Click **Import**.
 
-#### 2. Installing Required Nodes
+#### 2. Configuration
 
-If you haven't already installed the required palettes, you can do so via the Node-RED Palette Manager:
-
-1. Go to the Node-RED menu (top right) and select **Manage palette**.
-
-2. Switch to the **Install** tab.
-
-3. Search for each required node (e.g., `@flowfuse/node-red-dashboard`) and click **install**.
-
-#### 3. Configuration
-
-* Provide clear, step-by-step instructions on how to configure the flow.
-
-* Explain which nodes need to be edited and what parameters need to be set.
-
-  * **Example: MQTT Broker Settings**
-
-    1. Locate the `MQTT In` and `MQTT Out` nodes.
-
-    2. Double-click each node to open its properties.
-
-    3. Configure the MQTT broker details (Server, Port, Client ID, Username, Password if required).
-
-    4. Ensure the topics are correctly set for your application and click on `Done`.
-
-  * **Example: API Key Configuration**
-
-    * For nodes requiring API keys (e.g., `HTTP Request` to an external service), explain where to obtain the key.
-
-    * Instruct the user where to store the API key securely, preferably in a Node-RED `Context` variable or environment variable.
-
-      * **Set Global Environment Variables** 
-
-        1. Go to the Node-RED menu (top right) and select **Settings**.
-
-        2. From the left menu select **Environment**.
-
-        3. Add or edit (if prefilled) variable `API key`, select `credential` variable type and fill in your API key.
-        
-        4. Once filled in, you can **Close** the window.  
-
-  * **Example: Change variable in node**
-
-    1. Locate the `function` (*customNameOfFunction*) node.
-
-    2. Double-click the node to open its properties.
-
-    3. Modify the `validity` variable:
-
-        ```javascript
-        // Set the validity period for the session cookie
-        var validity = 6000; // milliseconds
-        ```
-
-    4. Save the change by pressing `Done`.
-
-* Include details on setting up any external services or dependencies.
-
-* Use screenshots or animated GIFs if the configuration is complex.
+* This flow **does not require** any **configuration** once deployed.
 
 ### Usage
 
@@ -177,17 +86,15 @@ Provide a detailed explanation of each major section or logical block of the flo
 
 ### Author and Versioning
 
-* **Author:** \[Your Name or GitHub Handle\]
+* **Author:** [Kristian Velen](https://github.com/kv-0000)
 
-* **Created On:** `[YYYY-MM-DD]`
+* **Created On:** `[2025-08-08]`
 
-* **Last Verified Working On:** `[YYYY-MM-DD]` (Date when it was last confirmed to be fully functional in a production/test environment)
+* **Last Verified Working On:** `[2025-08-08]`
 
 * **Verified with:**
 
-  * **2N Access Commander:** `[Specific Version, e.g., 3.1.0]`
-
-  * **2N OS:** `[Specific Version, e.g., 18.17.1]`
+  * **2N Access Commander:** `[3.4.0]`
 
 ### License
 

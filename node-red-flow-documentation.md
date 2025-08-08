@@ -117,8 +117,16 @@ If you haven't already installed the required palettes, you can do so via the No
     3. Modify the `validity` variable:
 
         ```javascript
+
+        // .... start of the code ... 
+
+
         // Set the validity period for the session cookie
         var validity = 6000; // milliseconds
+
+
+        // ... rest of the code ...
+
         ```
 
     4. Save the change by pressing `Done`.
@@ -185,9 +193,9 @@ Provide a detailed explanation of each major section or logical block of the flo
 
 * **Verified with:**
 
-  * **2N Access Commander:** `[Specific Version, e.g., 3.1.0]`
+  * **2N Access Commander:** `[Specific Version, e.g., 3.4.0]`
 
-  * **2N OS:** `[Specific Version, e.g., 18.17.1]`
+  * **2N OS:** `[Specific Version, e.g., 2.48.1]`
 
 ### License
 
