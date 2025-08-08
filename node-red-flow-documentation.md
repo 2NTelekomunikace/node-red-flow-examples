@@ -175,9 +175,9 @@ Provide a detailed explanation of each major section or logical block of the flo
 
 * **Common Issues:** List any known issues and their solutions.
 
-  * `Error: "Missing credentials"`: Ensure all API keys and sensitive information are correctly configured in the respective nodes or global context.
+  * **Error: "Missing credentials"**: Ensure all API keys and sensitive information are correctly configured in the respective nodes or global context.
 
-  * `Flow not triggering`: Check the `Inject` node settings or any preceding nodes for correct configuration.
+  * **Flow not triggering**: Check the `Inject` node settings or any preceding nodes for correct configuration.
 
 ### Limitations and Known issues:
 

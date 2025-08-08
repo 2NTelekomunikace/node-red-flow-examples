@@ -38,13 +38,7 @@ This automated system allows for a seamless and efficient arrival experience, pr
 
 ### Usage
 
-* Explain how to use the flow after it has been configured and deployed.
-
-* Describe the expected inputs that trigger the flow (e.g., `Inject a timestamp`, `Send a message to the "start" topic with a payload of "true"`, `HTTP POST request to /my-endpoint`).
-
-* Describe the expected outputs or behavior (e.g., `The flow will send a notification via email`, `It will update a dashboard chart`, `It will log data to a database`).
-
-* Provide examples of input messages if relevant.
+* Open the kiosk at `https://access_commander_ip_address/nodered/api/visitor`
 
 ### Flow Diagram
 
@@ -74,15 +68,13 @@ Provide a detailed explanation of each major section or logical block of the flo
 
 ### Troubleshooting
 
-* **Common Issues:** List any known issues and their solutions.
+* **Common Issues:**
 
-  * `Error: "Missing credentials"`: Ensure all API keys and sensitive information are correctly configured in the respective nodes or global context.
-
-  * `Flow not triggering`: Check the `Inject` node settings or any preceding nodes for correct configuration.
+  * **QR code not received:** The 2N Access Commander needs a properly configured SMTP server to send credentials via email. If a visitor doesn't receive their QR code, the first step is to check and ensure that the SMTP server has been set up correctly.
 
 ### Limitations and Known issues:
 
-  * List any possible limitations you have discovered.
+  * 
 
 ### Author and Versioning
 
