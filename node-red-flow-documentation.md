@@ -121,8 +121,8 @@ If you haven't already installed the required palettes, you can do so via the No
         // .... start of the code ... 
 
 
-        // Set the validity period for the session cookie
-        var validity = 6000; // milliseconds
+        // Set the validity period for the session cookie in milliseconds
+        var validity = 600000; // 10 minutes
 
 
         // ... rest of the code ...
