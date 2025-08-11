@@ -6,6 +6,10 @@ This flow powers a web-based visitor kiosk hosted in 2N Access Commander, stream
 
 This automated system allows for a seamless and efficient arrival experience, providing visitors with the necessary access credentials for the building and lifts without manual intervention from a receptionist.
 
+Every company in the 2N Access Commander has specific working hours and default visitor groups. The working hours determine the validity period for new visitors, while the groups are used to define their access rules (which zones/devices the visitor can access).
+
+![The video shows how the visitor kiosk operates](how_it_works.gif)  
+
 ### Features
 
 * **Self-Onboarding:** Provides a user-friendly web interface for visitors to input their details directly.
@@ -46,35 +50,35 @@ This automated system allows for a seamless and efficient arrival experience, pr
 
 ### Flow Details and Explanation
 
-Provide a detailed explanation of each major section or logical block of the flow. Use headings to structure this section clearly.
+#### 1. Input Trigger
 
-#### 1. Input Trigger (e.g., "Schedule Checker")
+* **Nodes Used:** `http in`, `template`, `REST API`
 
-* **Nodes Used:** List the key nodes (e.g., `Inject`, `Function`, `MQTT In`).
+* **Logic:** When a user accesses the kiosk via the specified path (*GET /visitor*), the system initiates a request to the 2N Access Commander via `REST API` (*getCompanies*) node. This request retrieves a list of available companies and is then used to populate the `template` node, which contains the necessary HTML, CSS, and JavaScript code to display the kiosk (webpage).
 
-* **Logic:** Explain the logic within this section. For example, "This `Inject` node is configured to trigger every 5 minutes, sending a message to the `Function` node. The `Function` node then checks the current time and day to determine if the automation should proceed."
+#### 2. Data Processing
 
-#### 2. Data Processing (e.g., "API Call and Data Transformation")
+* **Nodes Used:** `REST API`, `function`, `change`
 
-* **Nodes Used:** List relevant nodes (e.g., `HTTP Request`, `JSON`, `Change`).
+* **Logic:** When a visitor submits their information at the kiosk, the flow begins by parsing the data with the `change` node. It then uses the `REST API` (*getCompany*) node to retrieve the selected company's working hours and default visitor groups. This retrieved data is then used in the `function` node to build a JSON body which is sent to 2N Access Commander via `REST API` (*createVisitor*) node to create the visitor.
 
-* **Logic:** Explain how data is fetched, parsed, and transformed. "The `HTTP Request` node calls the weather API. The response is then parsed by the `JSON` node. Finally, the `Change` node extracts the temperature and humidity values from `msg.payload` and renames them to `msg.temperature` and `msg.humidity`."
+#### 3. Output Action
 
-#### 3. Output Action (e.g., "Notification Sender")
+* **Nodes Used:** `REST API`
 
-* **Nodes Used:** List relevant nodes (e.g., `Email Sender`, `Debug`).
-
-* **Logic:** Explain how the processed data is used. "The `Email Sender` node constructs a message using `msg.temperature` and `msg.humidity` and sends it to the configured chat ID. A `Debug` node is also connected to show the final message in the debug sidebar."
+* **Logic:** Once the visitor is created the flow uses two `REST API` nodes, *createQRcode* and *sendQRcode*, to generate a random PIN in the form of a QR code, which is then sent to the visitor's specified email address.
 
 ### Troubleshooting
 
 * **Common Issues:**
 
-  * **QR code not received:** The 2N Access Commander needs a properly configured SMTP server to send credentials via email. If a visitor doesn't receive their QR code, the first step is to check and ensure that the SMTP server has been set up correctly.
+  * **QR code was not received:** The 2N Access Commander needs a properly configured SMTP server to send credentials via email. If a visitor doesn't receive their QR code, the first step is to check and ensure that the SMTP server has been set up correctly.
+
+  * **QR code was received but no access is possible:** If a visitor receives a QR code but is unable to use it for access, verify that the selected company has defined **default groups for new visitors**. These groups are required to assign access rules for the visitors.
 
 ### Limitations and Known issues:
 
-  * 
+  * `N/A`
 
 ### Author and Versioning
 

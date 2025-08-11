@@ -78,7 +78,7 @@ This flow provides one-time access for visitors. Once a visitor's credential is 
 
 ### Limitations and Known issues:
 
-  * The current setup of the flow monitors the Access log from every single device connected to the 2N Access Commander. This means that once visitors use access on any device, their credentials will be suspended. However, you can configure the `Access log` node to monitor only certain devices.s
+  * The current setup of the flow monitors the Access log from every single device connected to the 2N Access Commander. This means that once visitors use access on any device, their credentials will be suspended. However, you can configure the `Access log` node to monitor only certain devices.
 
 ### Author and Versioning
 
