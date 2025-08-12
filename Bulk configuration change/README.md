@@ -44,7 +44,7 @@ It utilises the 2N OS API to apply these changes, significantly reducing the man
 
 * **Filtering**
 
-  * By default, the flow targets all intercoms and access units connected to the 2N Access Commander. If you want to target specific devices or a group, you need to adjust the filter.
+  By default, the flow targets all intercoms and access units connected to the 2N Access Commander. If you want to target specific devices or a group, you need to adjust the filter.
 
   1. Locate the `REST API` (*filter devices*) node.
 
@@ -74,7 +74,7 @@ It utilises the 2N OS API to apply these changes, significantly reducing the man
 > [!TIP]
 > You can perform a mass configuration backup of all devices connected to 2N Access Commander. Select all devices from the **Devices** page and click on the cloud icon (Backup selected devices).
 
-  * By default, the configuration in this flow is set to apply the **Time Profile** stored in the first position as the **Hold Switch Time Profile**; this behaviour can be changed.
+  By default, the configuration in this flow is set to apply the **Time Profile** stored in the first position as the **Hold Switch Time Profile**; this behaviour can be changed.
 
   1. Locate the `function` (*deit config*) node.
 
