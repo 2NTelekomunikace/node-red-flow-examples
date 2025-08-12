@@ -44,7 +44,7 @@ It utilises the 2N OS API to apply these changes, significantly reducing the man
 
 * **Filtering**
 
-  By default, the flow targets all intercoms and access units connected to the 2N Access Commander. If you want to target specific devices or a group, you need to adjust the filter.
+By default, the flow targets all intercoms and access units connected to the 2N Access Commander. If you want to target specific devices or a group, you need to adjust the filter.
 
   1. Locate the `REST API` (*filter devices*) node.
 
@@ -69,7 +69,7 @@ It utilises the 2N OS API to apply these changes, significantly reducing the man
 * **Edit Configuration**
 
 > [!CAUTION]
-> This is a crucial step and must be configured correctly; otherwise, all filtered devices may be subject to incorrect configuration. It is highly recommended to create a backup of all devices before running this flow.
+> This is a crucial step and must be configured correctly; otherwise, all filtered devices may be subject to incorrect configuration. It is highly recommended to **create a backup** of all devices before running this flow.
 
 > [!TIP]
 > You can perform a mass configuration backup of all devices connected to 2N Access Commander. Select all devices from the **Devices** page and click on the cloud icon (Backup selected devices).
@@ -80,7 +80,7 @@ It utilises the 2N OS API to apply these changes, significantly reducing the man
 
   2. Double-click the node to open its properties.
 
-  3. Modify the `payload` message, keep in mind that the JSON structure will be converted to XML in order to be uploaded to the device.
+  3. Modify the `payload` message, keep in mind that the JSON structure will be converted to XML later in order to be uploaded to the device.
 
       ```javascript
 
@@ -110,7 +110,7 @@ It utilises the 2N OS API to apply these changes, significantly reducing the man
   4. Save the change by pressing `Done`.
 
 > [!NOTE]
-> If you do not know how to properly ccreate the configuration structure, please refer to the `config.xml` file, which can be downloaded from any 2N OS device.
+> If you do not know how to properly create the configuration structure, please refer to the `config.xml` file, which can be downloaded from any 2N OS device.
 
 ### Usage
 
