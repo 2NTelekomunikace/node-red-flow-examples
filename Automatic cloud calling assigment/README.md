@@ -43,17 +43,17 @@ This flow automatically creates and assigns phone numbers from the My2N cloud to
 
 #### 2. Configuration
 
-  * **My2N Settings**
+* **My2N Settings**
 
-    1. Locate the `change` node (*setMy2NDetails*).
+  1. Locate the `change` node (*setMy2NDetails*).
 
-    2. Double-click on the node to open its properties.
+  2. Double-click on the node to open its properties.
 
-    3. Configure the My2N details (username, password, companyId, and siteId). To retrieve the company ID and site ID, open the site in [my2n.com](https://my2n.com) and check the URL:
-    
-      * ![Where to locate company and site ID](comany_site_ID.png "CompanyID&SiteID")
+  3. Configure the My2N details (username, password, companyId, and siteId). To retrieve the company ID and site ID, open the site in [my2n.com](https://my2n.com) and check the URL:
+  
+    * ![Where to locate company and site ID](comany_site_ID.png "CompanyID&SiteID")
 
-    4. Ensure everyting is set correctly, click on `Done` and `Deploy` the flow.
+  4. Ensure everyting is set correctly, click on `Done` and `Deploy` the flow.
 
 ### Usage
 
@@ -89,11 +89,9 @@ If a user was deleted from the 2N Access Commander, any associated device found 
 
 ### Troubleshooting
 
-* **Common Issues:**
+* **Node Warn: "Unauthorized, wrong username or password.":** Ensure the username and password are correctly configured in the `change` (*setMy2NDetails*) node.
 
-  * **Node Warn: "Unauthorized, wrong username or password.":** Ensure the username and password are correctly configured in the `change` (*setMy2NDetails*) node.
-
-  * **Phone numbers are not created**: The Company ID or Site ID are not set up properly, or a device with the same name (user's name) already exists on My2N site.
+* **Phone numbers are not created**: The Company ID or Site ID are not set up properly, or a device with the same name (user's name) already exists on My2N site.
 
 ### Limitations and Known issues:
 

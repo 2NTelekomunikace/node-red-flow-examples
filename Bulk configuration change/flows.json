@@ -1,0 +1,392 @@
+[
+    {
+        "id": "4f8d9c375ee627e0",
+        "type": "tab",
+        "label": "Bulk config",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "81b9cf6ed0fedf37",
+        "type": "group",
+        "z": "4f8d9c375ee627e0",
+        "name": "Modify config & upload to device",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "1dd9d8bde5baab5f",
+            "9144d11cc7ba4d31",
+            "65bd74662eda0b51",
+            "7e8076f3e0bb8589",
+            "c007d82db8f831d4",
+            "fabd0f2ce4eb7501",
+            "0a18a14a9439b934"
+        ],
+        "x": 90.25,
+        "y": 279,
+        "w": 895.75,
+        "h": 82
+    },
+    {
+        "id": "4fff918673c7ec36",
+        "type": "group",
+        "z": "4f8d9c375ee627e0",
+        "name": "Filter selected devices & download config",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "8b5d082052f41cdd",
+            "ea1c13fa50f1ee68",
+            "1219b0719031441b",
+            "9ca71c873633991c",
+            "48d3763bad12b356",
+            "abcd14586fbe09c8",
+            "48c6d5892cd9b741",
+            "ef3619376e3a8a7a",
+            "884a778c02296ccd"
+        ],
+        "x": 90.25,
+        "y": 159,
+        "w": 1262,
+        "h": 82
+    },
+    {
+        "id": "8b5d082052f41cdd",
+        "type": "2nac-rest-api",
+        "z": "4f8d9c375ee627e0",
+        "g": "4fff918673c7ec36",
+        "name": "filter devices",
+        "method": "GET",
+        "endpoint": "devices",
+        "query": "?filter={\"$or\":[{\"Hardware.Category\":{\"$eq\":\"Intercom\"}},{\"Hardware.Category\":{\"$eq\":\"AccessUnit\"}}]}",
+        "senderr": true,
+        "x": 330,
+        "y": 200,
+        "wires": [
+            [
+                "ea1c13fa50f1ee68"
+            ]
+        ]
+    },
+    {
+        "id": "ea1c13fa50f1ee68",
+        "type": "split",
+        "z": "4f8d9c375ee627e0",
+        "g": "4fff918673c7ec36",
+        "name": "",
+        "splt": "\\n",
+        "spltType": "str",
+        "arraySplt": 1,
+        "arraySpltType": "len",
+        "stream": false,
+        "addname": "",
+        "property": "payload",
+        "x": 466.25,
+        "y": 200,
+        "wires": [
+            [
+                "9ca71c873633991c"
+            ]
+        ]
+    },
+    {
+        "id": "1219b0719031441b",
+        "type": "http request",
+        "z": "4f8d9c375ee627e0",
+        "g": "4fff918673c7ec36",
+        "name": "auth login",
+        "method": "use",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "f45fddb864bd1da6",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 736.25,
+        "y": 200,
+        "wires": [
+            [
+                "48d3763bad12b356"
+            ]
+        ]
+    },
+    {
+        "id": "9ca71c873633991c",
+        "type": "function",
+        "z": "4f8d9c375ee627e0",
+        "g": "4fff918673c7ec36",
+        "name": "auth login",
+        "func": "msg.ip = msg.payload.IpAddress\nmsg.name = msg.payload.Name\nmsg.method = \"POST\"\nmsg.url = `https://${msg.ip}/api/auth/login`\nmsg.payload = { user: \"admin\", password: msg.payload.Password}\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 596.25,
+        "y": 200,
+        "wires": [
+            [
+                "1219b0719031441b"
+            ]
+        ]
+    },
+    {
+        "id": "48d3763bad12b356",
+        "type": "function",
+        "z": "4f8d9c375ee627e0",
+        "g": "4fff918673c7ec36",
+        "name": "get SID & get config",
+        "func": "msg.sid = msg.payload.result.sid\nmsg.method = \"GET\"\nmsg.url = `https://${msg.ip}/api/config`\nmsg.headers = {\n    \"Cookie\": \"sid=\"+msg.sid\n};\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 916.25,
+        "y": 200,
+        "wires": [
+            [
+                "abcd14586fbe09c8"
+            ]
+        ]
+    },
+    {
+        "id": "abcd14586fbe09c8",
+        "type": "http request",
+        "z": "4f8d9c375ee627e0",
+        "g": "4fff918673c7ec36",
+        "name": "get config",
+        "method": "use",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "f45fddb864bd1da6",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 1096.25,
+        "y": 200,
+        "wires": [
+            [
+                "48c6d5892cd9b741"
+            ]
+        ]
+    },
+    {
+        "id": "48c6d5892cd9b741",
+        "type": "xml",
+        "z": "4f8d9c375ee627e0",
+        "g": "4fff918673c7ec36",
+        "name": "",
+        "property": "payload",
+        "attr": "$",
+        "chr": "",
+        "x": 1226.25,
+        "y": 200,
+        "wires": [
+            [
+                "ef3619376e3a8a7a"
+            ]
+        ]
+    },
+    {
+        "id": "ef3619376e3a8a7a",
+        "type": "link out",
+        "z": "4f8d9c375ee627e0",
+        "g": "4fff918673c7ec36",
+        "name": "link out 14",
+        "mode": "link",
+        "links": [
+            "0a18a14a9439b934"
+        ],
+        "x": 1311.25,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "1dd9d8bde5baab5f",
+        "type": "function",
+        "z": "4f8d9c375ee627e0",
+        "g": "81b9cf6ed0fedf37",
+        "name": "set config",
+        "func": "msg.method = \"PUT\"\nmsg.url = `https://${msg.ip}/api/config`\nmsg.headers = {\n    \"Cookie\": \"sid=\" + msg.sid,\n    \"Content-Type\": \"application/xml\"\n};\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 493.125,
+        "y": 320,
+        "wires": [
+            [
+                "9144d11cc7ba4d31"
+            ]
+        ]
+    },
+    {
+        "id": "9144d11cc7ba4d31",
+        "type": "http request",
+        "z": "4f8d9c375ee627e0",
+        "g": "81b9cf6ed0fedf37",
+        "name": "set config",
+        "method": "use",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "f45fddb864bd1da6",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 628.75,
+        "y": 320,
+        "wires": [
+            [
+                "65bd74662eda0b51"
+            ]
+        ]
+    },
+    {
+        "id": "65bd74662eda0b51",
+        "type": "function",
+        "z": "4f8d9c375ee627e0",
+        "g": "81b9cf6ed0fedf37",
+        "name": "message",
+        "func": "//print ip and success (true/false)\nmsg.payload = { name: msg.name, ip: msg.ip, success: msg.payload.success}\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 764.375,
+        "y": 320,
+        "wires": [
+            [
+                "7e8076f3e0bb8589"
+            ]
+        ]
+    },
+    {
+        "id": "7e8076f3e0bb8589",
+        "type": "debug",
+        "z": "4f8d9c375ee627e0",
+        "g": "81b9cf6ed0fedf37",
+        "name": "results",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 890,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "c007d82db8f831d4",
+        "type": "function",
+        "z": "4f8d9c375ee627e0",
+        "g": "81b9cf6ed0fedf37",
+        "name": "edit config",
+        "func": "let config = msg.payload.DeviceDatabase;\n\n\nmsg.payload = {\n    DeviceDatabase: {\n        $: config.$,\n\n        // from this point you can edit the configuration as you like\n        Switches: [\n            {\n                Switch: {\n                    $: {At: \"0\"},\n                    HoldSwitchTimeProfile: `P=0`\n                } \n            }\n        ]\n\n        \n    }\n};\n\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 231.875,
+        "y": 320,
+        "wires": [
+            [
+                "fabd0f2ce4eb7501"
+            ]
+        ]
+    },
+    {
+        "id": "fabd0f2ce4eb7501",
+        "type": "xml",
+        "z": "4f8d9c375ee627e0",
+        "g": "81b9cf6ed0fedf37",
+        "name": "",
+        "property": "payload",
+        "attr": "$",
+        "chr": "",
+        "x": 367.5,
+        "y": 320,
+        "wires": [
+            [
+                "1dd9d8bde5baab5f"
+            ]
+        ]
+    },
+    {
+        "id": "0a18a14a9439b934",
+        "type": "link in",
+        "z": "4f8d9c375ee627e0",
+        "g": "81b9cf6ed0fedf37",
+        "name": "link in 15",
+        "links": [
+            "ef3619376e3a8a7a"
+        ],
+        "x": 131.25,
+        "y": 320,
+        "wires": [
+            [
+                "c007d82db8f831d4"
+            ]
+        ]
+    },
+    {
+        "id": "884a778c02296ccd",
+        "type": "inject",
+        "z": "4f8d9c375ee627e0",
+        "g": "4fff918673c7ec36",
+        "name": "",
+        "props": [],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 186.25,
+        "y": 200,
+        "wires": [
+            [
+                "8b5d082052f41cdd"
+            ]
+        ]
+    },
+    {
+        "id": "f45fddb864bd1da6",
+        "type": "tls-config",
+        "name": "TLS",
+        "cert": "",
+        "key": "",
+        "ca": "",
+        "certname": "",
+        "keyname": "",
+        "caname": "",
+        "servername": "",
+        "verifyservercert": false,
+        "alpnprotocol": ""
+    }
+]

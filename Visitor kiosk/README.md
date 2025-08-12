@@ -1,4 +1,4 @@
-# Node-RED Flow Documentation Template
+# Node-RED Flow Documentation
 
 ### Description
 
@@ -70,11 +70,9 @@ Every company in the 2N Access Commander has specific working hours and default 
 
 ### Troubleshooting
 
-* **Common Issues:**
+* **QR code was not received:** The 2N Access Commander needs a properly configured SMTP server to send credentials via email. If a visitor doesn't receive their QR code, the first step is to check and ensure that the SMTP server has been set up correctly.
 
-  * **QR code was not received:** The 2N Access Commander needs a properly configured SMTP server to send credentials via email. If a visitor doesn't receive their QR code, the first step is to check and ensure that the SMTP server has been set up correctly.
-
-  * **QR code was received but no access is possible:** If a visitor receives a QR code but is unable to use it for access, verify that the selected company has defined **default groups for new visitors**. These groups are required to assign access rules for the visitors.
+* **QR code was received but no access is possible:** If a visitor receives a QR code but is unable to use it for access, verify that the selected company has defined **default groups for new visitors**. These groups are required to assign access rules for the visitors.
 
 ### Limitations and Known issues:
 
