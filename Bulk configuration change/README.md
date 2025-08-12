@@ -44,7 +44,7 @@ It utilises the 2N OS API to apply these changes, significantly reducing the man
 
 * **Filtering**
 
-By default, the flow targets all intercoms and access units connected to the 2N Access Commander. If you want to target specific devices or a group, you need to adjust the filter.
+  By default, the flow targets all intercoms and access units connected to the 2N Access Commander. If you want to target specific devices or a group, you need to adjust the filter.
 
   1. Locate the `REST API` (*filter devices*) node.
 
