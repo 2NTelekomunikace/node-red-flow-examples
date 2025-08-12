@@ -52,11 +52,16 @@ It utilises the 2N OS API to apply these changes, significantly reducing the man
 
   3. Configure the **Query** parameter to filter targeted devices. (see examples below)
 
-    * **Filter all intercoms and access units:** `?filter={"$or":[{"Hardware.Category":{"$eq":"Intercom"}},{"Hardware.Category":{"$eq":"AccessUnit"}}]}`
+    ```
+
+    //Filter all intercoms and access units:
+    `?filter={"$or":[{"Hardware.Category":{"$eq":"Intercom"}},{"Hardware.Category":{"$eq":"AccessUnit"}}]}`
 
     * **Filter devices with ID 1 or 4:** `?filter={"$or":[{"Id":{"$eq":1}},{"Id":{"$eq":4}}]}`
 
     * **Filter devices containing product name Style or Verso:** `?filter={"$or":[{"Hardware.ProductName":{"$cti":"Style"}},{"Hardware.ProductName":{"$cti":"Verso"}}]}`
+    
+    ```
 
   4. Ensure the filter is correct; otherwise, no device will be filtered.
 
