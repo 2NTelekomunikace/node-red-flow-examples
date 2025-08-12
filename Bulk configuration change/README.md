@@ -139,7 +139,7 @@ For each device, the first `function` node (*auth login*) prepares a login reque
 
 ### Troubleshooting
 
-* **Upload was successful, but nothing changed"**: Make sure that the configuration structure is correct and does not contain any typos; the device may accept the configuration with typos, but the actual configuration will not change because the device will ignore the incorrectly configured parameters.
+* **Upload was successful, but nothing changed:** Make sure that the configuration structure is correct and does not contain any typos; the device may accept the configuration with typos, but the actual configuration will not change because the device will ignore the incorrectly configured parameters.
 
 ### Limitations and Known issues:
 
