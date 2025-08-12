@@ -306,7 +306,7 @@
         "z": "4f8d9c375ee627e0",
         "g": "81b9cf6ed0fedf37",
         "name": "edit config",
-        "func": "let config = msg.payload.DeviceDatabase;\n\n\nmsg.payload = {\n    DeviceDatabase: {\n        $: config.$,\n\n        // from this point you can edit the configuration as you like\n        Switches: [\n            {\n                Switch: {\n                    $: {At: \"0\"},\n                    HoldSwitchTimeProfile: `P=0`\n                } \n            }\n        ]\n\n        \n    }\n};\n\n\nreturn msg;\n",
+        "func": "let config = msg.payload.DeviceDatabase;\n\n\nmsg.payload = {\n    DeviceDatabase: {\n        $: config.$,\n\n        // from this point you can edit the configuration as you like\n        Switches: [\n            {\n                Switch: {\n                    $: {At: \"0\"},\n                    HoldSwitchTimeProfile: `P=0`\n                } \n            }\n        ]\n        \n    }\n};\n\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,

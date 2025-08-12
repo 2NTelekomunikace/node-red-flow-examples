@@ -80,27 +80,37 @@ It utilises the 2N OS API to apply these changes, significantly reducing the man
 
   2. Double-click the node to open its properties.
 
-  3. Modify the `payload` message:
+  3. Modify the `payload` message, keep in mind that the JSON structure will be converted to XML in order to be uploaded to the device.
 
       ```javascript
 
       // .... start of the code ... 
 
-      // from this point you can edit the configuration as you like
-      Switches: [
-          {
-              Switch: {
-                  $: {At: "0"},
-                  HoldSwitchTimeProfile: `P=0`
-              } 
-          }
-      ]
+        msg.payload = {
+            DeviceDatabase: {
+                $: config.$,
+
+                // from this point you can edit the configuration as you like
+                Switches: [
+                    {
+                        Switch: {
+                            $: {At: "0"},
+                            HoldSwitchTimeProfile: `P=0`
+                        } 
+                    }
+                ]
+                                
+            }
+        };
 
       // ... rest of the code ...
 
       ```
 
   4. Save the change by pressing `Done`.
+
+> [!NOTE]
+> If you do not know how to properly ccreate the configuration structure, please refer to the `config.xml` file, which can be downloaded from any 2N OS device.
 
 ### Usage
 
