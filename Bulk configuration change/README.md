@@ -76,7 +76,7 @@ It utilises the 2N OS API to apply these changes, significantly reducing the man
 
   By default, the configuration in this flow is set to apply the **Time Profile** stored in the first position as the **Hold Switch Time Profile**; this behaviour can be changed.
 
-  1. Locate the `function` (*deit config*) node.
+  1. Locate the `function` (*edit config*) node.
 
   2. Double-click the node to open its properties.
 
