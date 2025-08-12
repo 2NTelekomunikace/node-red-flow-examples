@@ -52,16 +52,17 @@ It utilises the 2N OS API to apply these changes, significantly reducing the man
 
   3. Configure the **Query** parameter to filter targeted devices. (see examples below)
 
-    ```
-
-    //Filter all intercoms and access units:
-    `?filter={"$or":[{"Hardware.Category":{"$eq":"Intercom"}},{"Hardware.Category":{"$eq":"AccessUnit"}}]}`
-
-    * **Filter devices with ID 1 or 4:** `?filter={"$or":[{"Id":{"$eq":1}},{"Id":{"$eq":4}}]}`
-
-    * **Filter devices containing product name Style or Verso:** `?filter={"$or":[{"Hardware.ProductName":{"$cti":"Style"}},{"Hardware.ProductName":{"$cti":"Verso"}}]}`
+    * Filter all intercoms and access units:
     
-    ```
+      * `?filter={"$or":[{"Hardware.Category":{"$eq":"Intercom"}},{"Hardware.Category":{"$eq":"AccessUnit"}}]}`
+
+    * Filter devices with ID 1 or 4:
+    
+      * `?filter={"$or":[{"Id":{"$eq":1}},{"Id":{"$eq":4}}]}`
+
+    * Filter devices containing product name Style or Verso:
+    
+      * `?filter={"$or":[{"Hardware.ProductName":{"$cti":"Style"}},{"Hardware.ProductName":{"$cti":"Verso"}}]}`
 
   4. Ensure the filter is correct; otherwise, no device will be filtered.
 
@@ -73,22 +74,27 @@ It utilises the 2N OS API to apply these changes, significantly reducing the man
 > [!TIP]
 > You can perform a mass configuration backup of all devices connected to 2N Access Commander. Select all devices from the **Devices** page and click on the cloud icon (Backup selected devices).
 
-  * By default, the configuration in this flow is set to apply the **Time Profile** stored in the first position as the **Hold Switch Time Profile**.  
+  * By default, the configuration in this flow is set to apply the **Time Profile** stored in the first position as the **Hold Switch Time Profile**; this behaviour can be changed.
 
-  1. Locate the `function` (*customNameOfFunction*) node.
+  1. Locate the `function` (*deit config*) node.
 
   2. Double-click the node to open its properties.
 
-  3. Modify the `validity` variable:
+  3. Modify the `payload` message:
 
       ```javascript
 
       // .... start of the code ... 
 
-
-      // Set the validity period for the session cookie in milliseconds
-      var validity = 600000; // 10 minutes
-
+      // from this point you can edit the configuration as you like
+      Switches: [
+          {
+              Switch: {
+                  $: {At: "0"},
+                  HoldSwitchTimeProfile: `P=0`
+              } 
+          }
+      ]
 
       // ... rest of the code ...
 
@@ -96,14 +102,9 @@ It utilises the 2N OS API to apply these changes, significantly reducing the man
 
   4. Save the change by pressing `Done`.
 
-* Include details on setting up any external services or dependencies.
-
-* Use screenshots or animated GIFs if the configuration is complex.
-
-
 ### Usage
 
-* Once the flow is configured and deployed, click on the `inject` node to start the flow.
+* Once the flow is deployed and properly configured, click on the `inject` node to start the flow.
 
 ### Flow Diagram
 
