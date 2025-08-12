@@ -42,7 +42,7 @@ It utilises the 2N OS API to apply these changes, significantly reducing the man
 
 #### 2. Configuration
 
-* **Configure filtering**
+* **Filtering**
 
   * By default, the flow targets all intercoms and access units connected to the 2N Access Commander. If you want to target specific devices or a group, you need to adjust the filter.
 
@@ -52,26 +52,23 @@ It utilises the 2N OS API to apply these changes, significantly reducing the man
 
   3. Configure the **Query** parameter to filter targeted devices. (see examples below)
 
-    * Filter all intercoms and access units:
+    * **Filter all intercoms and access units:** `?filter={"$or":[{"Hardware.Category":{"$eq":"Intercom"}},{"Hardware.Category":{"$eq":"AccessUnit"}}]}`
 
-      * `?filter={"$or":[{"Hardware.Category":{"$eq":"Intercom"}},{"Hardware.Category":{"$eq":"AccessUnit"}}]}`
+    * **Filter devices with ID 1 or 4:** `?filter={"$or":[{"Id":{"$eq":1}},{"Id":{"$eq":4}}]}`
 
-    * Filter devices with ID 1 or 4:
-
-      * `?filter={"$or":[{"Id":{"$eq":1}},{"Id":{"$eq":4}}]}`
-
-    * Filter devices containing product name Style or Verso:
-
-      * `?filter={"$or":[{"Hardware.ProductName":{"$cti":"Style"}},{"Hardware.ProductName":{"$cti":"Verso"}}]}`
+    * **Filter devices containing product name Style or Verso:** `?filter={"$or":[{"Hardware.ProductName":{"$cti":"Style"}},{"Hardware.ProductName":{"$cti":"Verso"}}]}`
 
   4. Ensure the filter is correct; otherwise, no device will be filtered.
 
-* **Modify configuration**
-
-  * By default, the configuration in this flow is set to apply the **Time Profile** stored in the first position as the **Hold Switch Time Profile**.  
+* **Edit Configuration**
 
 > [!CAUTION]
-> This is a crucial step and must be configured correctly, otherwise all filtered devices may be subject to incorrect configuration. It is highly recommended to create a backup of all devices.
+> This is a crucial step and must be configured correctly; otherwise, all filtered devices may be subject to incorrect configuration. It is highly recommended to create a backup of all devices before running this flow.
+
+> [!TIP]
+> You can perform a mass configuration backup of all devices connected to 2N Access Commander. Select all devices from the **Devices** page and click on the cloud icon (Backup selected devices).
+
+  * By default, the configuration in this flow is set to apply the **Time Profile** stored in the first position as the **Hold Switch Time Profile**.  
 
   1. Locate the `function` (*customNameOfFunction*) node.
 
