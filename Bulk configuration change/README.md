@@ -70,8 +70,8 @@ It utilises the 2N OS API to apply these changes, significantly reducing the man
 
   * By default, the configuration in this flow is set to apply the **Time Profile** stored in the first position as the **Hold Switch Time Profile**.  
 
-  > [!CAUTION]
-  > This is a crucial step and must be configured correctly, otherwise all filtered devices may be subject to incorrect configuration. It is highly recommended to create a backup of all devices.
+  [!CAUTION]
+  This is a crucial step and must be configured correctly, otherwise all filtered devices may be subject to incorrect configuration. It is highly recommended to create a backup of all devices.
 
   1. Locate the `function` (*customNameOfFunction*) node.
 
