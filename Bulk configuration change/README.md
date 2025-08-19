@@ -28,7 +28,7 @@ It utilises the 2N OS API to apply these changes, significantly reducing the man
 
 * **any** 2N HW running 2N OS (see version above)
 
-### Installation and Setup
+## Installation and Setup
 
 #### 1. Importing the Flow
 
@@ -112,7 +112,7 @@ It utilises the 2N OS API to apply these changes, significantly reducing the man
 > [!NOTE]
 > If you do not know how to properly create the configuration structure, please refer to the `config.xml` file, which can be downloaded from any 2N OS device. You can also find configuration examples [here](examples/).
 
-### Usage
+## Usage
 
 * Once the flow is deployed and properly configured, click on the `inject` node to start the flow.
 
@@ -145,7 +145,7 @@ For each device, the first `function` node (*auth login*) prepares a login reque
 
   * `N/A`
 
-### Author and Versioning
+## Author and Versioning
 
 * **Author:** [Kristian Velen](https://github.com/kv-0000)
 

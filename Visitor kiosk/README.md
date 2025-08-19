@@ -24,9 +24,9 @@ Every company in the 2N Access Commander has specific working hours and default 
 
 * `3.4.0`
 
-### Installation and Setup
+## Installation and Setup
 
-#### 1. Importing the Flow
+### 1. Importing the Flow
 
 1. Download the JSON code [flows.json](flows.json) file or copy its contents.
 
@@ -36,11 +36,11 @@ Every company in the 2N Access Commander has specific working hours and default 
 
 4. Click **Import**.
 
-#### 2. Configuration
+### 2. Configuration
 
 * This flow **does not require** any **configuration** once deployed.
 
-### Usage
+## Usage
 
 * Open the kiosk at `https://access_commander_ip_address/nodered/api/visitor`
 
@@ -78,7 +78,7 @@ Every company in the 2N Access Commander has specific working hours and default 
 
   * `N/A`
 
-### Author and Versioning
+## Author and Versioning
 
 * **Author:** [Kristian Velen](https://github.com/kv-0000)
 

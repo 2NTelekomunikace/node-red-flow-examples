@@ -32,7 +32,7 @@ This flow provides one-time access for visitors. Once a visitor's credential is 
 
 * this flow `does not require` any 3rd party nodes
 
-### Installation and Setup
+## Installation and Setup
 
 #### 1. Importing the Flow
 
@@ -48,7 +48,7 @@ This flow provides one-time access for visitors. Once a visitor's credential is 
 
 * This flow requires no special setup, just upload the flow and hit `Deploy`. 
 
-### Usage
+## Usage
 
 * Once the flow is deployed, a visitor's credentials will be terminated immediately after their first successful access on **any** devices added into the 2N Access Commander.
 
@@ -80,7 +80,7 @@ This flow provides one-time access for visitors. Once a visitor's credential is 
 
   * The current setup of the flow monitors the Access log from every single device connected to the 2N Access Commander. This means that once visitors use access on any device, their credentials will be suspended. However, you can configure the `Access log` node to monitor only certain devices.
 
-### Author and Versioning
+## Author and Versioning
 
 * **Author:** [Kristian Velen](https://github.com/kv-0000)
 

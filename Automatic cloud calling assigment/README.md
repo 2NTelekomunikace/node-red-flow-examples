@@ -29,7 +29,7 @@ This flow automatically creates and assigns phone numbers from the My2N cloud to
 
 * My2N site **must** be a type of **Commercial**.
 
-### Installation and Setup
+## Installation and Setup
 
 #### 1. Importing the Flow
 
@@ -55,7 +55,7 @@ This flow automatically creates and assigns phone numbers from the My2N cloud to
 
   4. Ensure everyting is set correctly, click on `Done` and `Deploy` the flow.
 
-### Usage
+## Usage
 
 * Once the flow is deployed, any newly created user in the 2N Access Commander will automatically receive a phone number from the My2N Cloud.
 
@@ -107,7 +107,7 @@ If a user was deleted from the 2N Access Commander, any associated device found 
 
   * It is not possible to **select** which **users** receive the phone number and which do not.
 
-### Author and Versioning
+## Author and Versioning
 
 * **Author:** [Kristian Velen](https://github.com/kv-0000)
 
