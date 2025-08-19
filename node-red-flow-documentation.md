@@ -52,9 +52,9 @@ List all the non-standard nodes required for the flow to work. You should includ
 
 * `node-red-contrib-another-node` (e.g., for a specific function)
 
-### Installation and Setup
+## Installation and Setup
 
-#### 1. Importing the Flow
+### 1. Importing the Flow
 
 1. Download the JSON code [flows.json](flows.json) file or copy its contents.
 
@@ -64,7 +64,7 @@ List all the non-standard nodes required for the flow to work. You should includ
 
 4. Click **Import**.
 
-#### 2. Installing Required Nodes
+### 2. Installing Required Nodes
 
 If you haven't already installed the required palettes, you can do so via the Node-RED Palette Manager:
 
@@ -74,7 +74,7 @@ If you haven't already installed the required palettes, you can do so via the No
 
 3. Search for each required node (e.g., `@flowfuse/node-red-dashboard`) and click **install**.
 
-#### 3. Configuration
+### 3. Configuration
 
 * Provide clear, step-by-step instructions on how to configure the flow.
 
@@ -133,7 +133,7 @@ If you haven't already installed the required palettes, you can do so via the No
 
 * Use screenshots or animated GIFs if the configuration is complex.
 
-### Usage
+## Usage
 
 * Explain how to use the flow after it has been configured and deployed.
 
@@ -181,7 +181,7 @@ Provide a detailed explanation of each major section or logical block of the flo
 
   * List any possible limitations you have discovered.
 
-### Author and Versioning
+## Author and Versioning
 
 * **Author:** \[Your Name or GitHub Handle\]
 
