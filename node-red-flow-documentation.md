@@ -80,54 +80,52 @@ If you haven't already installed the required palettes, you can do so via the No
 
 * Explain which nodes need to be edited and what parameters need to be set.
 
-#### **Example: MQTT Broker Settings**
+#### Example: MQTT Broker Settings
 
-  1. Locate the `MQTT In` and `MQTT Out` nodes.
+1. Locate the `MQTT In` and `MQTT Out` nodes.
 
-  2. Double-click each node to open its properties.
+2. Double-click each node to open its properties.
 
-  3. Configure the MQTT broker details (Server, Port, Client ID, Username, Password if required).
+3. Configure the MQTT broker details (Server, Port, Client ID, Username, Password if required).
 
-  4. Ensure the topics are correctly set for your application and click on `Done`.
+4. Ensure the topics are correctly set for your application and click on `Done`.
 
-#### **Example: API Key Configuration**
+#### Example: API Key Configuration
 
-  * For nodes requiring API keys (e.g., `HTTP Request` to an external service), explain where to obtain the key.
+* For nodes requiring API keys (e.g., `HTTP Request` to an external service), explain where to obtain the key.
 
-  * Instruct the user where to store the API key securely, preferably in a Node-RED `Context` variable or environment variable.
+* Instruct the user where to store the API key securely, preferably in a Node-RED `Context` variable or environment variable.
 
-    * **Set Global Environment Variables** 
+  * **Set Global Environment Variables** 
 
-      1. Go to the Node-RED menu (top right) and select **Settings**.
+    1. Go to the Node-RED menu (top right) and select **Settings**.
 
-      2. From the left menu select **Environment**.
+    2. From the left menu select **Environment**.
 
-      3. Add or edit (if prefilled) variable `API key`, select `credential` variable type and fill in your API key.
-      
-      4. Once filled in, you can **Close** the window.  
+    3. Add or edit (if prefilled) variable `API key`, select `credential` variable type and fill in your API key.
+    
+    4. Once filled in, you can **Close** the window.  
 
-#### **Example: Change variable in node**
+#### Example: Change variables in node
 
-  1. Locate the `function` (*customNameOfFunction*) node.
+1. Locate the `function` (*customNameOfFunction*) node.
 
-  2. Double-click the node to open its properties.
+2. Double-click the node to open its properties.
 
-  3. Modify the `validity` variable:
+3. Modify the `validity` variable:
 
-      ```javascript
-
-      // .... start of the code ... 
-
-
-      // Set the validity period for the session cookie in milliseconds
-      var validity = 600000; // 10 minutes
+    ```javascript
+    // .... start of the code ... 
 
 
-      // ... rest of the code ...
+    // Set the validity period for the session cookie in milliseconds
+    var validity = 600000; // 10 minutes
 
-      ```
 
-  4. Save the change by pressing `Done`.
+    // ... rest of the code ...
+    ```
+
+4. Save the change by pressing `Done`.
 
 * Include details on setting up any external services or dependencies.
 
@@ -135,7 +133,7 @@ If you haven't already installed the required palettes, you can do so via the No
 
 ## Usage
 
-* Explain how to use the flow after it has been configured and deployed.
+Explain how to use the flow after it has been configured and deployed.
 
 * Describe the expected inputs that trigger the flow (e.g., `Inject a timestamp`, `Send a message to the "start" topic with a payload of "true"`, `HTTP POST request to /my-endpoint`).
 

@@ -42,7 +42,7 @@ Every company in the 2N Access Commander has specific working hours and default 
 
 ## Usage
 
-* Open the kiosk at `https://access_commander_ip_address/nodered/api/visitor`
+Open the kiosk at `https://access_commander_ip_address/nodered/api/visitor`
 
 ### Flow Diagram
 
