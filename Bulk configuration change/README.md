@@ -74,7 +74,7 @@ It utilises the 2N OS API to apply these changes, significantly reducing the man
 > [!TIP]
 > You can perform a mass configuration backup of all devices connected to 2N Access Commander. Select all devices from the **Devices** page and click on the cloud icon (Backup selected devices).
 
-  By default, the configuration in this flow is set to apply the **Time Profile** stored in the first position as the **Hold Switch Time Profile**; this behaviour can be changed.
+  By default, the configuration in this flow is set to apply the **Time Profile** stored in the first position as the **Hold Switch Time Profile**.
 
   1. Locate the `function` (*edit config*) node.
 
@@ -110,7 +110,7 @@ It utilises the 2N OS API to apply these changes, significantly reducing the man
   4. Save the change by pressing `Done`.
 
 > [!NOTE]
-> If you do not know how to properly create the configuration structure, please refer to the `config.xml` file, which can be downloaded from any 2N OS device.
+> If you do not know how to properly create the configuration structure, please refer to the `config.xml` file, which can be downloaded from any 2N OS device. You can also find configuration examples [here](examples/).
 
 ### Usage
 
