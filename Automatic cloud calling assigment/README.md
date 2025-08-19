@@ -43,7 +43,7 @@ This flow automatically creates and assigns phone numbers from the My2N cloud to
 
 ### 2. Configuration
 
-* **My2N Settings**
+#### **My2N Settings**
 
   1. Locate the `change` node (*setMy2NDetails*).
 

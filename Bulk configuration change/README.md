@@ -42,7 +42,7 @@ It utilises the 2N OS API to apply these changes, significantly reducing the man
 
 ### 2. Configuration
 
-* **Filtering**
+#### **Filtering**
 
   By default, the flow targets all intercoms and access units connected to the 2N Access Commander. If you want to target specific devices or a group, you need to adjust the filter.
 
@@ -66,7 +66,7 @@ It utilises the 2N OS API to apply these changes, significantly reducing the man
 
   4. Ensure the filter is correct; otherwise, no device will be filtered.
 
-* **Edit Configuration**
+#### **Edit Configuration**
 
 > [!CAUTION]
 > This is a crucial step and must be configured correctly; otherwise, all filtered devices may be subject to incorrect configuration. It is highly recommended to **create a backup** of all devices before running this flow.

@@ -80,7 +80,7 @@ If you haven't already installed the required palettes, you can do so via the No
 
 * Explain which nodes need to be edited and what parameters need to be set.
 
-* **Example: MQTT Broker Settings**
+#### **Example: MQTT Broker Settings**
 
   1. Locate the `MQTT In` and `MQTT Out` nodes.
 
@@ -90,7 +90,7 @@ If you haven't already installed the required palettes, you can do so via the No
 
   4. Ensure the topics are correctly set for your application and click on `Done`.
 
-* **Example: API Key Configuration**
+#### **Example: API Key Configuration**
 
   * For nodes requiring API keys (e.g., `HTTP Request` to an external service), explain where to obtain the key.
 
@@ -106,7 +106,7 @@ If you haven't already installed the required palettes, you can do so via the No
       
       4. Once filled in, you can **Close** the window.  
 
-* **Example: Change variable in node**
+#### **Example: Change variable in node**
 
   1. Locate the `function` (*customNameOfFunction*) node.
 

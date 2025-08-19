@@ -34,7 +34,7 @@ This flow provides one-time access for visitors. Once a visitor's credential is 
 
 ## Installation and Setup
 
-#### 1. Importing the Flow
+### 1. Importing the Flow
 
 1. Download the JSON code [flows.json](flows.json) file or copy its contents.
 
@@ -44,7 +44,7 @@ This flow provides one-time access for visitors. Once a visitor's credential is 
 
 4. Click **Import**.
 
-#### 2. Configuration
+### 2. Configuration
 
 * This flow requires no special setup, just upload the flow and hit `Deploy`. 
 
