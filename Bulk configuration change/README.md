@@ -30,7 +30,7 @@ It utilises the 2N OS API to apply these changes, significantly reducing the man
 
 ## Installation and Setup
 
-#### 1. Importing the Flow
+### 1. Importing the Flow
 
 1. Download the JSON code [flows.json](flows.json) file or copy its contents.
 
@@ -40,7 +40,7 @@ It utilises the 2N OS API to apply these changes, significantly reducing the man
 
 4. Click **Import**.
 
-#### 2. Configuration
+### 2. Configuration
 
 * **Filtering**
 
