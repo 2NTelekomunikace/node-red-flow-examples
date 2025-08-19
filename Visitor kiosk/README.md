@@ -1,6 +1,6 @@
 # Node-RED Flow Documentation
 
-## Description
+### Description
 
 This flow powers a web-based visitor kiosk hosted in 2N Access Commander, streamlining the visitor check-in process. Visitors can easily self-onboard by entering their details into a user-friendly interface. The flow then automatically creates a visitor record in the Access Commander, generates a unique QR code for access, and emails the credentials directly to the visitor.
 
@@ -10,7 +10,7 @@ Every company in the 2N Access Commander has specific working hours and default 
 
 ![The video shows how the visitor kiosk operates](how_it_works.gif)  
 
-## Features
+### Features
 
 * **Self-Onboarding:** Provides a user-friendly web interface for visitors to input their details directly.
 
@@ -18,9 +18,9 @@ Every company in the 2N Access Commander has specific working hours and default 
 
 * **Automated Credential Delivery:** Automatically generates a QR code for the new visitor and sends it to their email address.
 
-## Requirements
+### Requirements
 
-### 2N Access Commander
+#### 2N Access Commander
 
 * `3.4.0`
 

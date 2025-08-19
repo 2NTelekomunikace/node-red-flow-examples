@@ -1,13 +1,13 @@
 # Node-RED Flow Documentation
 
-## Description
+### Description
 
 This flow automatically creates and assigns phone numbers from the My2N cloud to newly created users in the 2N Access Commander. It solves the problem of manual number provisioning by using the My2N cloud API to create a mobile video device and then assigning its number to the newly created users, thereby automating the setup of My2N cloud calling.
 
 ![The video shows how the phone number is automatically assigned](how_it_works.gif)  
 *After creating a user, their details will open immediately. The phone number is assigned in the background; refresh the page to view the assigned phone number.
 
-## Features
+### Features
 
 * Automated assignment of My2N phone numbers, eliminating manual configuration.
 
@@ -17,13 +17,13 @@ This flow automatically creates and assigns phone numbers from the My2N cloud to
 
 * Notifies the administrator if the My2N license is missing.
 
-## Requirements
+### Requirements
 
-### 2N Access Commander
+#### 2N Access Commander
 
 * `3.4.0`
 
-### My2N account
+#### My2N account
 
 * Cloud calling is a paid feature and **requires a license**.
 
