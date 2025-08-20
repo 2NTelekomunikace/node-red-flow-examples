@@ -17,3 +17,5 @@ Here are a few configuration examples to help you with the setup.
 1. [HoldSwitchTimeProfile.js](HoldSwitchTimeProfile.js) will apply the **Time Profile** stored in the first position as the **Hold Switch Time Profile**.
 
 2. [HttpApiAccount.js](HttpApiAccount.js) will create an HTTP API account in the second position with a predefined username, password and allow privileges to the system.
+
+3. 
