@@ -1,5 +1,9 @@
 # Node-RED Flow Documentation
 
+> [!IMPORTANT]  
+> My2N accounts created after 1st of August 2025 must use My2N Auth v2; older accounts currently using My2N Auth v1 ([flows_auth_v1.json](flows_auth_v1.json)) should contact [2N Support](https://www.2n.com/en-GB/support/) to migrate their account to the new API authentication.  
+Eventually, all My2N accounts will be migrated automatically. If the flow stops working, please use the flow utilising My2N Auth v2 [flows.json](flows.json) instead.
+
 ### Description
 
 This flow automatically creates and assigns phone numbers from the My2N cloud to newly created users in the 2N Access Commander. It solves the problem of manual number provisioning by using the My2N cloud API to create a mobile video device and then assigning its number to the newly created users, thereby automating the setup of My2N cloud calling.
