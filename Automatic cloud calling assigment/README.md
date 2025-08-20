@@ -5,7 +5,7 @@
 Eventually, all My2N accounts will be **migrated automatically**. If the **flow stops working**, please use the [flow](flows.json) utilising My2N Auth v2 instead.
 
 > [!TIP]
-> You can check if you're already using My2N Auth v2 by visiting your [My2N profile](https://my2n.com/profile). If you see an option to enable two-factor authentication, you are using version 2.
+> You can check if you're already using My2N Auth v2 by visiting your [My2N profile](https://my2n.com/profile). If you see an option to enable **two-factor authentication**, you are using **version 2**.
 
 ### Description
 
