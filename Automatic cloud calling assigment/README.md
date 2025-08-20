@@ -1,8 +1,11 @@
 # Node-RED Flow Documentation
 
 > [!IMPORTANT]  
-> My2N accounts created after 1st of August 2025 must use My2N Auth v2; older accounts currently using My2N Auth v1 ([flows_auth_v1.json](flows_auth_v1.json)) should contact [2N Support](https://www.2n.com/en-GB/support/) to migrate their account to the new API authentication.  
-Eventually, all My2N accounts will be migrated automatically. If the flow stops working, please use the flow utilising My2N Auth v2 [flows.json](flows.json) instead.
+> My2N accounts created after **1st of August 2025** must use My2N Auth v2; older accounts currently using My2N Auth v1 ([flows_auth_v1.json](flows_auth_v1.json)) **should** contact [2N Support](https://www.2n.com/en-GB/support/) to **migrate** their account to the new API authentication.  
+Eventually, all My2N accounts will be **migrated automatically**. If the **flow stops working**, please use the [flow](flows.json) utilising My2N Auth v2 instead.
+
+> [!TIP]
+> You can check if you're already using My2N Auth v2 by visiting your [My2N profile](https://my2n.com/profile). If you see an option to enable two-factor authentication, you are using version 2.
 
 ### Description
 
@@ -116,7 +119,7 @@ If a user was deleted from the 2N Access Commander, any associated device found 
 
 * **Created On:** `[2025-08-04]`
 
-* **Last Verified Working On:** `[2025-08-06]`
+* **Last Verified Working On:** `[2025-08-20]`
 
 * **Verified with:**
 
