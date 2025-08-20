@@ -1,135 +1,130 @@
 [
     {
-        "id": "22c5681427f5f16c",
+        "id": "fd3c79e6b66d3caa",
         "type": "tab",
-        "label": "My2N connector (office) - Auth v.2",
+        "label": "My2N connector (office)",
         "disabled": false,
         "info": "This flow automatically creates a Mobile Video (MV) service in the My2N\r\nand assigns the generated phone number to the newly added user in the ACOM.\r\nOnce such a user is deleted from the ACOM, their device will be deleted from the My2N as well.\r\nThis flow does not work for My2N sites set as MDU.",
         "env": []
     },
     {
-        "id": "4e9450a5c0c1a2c0",
+        "id": "ee3dfc518b4a28f2",
         "type": "group",
-        "z": "22c5681427f5f16c",
+        "z": "fd3c79e6b66d3caa",
         "name": "Creating / Deleting devices",
         "style": {
             "label": true
         },
         "nodes": [
-            "f08684a962f516b6",
-            "2a16811018645009",
-            "e154c996175f2b47",
-            "cff4bab635246357",
-            "735be7c02c9a324e",
-            "58ce79a8b9b08990",
-            "f057a5c66659e383"
+            "f43d5b1bed943866",
+            "c2d4ef1f2c35fd37",
+            "0204cefc31a68c7f",
+            "ac4c5a693e4aed1a",
+            "ba2616bee8832802"
         ],
-        "x": 34,
-        "y": 359,
-        "w": 1954,
-        "h": 328
+        "x": 114,
+        "y": 313,
+        "w": 2498,
+        "h": 234
     },
     {
-        "id": "2d1a32c0d45e626e",
+        "id": "e54d820b9f1d3218",
         "type": "group",
-        "z": "22c5681427f5f16c",
+        "z": "fd3c79e6b66d3caa",
         "name": "My2N Authentication",
         "style": {
             "label": true
         },
         "nodes": [
-            "dae30434200a6a52",
-            "7dc7ae4c396c209a",
-            "b75170dd040fcd17",
-            "6aae544055ae9217",
-            "08ded1e004f15b02",
-            "be52ee7881bef837",
-            "22cad40d62540e0a",
-            "29e8bfe3b8a0045c",
-            "c9fba779ce0bb846",
-            "4e2c80369c8e1bb3"
+            "17f14dedf5d3ddb8",
+            "0b34081833247360",
+            "f16385705f49116e",
+            "9c0094a5457cc33d",
+            "5c15c00ab77a4bd2",
+            "f41ee7ade910841e",
+            "1ba67d82461d35f8",
+            "d88a1918f07da0ed",
+            "6e46911b749cddf2"
         ],
-        "x": 38,
-        "y": 219,
-        "w": 1552,
+        "x": 114,
+        "y": 159,
+        "w": 1412,
         "h": 122
     },
     {
-        "id": "cff4bab635246357",
+        "id": "ac4c5a693e4aed1a",
         "type": "group",
-        "z": "22c5681427f5f16c",
-        "g": "4e9450a5c0c1a2c0",
+        "z": "fd3c79e6b66d3caa",
+        "g": "ee3dfc518b4a28f2",
         "name": "Creating device",
         "style": {
             "label": true
         },
         "nodes": [
-            "88ce0c3ec2217d51",
-            "d9fb7bb58a5d7dc1",
-            "d9b542c4aa1434c5",
-            "8ef720979305214a",
-            "c3ac4e5c37518351",
-            "a47b4f19f4e6e174",
-            "57433c658821b0be",
-            "f65d770fd1ee6f58",
-            "8d5e16139e518751",
-            "d885484fc80d4be9",
-            "4f3678f07c77d7a0"
+            "d4a68e4ea1a00c1c",
+            "c96225c116453d1b",
+            "117572a27c5452e4",
+            "8c2aea1dbf5a3892",
+            "d39c32d26f3044e7",
+            "ed5b5a78af0399ba",
+            "2708446c6727f6be",
+            "3a17a1b0e65c2b65",
+            "2377b0f48b3bd14b",
+            "f7b1fa48cb913c26"
         ],
-        "x": 60,
-        "y": 479,
-        "w": 1902,
+        "x": 734,
+        "y": 339,
+        "w": 1852,
         "h": 82
     },
     {
-        "id": "735be7c02c9a324e",
+        "id": "ba2616bee8832802",
         "type": "group",
-        "z": "22c5681427f5f16c",
-        "g": "4e9450a5c0c1a2c0",
+        "z": "fd3c79e6b66d3caa",
+        "g": "ee3dfc518b4a28f2",
         "name": "Deleting device",
         "style": {
             "label": true
         },
         "nodes": [
-            "469d9b31ceb44b57",
-            "983234338666ce0b",
-            "08f32ae94476047f",
-            "ce03aafee2d2f379",
-            "46a3a6b4abc76c1f",
-            "b7087089a4106020",
-            "7dfbcf846c9dd6c1",
-            "76fc7fdfa1df4da5",
-            "94e452042372c131",
-            "2fbcd3d6d9d3adf2",
-            "162a9dfb4c77ff68",
-            "746c09a879b1a911"
+            "23ba1b94a66f1c0e",
+            "7634eb7824886230",
+            "48f7f31be2d251bf",
+            "08337381eacd6fe2",
+            "8a9092aa3e87289a",
+            "62db19193e70f5ee",
+            "564415191ec57e57",
+            "65cc8ee4465f60f0",
+            "255706ba9fd202c8",
+            "40e91d672a11d2ea",
+            "7fc52d0ab4694e97"
         ],
-        "x": 60,
-        "y": 579,
-        "w": 1762,
+        "x": 734,
+        "y": 439,
+        "w": 1712,
         "h": 82
     },
     {
-        "id": "f08684a962f516b6",
+        "id": "f43d5b1bed943866",
         "type": "2nac-system-log",
-        "z": "22c5681427f5f16c",
-        "g": "4e9450a5c0c1a2c0",
+        "z": "fd3c79e6b66d3caa",
+        "g": "ee3dfc518b4a28f2",
         "filter": "{\"category\":\"UserAction\"}",
         "filtertype": "json",
         "name": "",
-        "x": 120,
+        "x": 200,
         "y": 420,
         "wires": [
             [
-                "e154c996175f2b47"
+                "0204cefc31a68c7f"
             ]
         ]
     },
     {
-        "id": "2a16811018645009",
+        "id": "c2d4ef1f2c35fd37",
         "type": "switch",
-        "z": "22c5681427f5f16c",
-        "g": "4e9450a5c0c1a2c0",
+        "z": "fd3c79e6b66d3caa",
+        "g": "ee3dfc518b4a28f2",
         "name": "created or deleted ?",
         "property": "payload.Event",
         "propertyType": "msg",
@@ -148,22 +143,22 @@
         "checkall": "true",
         "repair": false,
         "outputs": 2,
-        "x": 500,
+        "x": 560,
         "y": 420,
         "wires": [
             [
-                "f057a5c66659e383"
+                "ed5b5a78af0399ba"
             ],
             [
-                "58ce79a8b9b08990"
+                "65cc8ee4465f60f0"
             ]
         ]
     },
     {
-        "id": "e154c996175f2b47",
+        "id": "0204cefc31a68c7f",
         "type": "change",
-        "z": "22c5681427f5f16c",
-        "g": "4e9450a5c0c1a2c0",
+        "z": "fd3c79e6b66d3caa",
+        "g": "ee3dfc518b4a28f2",
         "name": "flow data to msg",
         "rules": [
             {
@@ -214,58 +209,58 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 300,
+        "x": 360,
         "y": 420,
         "wires": [
             [
-                "2a16811018645009"
+                "c2d4ef1f2c35fd37"
             ]
         ]
     },
     {
-        "id": "88ce0c3ec2217d51",
+        "id": "d4a68e4ea1a00c1c",
         "type": "function",
-        "z": "22c5681427f5f16c",
-        "g": "cff4bab635246357",
+        "z": "fd3c79e6b66d3caa",
+        "g": "ac4c5a693e4aed1a",
         "name": "compositeUser",
-        "func": "msg.method = \"POST\";\nmsg.headers = {};\nmsg.headers['Authorization'] = `Bearer ` + msg.apiKey;\nmsg.headers['Content-Type'] = 'application/json';\n\nif (msg.payload.Account.Email === \"\") {\n    msg.url = msg.partnerUrl + `/companies/${msg.companyId}/sites/${msg.siteId}/devices`;\n    msg.payload = {\n        \"apartmentId\": null,\n        \"name\": msg.payload.Name,\n        \"type\": \"HIPMO\",\n        \"userId\": msg.my2nUserId,\n        \"externalId\": msg.userId\n    };\n} else {\n    const getNameParts = (fullName) => {\n        if (!fullName) {\n            return { firstName: null, lastName: null };\n        }\n        const cleanName = fullName.trim().replace(/\\s+/g, ' ');\n        const nameParts = cleanName.split(' ');\n        const firstName = nameParts[0];\n        const lastName = nameParts.length > 1 ? nameParts[nameParts.length - 1] : \"null\";\n        return { firstName, lastName };\n    };\n\n    const nameParts = getNameParts(msg.payload.Name);\n\n    msg.url = msg.partnerUrl + `/composite/user`;\n    msg.payload = {\n        \"companyId\": msg.companyId,\n        \"siteId\": msg.siteId,\n        \"user\": {\n            \"email\": msg.payload.Account.Email,\n            \"firstName\": nameParts.firstName,\n            \"lastName\": nameParts.lastName,\n            \"grantedRoles\": {\n                \"companyRoles\": [{\n                    \"companyId\": msg.companyId,\n                    \"types\": [\"STANDARD\"]\n                }],\n                \"siteRoles\": [{\n                    \"siteId\": msg.siteId,\n                    \"types\": [\"USER\"]\n                }]\n            }\n        },\n        \"device\": {\n            \"externalId\": msg.userId,\n            \"name\": msg.payload.Name,\n            \"type\": \"HIPMO\"\n        }\n    };\n}\n\nreturn msg;",
+        "func": "msg.method = \"POST\";\nmsg.headers = {};\nmsg.headers['X-Api-Key'] = msg.apiKey;\nmsg.headers['Content-Type'] = 'application/json';\n\nif (msg.payload.Account.Email === \"\") {\n    msg.url = msg.partnerUrl + `/companies/${msg.companyId}/sites/${msg.siteId}/devices`;\n    msg.payload = {\n        \"apartmentId\": null,\n        \"name\": msg.payload.Name,\n        \"type\": \"HIPMO\",\n        \"userId\": msg.my2nUserId,\n        \"externalId\": msg.userId\n    };\n} else {\n    const getNameParts = (fullName) => {\n        if (!fullName) {\n            return { firstName: null, lastName: null };\n        }\n        const cleanName = fullName.trim().replace(/\\s+/g, ' ');\n        const nameParts = cleanName.split(' ');\n        const firstName = nameParts[0];\n        const lastName = nameParts.length > 1 ? nameParts[nameParts.length - 1] : \"null\";\n        return { firstName, lastName };\n    };\n\n    const nameParts = getNameParts(msg.payload.Name);\n\n    msg.url = msg.partnerUrl + `/composite/user`;\n    msg.payload = {\n        \"companyId\": msg.companyId,\n        \"siteId\": msg.siteId,\n        \"user\": {\n            \"email\": msg.payload.Account.Email,\n            \"firstName\": nameParts.firstName,\n            \"lastName\": nameParts.lastName,\n            \"grantedRoles\": {\n                \"companyRoles\": [{\n                    \"companyId\": msg.companyId,\n                    \"types\": [\"STANDARD\"]\n                }],\n                \"siteRoles\": [{\n                    \"siteId\": msg.siteId,\n                    \"types\": [\"USER\"]\n                }]\n            }\n        },\n        \"device\": {\n            \"externalId\": msg.userId,\n            \"name\": msg.payload.Name,\n            \"type\": \"HIPMO\"\n        }\n    };\n}\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 516,
-        "y": 520,
+        "x": 1140,
+        "y": 380,
         "wires": [
             [
-                "8ef720979305214a"
+                "8c2aea1dbf5a3892"
             ]
         ]
     },
     {
-        "id": "d9fb7bb58a5d7dc1",
+        "id": "c96225c116453d1b",
         "type": "2nac-rest-api",
-        "z": "22c5681427f5f16c",
-        "g": "cff4bab635246357",
+        "z": "fd3c79e6b66d3caa",
+        "g": "ac4c5a693e4aed1a",
         "name": "setPhoneNumber",
         "method": "PATCH",
         "endpoint": "users/{userId}",
         "query": "",
         "senderr": true,
-        "x": 1106,
-        "y": 520,
+        "x": 1730,
+        "y": 380,
         "wires": [
             [
-                "57433c658821b0be"
+                "2708446c6727f6be"
             ]
         ]
     },
     {
-        "id": "d9b542c4aa1434c5",
+        "id": "117572a27c5452e4",
         "type": "function",
-        "z": "22c5681427f5f16c",
-        "g": "cff4bab635246357",
+        "z": "fd3c79e6b66d3caa",
+        "g": "ac4c5a693e4aed1a",
         "name": "getPhoneNumber",
         "func": "if (msg.statusCode == 201){\n    msg.body = [{\"op\":\"add\",\"path\":\"/Calling/PhoneNumbers/-\",\"value\":{\"Number\":msg.payload.services.MOBILE_VIDEO.sipNumber+\"/2\"}}]\n    return msg;\n}\nif (msg.statusCode == 200){\n    msg.body = [{\"op\":\"add\",\"path\":\"/Calling/PhoneNumbers/-\",\"value\":{\"Number\":msg.payload.device.services.MOBILE_VIDEO.sipNumber+\"/2\"}}]\n    return msg;\n}\nelse {\n    node.warn(msg.payload);\n}",
         "outputs": 1,
@@ -274,19 +269,19 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 906,
-        "y": 520,
+        "x": 1530,
+        "y": 380,
         "wires": [
             [
-                "d9fb7bb58a5d7dc1"
+                "c96225c116453d1b"
             ]
         ]
     },
     {
-        "id": "8ef720979305214a",
+        "id": "8c2aea1dbf5a3892",
         "type": "http request",
-        "z": "22c5681427f5f16c",
-        "g": "cff4bab635246357",
+        "z": "fd3c79e6b66d3caa",
+        "g": "ac4c5a693e4aed1a",
         "name": "createUser&Device",
         "method": "use",
         "ret": "obj",
@@ -299,58 +294,58 @@
         "authType": "",
         "senderr": false,
         "headers": [],
-        "x": 706,
-        "y": 520,
+        "x": 1330,
+        "y": 380,
         "wires": [
             [
-                "d9b542c4aa1434c5"
+                "117572a27c5452e4"
             ]
         ]
     },
     {
-        "id": "c3ac4e5c37518351",
+        "id": "d39c32d26f3044e7",
         "type": "2nac-rest-api",
-        "z": "22c5681427f5f16c",
-        "g": "cff4bab635246357",
+        "z": "fd3c79e6b66d3caa",
+        "g": "ac4c5a693e4aed1a",
         "name": "getUser",
         "method": "GET",
         "endpoint": "users/{userId}",
         "query": "",
         "senderr": true,
-        "x": 356,
-        "y": 520,
+        "x": 980,
+        "y": 380,
         "wires": [
             [
-                "88ce0c3ec2217d51"
+                "d4a68e4ea1a00c1c"
             ]
         ]
     },
     {
-        "id": "469d9b31ceb44b57",
+        "id": "23ba1b94a66f1c0e",
         "type": "function",
-        "z": "22c5681427f5f16c",
-        "g": "735be7c02c9a324e",
+        "z": "fd3c79e6b66d3caa",
+        "g": "ba2616bee8832802",
         "name": "getDevices",
-        "func": "msg.method = \"GET\"\nmsg.url = msg.partnerUrl+`/companies/${msg.companyId}/sites/${msg.siteId}/devices?filter=${msg.payload.Subject.Name}&limit=1000`\nmsg.headers = {};\nmsg.headers['Authorization'] = `Bearer ` + msg.apiKey;\nreturn msg;",
+        "func": "msg.method = \"GET\"\nmsg.url = msg.partnerUrl+`/companies/${msg.companyId}/sites/${msg.siteId}/devices?filter=${msg.payload.Subject.Name}&limit=1000`\nmsg.headers = {};\nmsg.headers['X-Api-Key'] = msg.apiKey;\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 366,
-        "y": 620,
+        "x": 990,
+        "y": 480,
         "wires": [
             [
-                "983234338666ce0b"
+                "7634eb7824886230"
             ]
         ]
     },
     {
-        "id": "983234338666ce0b",
+        "id": "7634eb7824886230",
         "type": "http request",
-        "z": "22c5681427f5f16c",
-        "g": "735be7c02c9a324e",
+        "z": "fd3c79e6b66d3caa",
+        "g": "ba2616bee8832802",
         "name": "getDevices",
         "method": "use",
         "ret": "obj",
@@ -363,40 +358,40 @@
         "authType": "",
         "senderr": false,
         "headers": [],
-        "x": 526,
-        "y": 620,
+        "x": 1150,
+        "y": 480,
         "wires": [
             [
-                "b7087089a4106020"
+                "62db19193e70f5ee"
             ]
         ]
     },
     {
-        "id": "08f32ae94476047f",
+        "id": "48f7f31be2d251bf",
         "type": "function",
-        "z": "22c5681427f5f16c",
-        "g": "735be7c02c9a324e",
+        "z": "fd3c79e6b66d3caa",
+        "g": "ba2616bee8832802",
         "name": "deleteDevice",
-        "func": "if (msg.payload.externalId == msg.userId){\n    msg.my2nUserId = msg.payload.userId\n    msg.method = \"DELETE\"\n    msg.url = msg.partnerUrl+`/companies/${msg.companyId}/sites/${msg.siteId}/devices/${msg.payload.id}`\n    msg.headers = {};\n    msg.headers['Authorization'] = `Bearer ` + msg.apiKey;\n    return msg;\n}",
+        "func": "if (msg.payload.externalId == msg.userId){\n    msg.my2nUserId = msg.payload.userId\n    msg.method = \"DELETE\"\n    msg.url = msg.partnerUrl+`/companies/${msg.companyId}/sites/${msg.siteId}/devices/${msg.payload.id}`\n    msg.headers = {};\n    msg.headers['X-Api-Key'] = msg.apiKey;\n    return msg;\n}",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 986,
-        "y": 620,
+        "x": 1610,
+        "y": 480,
         "wires": [
             [
-                "ce03aafee2d2f379"
+                "08337381eacd6fe2"
             ]
         ]
     },
     {
-        "id": "ce03aafee2d2f379",
+        "id": "08337381eacd6fe2",
         "type": "http request",
-        "z": "22c5681427f5f16c",
-        "g": "735be7c02c9a324e",
+        "z": "fd3c79e6b66d3caa",
+        "g": "ba2616bee8832802",
         "name": "deleteDevice",
         "method": "use",
         "ret": "obj",
@@ -409,19 +404,19 @@
         "authType": "",
         "senderr": false,
         "headers": [],
-        "x": 1146,
-        "y": 620,
+        "x": 1770,
+        "y": 480,
         "wires": [
             [
-                "7dfbcf846c9dd6c1"
+                "564415191ec57e57"
             ]
         ]
     },
     {
-        "id": "46a3a6b4abc76c1f",
+        "id": "8a9092aa3e87289a",
         "type": "split",
-        "z": "22c5681427f5f16c",
-        "g": "735be7c02c9a324e",
+        "z": "fd3c79e6b66d3caa",
+        "g": "ba2616bee8832802",
         "name": "",
         "splt": "\\n",
         "spltType": "str",
@@ -430,19 +425,19 @@
         "stream": false,
         "addname": "",
         "property": "payload",
-        "x": 846,
-        "y": 620,
+        "x": 1470,
+        "y": 480,
         "wires": [
             [
-                "08f32ae94476047f"
+                "48f7f31be2d251bf"
             ]
         ]
     },
     {
-        "id": "b7087089a4106020",
+        "id": "62db19193e70f5ee",
         "type": "change",
-        "z": "22c5681427f5f16c",
-        "g": "735be7c02c9a324e",
+        "z": "fd3c79e6b66d3caa",
+        "g": "ba2616bee8832802",
         "name": "",
         "rules": [
             {
@@ -458,19 +453,19 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 696,
-        "y": 620,
+        "x": 1320,
+        "y": 480,
         "wires": [
             [
-                "46a3a6b4abc76c1f"
+                "8a9092aa3e87289a"
             ]
         ]
     },
     {
-        "id": "dae30434200a6a52",
+        "id": "17f14dedf5d3ddb8",
         "type": "http request",
-        "z": "22c5681427f5f16c",
-        "g": "2d1a32c0d45e626e",
+        "z": "fd3c79e6b66d3caa",
+        "g": "e54d820b9f1d3218",
         "name": "currentUserRequest",
         "method": "use",
         "ret": "obj",
@@ -483,19 +478,19 @@
         "authType": "",
         "senderr": false,
         "headers": [],
-        "x": 1244,
-        "y": 300,
+        "x": 1180,
+        "y": 240,
         "wires": [
             [
-                "7dc7ae4c396c209a"
+                "0b34081833247360"
             ]
         ]
     },
     {
-        "id": "7dc7ae4c396c209a",
+        "id": "0b34081833247360",
         "type": "change",
-        "z": "22c5681427f5f16c",
-        "g": "2d1a32c0d45e626e",
+        "z": "fd3c79e6b66d3caa",
+        "g": "e54d820b9f1d3218",
         "name": "",
         "rules": [
             {
@@ -511,17 +506,17 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 1464,
-        "y": 300,
+        "x": 1400,
+        "y": 240,
         "wires": [
             []
         ]
     },
     {
-        "id": "b75170dd040fcd17",
+        "id": "f16385705f49116e",
         "type": "inject",
-        "z": "22c5681427f5f16c",
-        "g": "2d1a32c0d45e626e",
+        "z": "fd3c79e6b66d3caa",
+        "g": "e54d820b9f1d3218",
         "name": "",
         "props": [
             {
@@ -535,19 +530,19 @@
         "once": true,
         "onceDelay": 0.1,
         "topic": "",
-        "x": 134,
-        "y": 300,
+        "x": 210,
+        "y": 240,
         "wires": [
             [
-                "6aae544055ae9217"
+                "9c0094a5457cc33d"
             ]
         ]
     },
     {
-        "id": "6aae544055ae9217",
+        "id": "9c0094a5457cc33d",
         "type": "change",
-        "z": "22c5681427f5f16c",
-        "g": "2d1a32c0d45e626e",
+        "z": "fd3c79e6b66d3caa",
+        "g": "e54d820b9f1d3218",
         "name": "setMy2NDetails",
         "rules": [
             {
@@ -575,7 +570,7 @@
                 "t": "set",
                 "p": "siteId",
                 "pt": "flow",
-                "to": "354546",
+                "to": "308865",
                 "tot": "num"
             },
             {
@@ -591,347 +586,40 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 284,
-        "y": 300,
+        "x": 360,
+        "y": 240,
         "wires": [
             [
-                "08ded1e004f15b02"
+                "5c15c00ab77a4bd2"
             ]
         ]
     },
     {
-        "id": "08ded1e004f15b02",
-        "type": "http request",
-        "z": "22c5681427f5f16c",
-        "g": "2d1a32c0d45e626e",
-        "name": "loginFlow",
-        "method": "GET",
-        "ret": "obj",
-        "paytoqs": "ignore",
-        "url": "https://auth.my2n.com/self-service/login/api",
-        "tls": "",
-        "persist": false,
-        "proxy": "",
-        "insecureHTTPParser": false,
-        "authType": "",
-        "senderr": false,
-        "headers": [],
-        "x": 444,
-        "y": 300,
-        "wires": [
-            [
-                "c9fba779ce0bb846"
-            ]
-        ]
-    },
-    {
-        "id": "be52ee7881bef837",
-        "type": "change",
-        "z": "22c5681427f5f16c",
-        "g": "2d1a32c0d45e626e",
-        "name": "set apiKey",
-        "rules": [
-            {
-                "t": "set",
-                "p": "apiKey",
-                "pt": "flow",
-                "to": "payload.session_token",
-                "tot": "msg"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 874,
-        "y": 300,
-        "wires": [
-            [
-                "29e8bfe3b8a0045c"
-            ]
-        ]
-    },
-    {
-        "id": "22cad40d62540e0a",
-        "type": "comment",
-        "z": "22c5681427f5f16c",
-        "g": "2d1a32c0d45e626e",
-        "name": "set your My2N details here",
-        "info": "not here, to the node below this one",
-        "x": 314,
-        "y": 260,
-        "wires": []
-    },
-    {
-        "id": "29e8bfe3b8a0045c",
+        "id": "5c15c00ab77a4bd2",
         "type": "function",
-        "z": "22c5681427f5f16c",
-        "g": "2d1a32c0d45e626e",
-        "name": "getCurrentUser",
-        "func": "if (msg.statusCode == 200){\n    msg.apiKey = flow.get(\"apiKey\")\n    msg.method = \"GET\"\n    msg.url = msg.partnerUrl + \"/users/current\"\n    msg.headers = {};\n    msg.headers['Authorization'] = `Bearer ` + msg.apiKey;\n    return msg;\n}\nelse if (msg.statusCode == 401){\n    node.warn(\"Unauthorized, wrong username or password.\")\n}\nelse{\n    node.warn(\"Unspecified error \" + msg.payload)\n}",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 1044,
-        "y": 300,
-        "wires": [
-            [
-                "dae30434200a6a52"
-            ]
-        ]
-    },
-    {
-        "id": "7dfbcf846c9dd6c1",
-        "type": "function",
-        "z": "22c5681427f5f16c",
-        "g": "735be7c02c9a324e",
-        "name": "getUser",
-        "func": "msg.method = \"GET\"\nmsg.url = msg.partnerUrl+`/companies/${msg.companyId}/sites/${msg.siteId}/users/${msg.my2nUserId}`\nmsg.headers = {};\nmsg.headers['Authorization'] = `Bearer ` + msg.apiKey;\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 1296,
-        "y": 620,
-        "wires": [
-            [
-                "94e452042372c131"
-            ]
-        ]
-    },
-    {
-        "id": "a47b4f19f4e6e174",
-        "type": "delay",
-        "z": "22c5681427f5f16c",
-        "g": "cff4bab635246357",
-        "name": "",
-        "pauseType": "rate",
-        "timeout": "5",
-        "timeoutUnits": "seconds",
-        "rate": "2",
-        "nbRateUnits": "1",
-        "rateUnits": "second",
-        "randomFirst": "1",
-        "randomLast": "5",
-        "randomUnits": "seconds",
-        "drop": false,
-        "allowrate": false,
-        "outputs": 1,
-        "x": 206,
-        "y": 520,
-        "wires": [
-            [
-                "c3ac4e5c37518351"
-            ]
-        ]
-    },
-    {
-        "id": "76fc7fdfa1df4da5",
-        "type": "delay",
-        "z": "22c5681427f5f16c",
-        "g": "735be7c02c9a324e",
-        "name": "",
-        "pauseType": "rate",
-        "timeout": "5",
-        "timeoutUnits": "seconds",
-        "rate": "2",
-        "nbRateUnits": "1",
-        "rateUnits": "second",
-        "randomFirst": "1",
-        "randomLast": "5",
-        "randomUnits": "seconds",
-        "drop": false,
-        "allowrate": false,
-        "outputs": 1,
-        "x": 206,
-        "y": 620,
-        "wires": [
-            [
-                "469d9b31ceb44b57"
-            ]
-        ]
-    },
-    {
-        "id": "57433c658821b0be",
-        "type": "function",
-        "z": "22c5681427f5f16c",
-        "g": "cff4bab635246357",
-        "name": "consumeLicense",
-        "func": "msg.url = msg.partnerUrl + `/companies/${msg.companyId}/sites/${msg.siteId}/services/MOBILE_VIDEO/licence`;\nmsg.method = \"POST\";\nmsg.headers = {};\nmsg.headers['Authorization'] = `Bearer ` + msg.apiKey;\nmsg.headers['Content-Type'] = 'application/json';\nmsg.payload = {\"action\":\"CONSUME\"}\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 1306,
-        "y": 520,
-        "wires": [
-            [
-                "f65d770fd1ee6f58"
-            ]
-        ]
-    },
-    {
-        "id": "f65d770fd1ee6f58",
-        "type": "http request",
-        "z": "22c5681427f5f16c",
-        "g": "cff4bab635246357",
-        "name": "consumeLicense",
-        "method": "use",
-        "ret": "obj",
-        "paytoqs": "ignore",
-        "url": "",
-        "tls": "",
-        "persist": false,
-        "proxy": "",
-        "insecureHTTPParser": false,
-        "authType": "",
-        "senderr": false,
-        "headers": [],
-        "x": 1506,
-        "y": 520,
-        "wires": [
-            [
-                "8d5e16139e518751"
-            ]
-        ]
-    },
-    {
-        "id": "8d5e16139e518751",
-        "type": "function",
-        "z": "22c5681427f5f16c",
-        "g": "cff4bab635246357",
-        "name": "systemLog",
-        "func": "if (msg.payload.unlicensedCount > 0){\n    msg.severity = \"Warn\"\n    if (msg.payload.unlicensedCount == 1){\n        msg.event = \"My2N license required\"\n        msg.detail = `${msg.payload.unlicensedCount} calling device is unlicensed, additional license must be purchased at my2n.com.`\n    }\n    else {\n        msg.event = \"My2N licenses required\"\n        msg.detail = `${msg.payload.unlicensedCount} calling devices are unlicensed, additional licenses must be purchased at my2n.com.`\n    }\n    \n}\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 1686,
-        "y": 520,
-        "wires": [
-            [
-                "d885484fc80d4be9"
-            ]
-        ]
-    },
-    {
-        "id": "d885484fc80d4be9",
-        "type": "2nac-write-system-log",
-        "z": "22c5681427f5f16c",
-        "g": "cff4bab635246357",
-        "name": "",
-        "severity": "Info",
-        "event": "",
-        "detail": "",
-        "x": 1856,
-        "y": 520,
-        "wires": []
-    },
-    {
-        "id": "94e452042372c131",
-        "type": "http request",
-        "z": "22c5681427f5f16c",
-        "g": "735be7c02c9a324e",
-        "name": "getUser",
-        "method": "use",
-        "ret": "obj",
-        "paytoqs": "ignore",
-        "url": "",
-        "tls": "",
-        "persist": false,
-        "proxy": "",
-        "insecureHTTPParser": false,
-        "authType": "",
-        "senderr": false,
-        "headers": [],
-        "x": 1436,
-        "y": 620,
-        "wires": [
-            [
-                "2fbcd3d6d9d3adf2"
-            ]
-        ]
-    },
-    {
-        "id": "2fbcd3d6d9d3adf2",
-        "type": "function",
-        "z": "22c5681427f5f16c",
-        "g": "735be7c02c9a324e",
-        "name": "isAdmin?",
-        "func": "const company = msg.payload.companies.find(c => c.id === msg.companyId);\nconst site = company.sites.find(s => s.id === msg.siteId);\n\nif (!site.roles.includes('ADMIN')){\n    msg.method = \"DELETE\"\n    msg.url = msg.partnerUrl+`/companies/${msg.companyId}/sites/${msg.siteId}/users/${msg.my2nUserId}`\n    msg.headers = {};\n    msg.headers['Authorization'] = `Bearer ` + msg.apiKey;\n    return msg;\n}",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 1576,
-        "y": 620,
-        "wires": [
-            [
-                "162a9dfb4c77ff68"
-            ]
-        ]
-    },
-    {
-        "id": "162a9dfb4c77ff68",
-        "type": "http request",
-        "z": "22c5681427f5f16c",
-        "g": "735be7c02c9a324e",
-        "name": "deleteUser",
-        "method": "use",
-        "ret": "obj",
-        "paytoqs": "ignore",
-        "url": "",
-        "tls": "",
-        "persist": false,
-        "proxy": "",
-        "insecureHTTPParser": false,
-        "authType": "",
-        "senderr": false,
-        "headers": [],
-        "x": 1726,
-        "y": 620,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "c9fba779ce0bb846",
-        "type": "function",
-        "z": "22c5681427f5f16c",
-        "g": "2d1a32c0d45e626e",
+        "z": "fd3c79e6b66d3caa",
+        "g": "e54d820b9f1d3218",
         "name": "auth",
-        "func": "msg.partnerUrl = flow.get(\"partnerUrl\")\nmsg.method = \"POST\"\nmsg.url = `https://auth.my2n.com/self-service/login?flow=${msg.payload.id}`\nmsg.payload = {\"identifier\":msg.username,\"password\":msg.password,\"method\": \"password\"}\nreturn msg;",
+        "func": "msg.partnerUrl = flow.get(\"partnerUrl\")\nmsg.method = \"POST\"\nmsg.url = msg.partnerUrl+\"/auth\"\nmsg.payload = {\"username\":msg.username,\"password\":msg.password}\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 574,
-        "y": 300,
+        "x": 510,
+        "y": 240,
         "wires": [
             [
-                "4e2c80369c8e1bb3"
+                "f41ee7ade910841e"
             ]
         ]
     },
     {
-        "id": "4e2c80369c8e1bb3",
+        "id": "f41ee7ade910841e",
         "type": "http request",
-        "z": "22c5681427f5f16c",
-        "g": "2d1a32c0d45e626e",
+        "z": "fd3c79e6b66d3caa",
+        "g": "e54d820b9f1d3218",
         "name": "authRequest",
         "method": "use",
         "ret": "obj",
@@ -944,74 +632,294 @@
         "authType": "",
         "senderr": false,
         "headers": [],
-        "x": 714,
-        "y": 300,
+        "x": 650,
+        "y": 240,
         "wires": [
             [
-                "be52ee7881bef837"
+                "1ba67d82461d35f8"
             ]
         ]
     },
     {
-        "id": "746c09a879b1a911",
-        "type": "link in",
-        "z": "22c5681427f5f16c",
-        "g": "735be7c02c9a324e",
-        "name": "link in 12",
-        "links": [
-            "58ce79a8b9b08990"
+        "id": "1ba67d82461d35f8",
+        "type": "change",
+        "z": "fd3c79e6b66d3caa",
+        "g": "e54d820b9f1d3218",
+        "name": "set apiKey",
+        "rules": [
+            {
+                "t": "set",
+                "p": "apiKey",
+                "pt": "flow",
+                "to": "payload.accessToken",
+                "tot": "msg"
+            }
         ],
-        "x": 101,
-        "y": 620,
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 810,
+        "y": 240,
         "wires": [
             [
-                "76fc7fdfa1df4da5"
+                "6e46911b749cddf2"
             ]
         ]
     },
     {
-        "id": "58ce79a8b9b08990",
-        "type": "link out",
-        "z": "22c5681427f5f16c",
-        "g": "4e9450a5c0c1a2c0",
-        "name": "link out 13",
-        "mode": "link",
-        "links": [
-            "746c09a879b1a911"
-        ],
-        "x": 655,
-        "y": 440,
+        "id": "d88a1918f07da0ed",
+        "type": "comment",
+        "z": "fd3c79e6b66d3caa",
+        "g": "e54d820b9f1d3218",
+        "name": "set your My2N details here",
+        "info": "not here, to the node below this one",
+        "x": 390,
+        "y": 200,
         "wires": []
     },
     {
-        "id": "4f3678f07c77d7a0",
-        "type": "link in",
-        "z": "22c5681427f5f16c",
-        "g": "cff4bab635246357",
-        "name": "link in 14",
-        "links": [
-            "f057a5c66659e383"
-        ],
-        "x": 101,
-        "y": 520,
+        "id": "6e46911b749cddf2",
+        "type": "function",
+        "z": "fd3c79e6b66d3caa",
+        "g": "e54d820b9f1d3218",
+        "name": "getCurrentUser",
+        "func": "if (msg.statusCode == 200){\n    msg.apiKey = flow.get(\"apiKey\")\n    msg.method = \"GET\"\n    msg.url = msg.partnerUrl + \"/users/current\"\n    msg.headers = {};\n    msg.headers['X-Api-Key'] = msg.apiKey;\n    return msg;\n}\nelse if (msg.statusCode == 401){\n    node.warn(\"Unauthorized, wrong username or password.\")\n}\nelse{\n    node.warn(\"Unspecified error \" + msg.payload)\n}",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 980,
+        "y": 240,
         "wires": [
             [
-                "a47b4f19f4e6e174"
+                "17f14dedf5d3ddb8"
             ]
         ]
     },
     {
-        "id": "f057a5c66659e383",
-        "type": "link out",
-        "z": "22c5681427f5f16c",
-        "g": "4e9450a5c0c1a2c0",
-        "name": "link out 15",
-        "mode": "link",
-        "links": [
-            "4f3678f07c77d7a0"
-        ],
-        "x": 655,
-        "y": 400,
+        "id": "564415191ec57e57",
+        "type": "function",
+        "z": "fd3c79e6b66d3caa",
+        "g": "ba2616bee8832802",
+        "name": "getUser",
+        "func": "msg.method = \"GET\"\nmsg.url = msg.partnerUrl+`/companies/${msg.companyId}/sites/${msg.siteId}/users/${msg.my2nUserId}`\nmsg.headers = {};\nmsg.headers['X-Api-Key'] = msg.apiKey;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1920,
+        "y": 480,
+        "wires": [
+            [
+                "255706ba9fd202c8"
+            ]
+        ]
+    },
+    {
+        "id": "ed5b5a78af0399ba",
+        "type": "delay",
+        "z": "fd3c79e6b66d3caa",
+        "g": "ac4c5a693e4aed1a",
+        "name": "",
+        "pauseType": "rate",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "2",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 830,
+        "y": 380,
+        "wires": [
+            [
+                "d39c32d26f3044e7"
+            ]
+        ]
+    },
+    {
+        "id": "65cc8ee4465f60f0",
+        "type": "delay",
+        "z": "fd3c79e6b66d3caa",
+        "g": "ba2616bee8832802",
+        "name": "",
+        "pauseType": "rate",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "2",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 830,
+        "y": 480,
+        "wires": [
+            [
+                "23ba1b94a66f1c0e"
+            ]
+        ]
+    },
+    {
+        "id": "2708446c6727f6be",
+        "type": "function",
+        "z": "fd3c79e6b66d3caa",
+        "g": "ac4c5a693e4aed1a",
+        "name": "consumeLicense",
+        "func": "msg.url = msg.partnerUrl + `/companies/${msg.companyId}/sites/${msg.siteId}/services/MOBILE_VIDEO/licence`;\nmsg.method = \"POST\";\nmsg.headers = {};\nmsg.headers['X-Api-Key'] = msg.apiKey;\nmsg.headers['Content-Type'] = 'application/json';\nmsg.payload = {\"action\":\"CONSUME\"}\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1930,
+        "y": 380,
+        "wires": [
+            [
+                "3a17a1b0e65c2b65"
+            ]
+        ]
+    },
+    {
+        "id": "3a17a1b0e65c2b65",
+        "type": "http request",
+        "z": "fd3c79e6b66d3caa",
+        "g": "ac4c5a693e4aed1a",
+        "name": "consumeLicense",
+        "method": "use",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 2130,
+        "y": 380,
+        "wires": [
+            [
+                "2377b0f48b3bd14b"
+            ]
+        ]
+    },
+    {
+        "id": "2377b0f48b3bd14b",
+        "type": "function",
+        "z": "fd3c79e6b66d3caa",
+        "g": "ac4c5a693e4aed1a",
+        "name": "systemLog",
+        "func": "if (msg.payload.unlicensedCount > 0){\n    msg.severity = \"Warn\"\n    if (msg.payload.unlicensedCount == 1){\n        msg.event = \"My2N license required\"\n        msg.detail = `${msg.payload.unlicensedCount} calling device is unlicensed, additional license must be purchased at my2n.com.`\n    }\n    else {\n        msg.event = \"My2N licenses required\"\n        msg.detail = `${msg.payload.unlicensedCount} calling devices are unlicensed, additional licenses must be purchased at my2n.com.`\n    }\n    \n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2310,
+        "y": 380,
+        "wires": [
+            [
+                "f7b1fa48cb913c26"
+            ]
+        ]
+    },
+    {
+        "id": "f7b1fa48cb913c26",
+        "type": "2nac-write-system-log",
+        "z": "fd3c79e6b66d3caa",
+        "g": "ac4c5a693e4aed1a",
+        "name": "",
+        "severity": "Info",
+        "event": "",
+        "detail": "",
+        "x": 2480,
+        "y": 380,
         "wires": []
+    },
+    {
+        "id": "255706ba9fd202c8",
+        "type": "http request",
+        "z": "fd3c79e6b66d3caa",
+        "g": "ba2616bee8832802",
+        "name": "getUser",
+        "method": "use",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 2060,
+        "y": 480,
+        "wires": [
+            [
+                "40e91d672a11d2ea"
+            ]
+        ]
+    },
+    {
+        "id": "40e91d672a11d2ea",
+        "type": "function",
+        "z": "fd3c79e6b66d3caa",
+        "g": "ba2616bee8832802",
+        "name": "isAdmin?",
+        "func": "const company = msg.payload.companies.find(c => c.id === msg.companyId);\nconst site = company.sites.find(s => s.id === msg.siteId);\n\nif (!site.roles.includes('ADMIN')){\n    msg.method = \"DELETE\"\n    msg.url = msg.partnerUrl+`/companies/${msg.companyId}/sites/${msg.siteId}/users/${msg.my2nUserId}`\n    msg.headers = {};\n    msg.headers['X-Api-Key'] = msg.apiKey;\n    return msg;\n}",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2200,
+        "y": 480,
+        "wires": [
+            [
+                "7fc52d0ab4694e97"
+            ]
+        ]
+    },
+    {
+        "id": "7fc52d0ab4694e97",
+        "type": "http request",
+        "z": "fd3c79e6b66d3caa",
+        "g": "ba2616bee8832802",
+        "name": "deleteUser",
+        "method": "use",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 2350,
+        "y": 480,
+        "wires": [
+            []
+        ]
     }
 ]
