@@ -18,4 +18,4 @@ Here are a few configuration examples to help you with the setup.
 
 2. [HttpApiAccount.js](HttpApiAccount.js) will create an HTTP API account in the second position with a predefined username, password and allow privileges to the system.
 
-3. 
+3. [SipAccountBackupAddress.js](SipAccountBackupAddress.js) will add a predefined backup proxy and backup registrar address to SIP 1 account.
