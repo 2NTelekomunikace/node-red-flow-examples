@@ -52,17 +52,17 @@ By default, the flow targets all intercoms and access units connected to the 2N 
 
 3. Configure the **Query** parameter to filter targeted devices. (see examples below)
 
-    * Filter all intercoms and access units:
+    * Filter all online intercoms or access units:
       
-      * `?filter={"$or":[{"Hardware.Category":{"$eq":"Intercom"}},{"Hardware.Category":{"$eq":"AccessUnit"}}]}`
+      * `?filter={"$and":[{"State.Status":{"$eq":"Online"}},{"$or":[{"Hardware.Category":{"$in":["Intercom","AccessUnit"]}}]}]}`
 
-    * Filter devices with ID 1 or 4:
+    * Filter online devices with ID 1 or 4:
       
-      * `?filter={"$or":[{"Id":{"$eq":1}},{"Id":{"$eq":4}}]}`
+      * `?filter={"$and":[{"State.Status":{"$eq":"Online"}},{"$or":[{"Id":{"$in":[1,4]}}]}]}`
 
-    * Filter devices containing product name Style or Verso:
+    * Filter online devices containing product name Style or Verso:
       
-      * `?filter={"$or":[{"Hardware.ProductName":{"$cti":"Style"}},{"Hardware.ProductName":{"$cti":"Verso"}}]}`
+      * `?filter={"$and":[{"State.Status":{"$eq":"Online"}},{"$or":[{"Hardware.ProductName":{"$cti":"Style"}},{"Hardware.ProductName":{"$cti":"Verso"}}]}]}`
 
 4. Ensure the filter is correct; otherwise, no device will be filtered.
 
@@ -141,7 +141,7 @@ For each device, the first `function` node (*auth login*) prepares a login reque
 
 ### Limitations and Known issues:
 
-  * `N/A`
+  * If you have a lot of devices, it is recommended to add a rate limiter.
 
 ## Author and Versioning
 
