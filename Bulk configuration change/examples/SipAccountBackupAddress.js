@@ -6,6 +6,7 @@ msg.payload = {
         Phone: [
             {
                 Sip: {
+                    $: {At: "0"},
                     Proxy: {
                         FirstBackupAddress: "192.168.1.2" 
                     },
