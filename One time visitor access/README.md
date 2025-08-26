@@ -84,6 +84,8 @@ This flow provides one-time access for visitors. Once a visitor's credential is 
 
 * **Author:** [Kristian Velen](https://github.com/kv-0000)
 
+* **Company:** [2N](https://2n.com)
+
 * **Created On:** `[2025-07-30]`
 
 * **Last Verified Working On:** `[2025-07-30]`

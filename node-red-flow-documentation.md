@@ -181,7 +181,9 @@ Provide a detailed explanation of each major section or logical block of the flo
 
 ## Author and Versioning
 
-* **Author:** \[Your Name or GitHub Handle\]
+* **Author:** [Your Yame](link)
+
+* **Company:** [Your Company](link)
 
 * **Created On:** `[YYYY-MM-DD]`
 

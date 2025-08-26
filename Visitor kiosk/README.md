@@ -82,6 +82,8 @@ Open the kiosk at `https://access_commander_ip_address/nodered/api/visitor`
 
 * **Author:** [Kristian Velen](https://github.com/kv-0000)
 
+* **Company:** [2N](https://2n.com)
+
 * **Created On:** `[2025-08-08]`
 
 * **Last Verified Working On:** `[2025-08-08]`

@@ -147,6 +147,8 @@ For each device, the first `function` node (*auth login*) prepares a login reque
 
 * **Author:** [Kristian Velen](https://github.com/kv-0000)
 
+* **Company:** [2N](https://2n.com)
+
 * **Created On:** `[2025-08-12]`
 
 * **Last Verified Working On:** `[2025-08-12]`

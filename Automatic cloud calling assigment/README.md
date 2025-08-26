@@ -117,6 +117,8 @@ If a user was deleted from the 2N Access Commander, any associated device found 
 
 * **Author:** [Kristian Velen](https://github.com/kv-0000)
 
+* **Company:** [2N](https://2n.com)
+
 * **Created On:** `[2025-08-04]`
 
 * **Last Verified Working On:** `[2025-08-20]`
