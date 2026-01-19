@@ -1,0 +1,418 @@
+[
+    {
+        "id": "3a5edba4ed7f9da7",
+        "type": "tab",
+        "label": "Visitor kiosk 2.0",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "5f54724064baef29",
+        "type": "group",
+        "z": "3a5edba4ed7f9da7",
+        "name": "Kiosk",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "dd65bb993614613c",
+            "e49457c704da0d7f",
+            "2b60082a2022d66a",
+            "c58209837bd55c0f",
+            "6c6686d061125b2b",
+            "ebb95fb3b4485cef",
+            "5375804788a23144",
+            "38153ed69d22814a",
+            "c1210eb88acd45d5",
+            "592aa7d70f6d66d6",
+            "e593886c3a5927e0",
+            "4aa8e5b83ae8c0d7",
+            "174433df0db561b7",
+            "34148273cedf5500",
+            "c6cb116397cc1a02",
+            "13fb9218ca1ac65a",
+            "4dd4821cec2bdcb7",
+            "4022b56b06f9ca22",
+            "3fb240f3e325d7d3"
+        ],
+        "x": 114,
+        "y": 99,
+        "w": 912,
+        "h": 302
+    },
+    {
+        "id": "dd65bb993614613c",
+        "type": "http in",
+        "z": "3a5edba4ed7f9da7",
+        "g": "5f54724064baef29",
+        "name": "GET /visitor",
+        "url": "/visitor",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 210,
+        "y": 140,
+        "wires": [
+            [
+                "2b60082a2022d66a"
+            ]
+        ]
+    },
+    {
+        "id": "e49457c704da0d7f",
+        "type": "http response",
+        "z": "3a5edba4ed7f9da7",
+        "g": "5f54724064baef29",
+        "name": "",
+        "statusCode": "200",
+        "headers": {},
+        "x": 800,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "2b60082a2022d66a",
+        "type": "2nac-rest-api",
+        "z": "3a5edba4ed7f9da7",
+        "g": "5f54724064baef29",
+        "name": "getCompanies",
+        "method": "GET",
+        "endpoint": "companies",
+        "query": "",
+        "senderr": true,
+        "x": 420,
+        "y": 140,
+        "wires": [
+            [
+                "c6cb116397cc1a02"
+            ]
+        ]
+    },
+    {
+        "id": "c58209837bd55c0f",
+        "type": "http in",
+        "z": "3a5edba4ed7f9da7",
+        "g": "5f54724064baef29",
+        "name": "POST /visitor",
+        "url": "/visitor",
+        "method": "post",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 210,
+        "y": 180,
+        "wires": [
+            [
+                "5375804788a23144"
+            ]
+        ]
+    },
+    {
+        "id": "6c6686d061125b2b",
+        "type": "function",
+        "z": "3a5edba4ed7f9da7",
+        "g": "5f54724064baef29",
+        "name": "createVisitor",
+        "func": "function formatDateTime(time) {\n  const date = new Date();\n  const year = date.getFullYear();\n  const month = String(date.getMonth() + 1).padStart(2, '0');\n  const day = String(date.getDate()).padStart(2, '0');\n  return `${year}-${month}-${day}T${time}`;\n}\n\nvar startTime = formatDateTime(msg.payload.BusinessHours.From)\nvar endTime = formatDateTime(msg.payload.BusinessHours.To)\n\nmsg.body = { \"Name\": msg.name, \"Company\": { \"Id\": msg.companyId }, \"Groups\": msg.payload.VisitorSettings.PredefinedVisitorGroups, \"Email\": msg.email, \"VisitFrom\": startTime, \"VisitTo\": endTime, \"VisitedPersonId\": msg.visitedPersonId }\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 770,
+        "y": 180,
+        "wires": [
+            [
+                "ebb95fb3b4485cef"
+            ]
+        ]
+    },
+    {
+        "id": "ebb95fb3b4485cef",
+        "type": "2nac-rest-api",
+        "z": "3a5edba4ed7f9da7",
+        "g": "5f54724064baef29",
+        "name": "createVisitor",
+        "method": "POST",
+        "endpoint": "visitors",
+        "query": "",
+        "senderr": true,
+        "x": 930,
+        "y": 180,
+        "wires": [
+            [
+                "c1210eb88acd45d5"
+            ]
+        ]
+    },
+    {
+        "id": "5375804788a23144",
+        "type": "change",
+        "z": "3a5edba4ed7f9da7",
+        "g": "5f54724064baef29",
+        "name": "formDetails",
+        "rules": [
+            {
+                "t": "set",
+                "p": "name",
+                "pt": "msg",
+                "to": "payload.name",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "email",
+                "pt": "msg",
+                "to": "payload.email",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "companyId",
+                "pt": "msg",
+                "to": "payload.company",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "visitedPersonId",
+                "pt": "msg",
+                "to": "payload.visitedPersonId",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 410,
+        "y": 180,
+        "wires": [
+            [
+                "38153ed69d22814a"
+            ]
+        ]
+    },
+    {
+        "id": "38153ed69d22814a",
+        "type": "2nac-rest-api",
+        "z": "3a5edba4ed7f9da7",
+        "g": "5f54724064baef29",
+        "name": "getCompany",
+        "method": "GET",
+        "endpoint": "companies/{companyId}",
+        "query": "",
+        "senderr": true,
+        "x": 590,
+        "y": 180,
+        "wires": [
+            [
+                "6c6686d061125b2b"
+            ]
+        ]
+    },
+    {
+        "id": "c1210eb88acd45d5",
+        "type": "change",
+        "z": "3a5edba4ed7f9da7",
+        "g": "5f54724064baef29",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "visitorId",
+                "pt": "msg",
+                "to": "payload.Id",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "body",
+                "pt": "msg",
+                "to": "payload.Email",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 240,
+        "y": 240,
+        "wires": [
+            [
+                "592aa7d70f6d66d6"
+            ]
+        ]
+    },
+    {
+        "id": "592aa7d70f6d66d6",
+        "type": "2nac-rest-api",
+        "z": "3a5edba4ed7f9da7",
+        "g": "5f54724064baef29",
+        "name": "createQRcode",
+        "method": "POST",
+        "endpoint": "visitors/{visitorId}/qrcode",
+        "query": "",
+        "senderr": true,
+        "x": 420,
+        "y": 240,
+        "wires": [
+            [
+                "e593886c3a5927e0"
+            ]
+        ]
+    },
+    {
+        "id": "e593886c3a5927e0",
+        "type": "2nac-rest-api",
+        "z": "3a5edba4ed7f9da7",
+        "g": "5f54724064baef29",
+        "name": "sendQRcode",
+        "method": "PUT",
+        "endpoint": "visitors/{visitorId}/sendcredentials",
+        "query": "",
+        "senderr": true,
+        "x": 590,
+        "y": 240,
+        "wires": [
+            [
+                "4aa8e5b83ae8c0d7"
+            ]
+        ]
+    },
+    {
+        "id": "4aa8e5b83ae8c0d7",
+        "type": "http response",
+        "z": "3a5edba4ed7f9da7",
+        "g": "5f54724064baef29",
+        "name": "",
+        "statusCode": "200",
+        "headers": {},
+        "x": 740,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "174433df0db561b7",
+        "type": "catch",
+        "z": "3a5edba4ed7f9da7",
+        "g": "5f54724064baef29",
+        "name": "",
+        "scope": [
+            "38153ed69d22814a"
+        ],
+        "uncaught": false,
+        "x": 210,
+        "y": 300,
+        "wires": [
+            [
+                "34148273cedf5500"
+            ]
+        ]
+    },
+    {
+        "id": "34148273cedf5500",
+        "type": "http response",
+        "z": "3a5edba4ed7f9da7",
+        "g": "5f54724064baef29",
+        "name": "",
+        "statusCode": "400",
+        "headers": {},
+        "x": 340,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "c6cb116397cc1a02",
+        "type": "template",
+        "z": "3a5edba4ed7f9da7",
+        "g": "5f54724064baef29",
+        "name": "",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "html",
+        "syntax": "mustache",
+        "template": "<!DOCTYPE html>\n<html lang=\"en\">\n\n<head>\n  <meta charset=\"UTF-8\">\n  <title>Visitor Kiosk</title>\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1, viewport-fit=cover\" />\n\n  <meta name=\"theme-color\" media=\"(prefers-color-scheme: light)\" content=\"rgb(61, 105, 244)\">\n  <meta name=\"theme-color\" media=\"(prefers-color-scheme: dark)\" content=\"rgb(130, 177, 255)\">\n  <link href=\"https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap\" rel=\"stylesheet\">\n  <style>\n    :root {\n      --md-primary: rgb(61, 105, 244);\n      --md-primary-hover: rgb(26, 72, 188);\n      --md-on-primary: #FFFFFF;\n      --md-surface: #FFFBFE;\n      --md-surface-container: rgb(246, 246, 251);\n      --md-outline: rgb(100, 116, 157);\n      --md-error: #B3261E;\n      --md-success: #197a50;\n      --main-grey: rgba(0, 0, 0, 0.38);\n\n      /* Text colors for light mode */\n      --md-text: #1C1B1F;\n      --md-text-secondary: #49454F;\n      --md-input-text: #1C1B1F;\n      --md-label-text: rgba(0, 0, 0, 0.6);\n\n      /* Notification backgrounds for light mode */\n      --notif-success-bg: #d4f8e8;\n      --notif-error-bg: #ffd6d6;\n\n      color-scheme: light;\n    }\n\n    @media (prefers-color-scheme: dark) {\n      :root {\n        --md-primary: rgb(130, 177, 255);\n        --md-primary-hover: rgb(80, 120, 210);\n        --md-on-primary: #1C1B1F;\n        --md-surface: #181A20;\n        --md-surface-container: #23252C;\n        --md-outline: rgb(130, 140, 180);\n        --md-error: #FFB4A9;\n        --md-success: #4ADE80;\n        --main-grey: rgba(255, 255, 255, 0.24);\n\n        /* Text colors for dark mode */\n        --md-text: #fff;\n        --md-text-secondary: #bcbcbc;\n        --md-input-text: #fff;\n        --md-label-text: rgba(255, 255, 255, 0.7);\n\n        /* Notification backgrounds for dark mode */\n        --notif-success-bg: #163d2a;\n        --notif-error-bg: #4a2323;\n\n        color-scheme: light dark;\n      }\n    }\n\n    * {\n      margin: 0;\n      padding: 0;\n      box-sizing: border-box;\n      font-family: 'Roboto', sans-serif;\n    }\n\n    html,\n    body {\n      height: 100%;\n    }\n\n    body {\n      background-color: var(--md-surface-container);\n      display: flex;\n      justify-content: center;\n      align-items: center;\n      color: var(--md-text);\n    }\n\n    .container {\n      width: 100%;\n      max-width: 750px;\n      padding: 20px;\n    }\n\n    .card {\n      background-color: var(--md-surface);\n      border-radius: 28px;\n      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);\n      overflow: hidden;\n    }\n\n    .card-content {\n      padding: 32px;\n    }\n\n    .brand {\n      display: flex;\n      justify-content: center;\n      margin-bottom: 24px;\n    }\n\n    .brand svg {\n      width: 48px;\n      height: 48px;\n      fill: var(--md-primary);\n    }\n\n    .title {\n      text-align: center;\n      font-size: 2rem;\n      font-weight: 500;\n      color: var(--md-text);\n      margin-bottom: 8px;\n    }\n\n    .subtitle {\n      text-align: center;\n      color: var(--md-text-secondary);\n      margin-bottom: 32px;\n    }\n\n    form {\n      display: flex;\n      flex-direction: column;\n      gap: 24px;\n    }\n\n    .form-group {\n      width: 100%;\n    }\n\n    .outlined-input {\n      position: relative;\n      width: 100%;\n    }\n\n    .outlined-input input,\n    .outlined-input select {\n      width: 100%;\n      color: var(--md-input-text);\n      height: 56px;\n      outline: 1px solid var(--main-grey);\n      border-radius: 5px;\n      border: none;\n      background-color: var(--md-surface);\n      padding: 0 20px;\n      font-size: 16px;\n      transition: outline-color 0.1s ease-in-out;\n    }\n\n    .outlined-input select {\n      cursor: pointer;\n      appearance: none;\n      background-image: url(\"data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e\");\n      background-position: right 12px center;\n      background-repeat: no-repeat;\n      background-size: 16px;\n    }\n\n    .outlined-input label {\n      position: absolute;\n      top: 50%;\n      left: 20px;\n      transform: translateY(-50%);\n      background-color: var(--md-surface);\n      color: var(--md-label-text);\n      padding: 0 5px;\n      transition: all 0.2s ease-in-out;\n      font-size: 1rem;\n      pointer-events: none;\n      white-space: nowrap;\n    }\n\n    .outlined-input input[data-has-content]~label,\n    .outlined-input input:not(:placeholder-shown)~label,\n    .outlined-input input:focus~label,\n    .outlined-input select:not([value=\"\"])~label,\n    .outlined-input select:focus~label {\n      top: 0;\n      left: 15px;\n      font-size: 0.75rem;\n      transform: translateY(-50%);\n    }\n\n    .outlined-input input:hover,\n    .outlined-input select:hover {\n      outline-color: var(--md-text);\n    }\n\n    .outlined-input input:focus,\n    .outlined-input select:focus {\n      outline: 2px solid var(--md-primary)\n    }\n\n    .outlined-input input:focus~label,\n    .outlined-input select:focus~label {\n      color: var(--md-primary);\n    }\n\n    .outlined-input input:disabled,\n    .outlined-input select:disabled {\n      background-color: rgba(0, 0, 0, 0.05);\n      outline-color: rgba(0, 0, 0, 0.12);\n      color: rgba(0, 0, 0, 0.38);\n      cursor: not-allowed;\n    }\n\n    .outlined-input input:disabled~label,\n    .outlined-input select:disabled~label {\n      color: rgba(0, 0, 0, 0.38);\n      background-color: transparent;\n    }\n\n    /* Dropdown suggestions styling */\n    .search-dropdown {\n      position: absolute;\n      top: 100%;\n      left: 0;\n      right: 0;\n      background-color: var(--md-surface);\n      border: 1px solid var(--md-outline);\n      border-radius: 5px;\n      max-height: 200px;\n      overflow-y: auto;\n      z-index: 1000;\n      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);\n      display: none;\n    }\n\n    .search-dropdown.show {\n      display: block;\n    }\n\n    .dropdown-item {\n      padding: 12px 16px;\n      cursor: pointer;\n      border-bottom: 1px solid var(--md-outline);\n      transition: background-color 0.2s;\n    }\n\n    .dropdown-item:last-child {\n      border-bottom: none;\n    }\n\n    .dropdown-item:hover {\n      background-color: var(--md-surface-container);\n    }\n\n    .dropdown-item.selected {\n      background-color: var(--md-primary);\n      color: var(--md-on-primary);\n    }\n\n    @media (prefers-color-scheme: dark) {\n\n      .outlined-input input:disabled,\n      .outlined-input select:disabled {\n        background-color: rgba(255, 255, 255, 0.05);\n        outline-color: rgba(255, 255, 255, 0.12);\n        color: rgba(255, 255, 255, 0.38);\n      }\n\n      .outlined-input input:disabled~label,\n      .outlined-input select:disabled~label {\n        color: rgba(255, 255, 255, 0.38);\n        background-color: transparent;\n      }\n\n      .outlined-input select {\n        background-image: url(\"data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%9ca3af' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e\");\n      }\n    }\n\n    .button-container {\n      display: flex;\n      flex-direction: column;\n      gap: 16px;\n      margin-top: 8px;\n    }\n\n    .button {\n      width: 100%;\n      padding: 16px;\n      color: var(--md-on-primary);\n      border: none;\n      border-radius: 100px;\n      font-size: 16px;\n      font-weight: 500;\n      cursor: pointer;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      background-color: var(--md-primary);\n      transition: background-color 0.2s;\n      text-align: center;\n      min-height: 40px;\n      line-height: normal;\n    }\n\n    .button:hover {\n      background-color: var(--md-primary-hover);\n    }\n\n    .notification {\n      margin-top: 1.2rem;\n      padding: 1rem 1.2rem;\n      border-radius: 8px;\n      font-weight: 500;\n      font-size: 1rem;\n      display: none;\n      border: 1px solid transparent;\n      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);\n      text-align: center;\n      opacity: 0;\n      transform: translateY(-10px);\n      transition: all 0.3s ease-in-out;\n    }\n\n    .notification.show {\n      display: block;\n      opacity: 1;\n      transform: translateY(0);\n    }\n\n    .notification.fade-out {\n      opacity: 0;\n      transform: translateY(-10px);\n    }\n\n    .notification.success {\n      background: var(--notif-success-bg);\n      color: var(--md-success);\n      border-color: var(--md-success);\n    }\n\n    .notification.error {\n      background: var(--notif-error-bg);\n      color: var(--md-error);\n      border-color: var(--md-error);\n    }\n  </style>\n</head>\n\n<body>\n  <div class=\"container\">\n    <div class=\"card\">\n      <div class=\"card-content\">\n        <div class=\"brand\">\n          <svg xmlns=\"http://www.w3.org/2000/svg\" height=\"24px\" viewBox=\"0 -960 960 960\" width=\"24px\">\n            <path\n              d=\"M160-80q-33 0-56.5-23.5T80-160v-440q0-33 23.5-56.5T160-680h200v-120q0-33 23.5-56.5T440-880h80q33 0 56.5 23.5T600-800v120h200q33 0 56.5 23.5T880-600v440q0 33-23.5 56.5T800-80H160Zm0-80h640v-440H600q0 33-23.5 56.5T520-520h-80q-33 0-56.5-23.5T360-600H160v440Zm80-80h240v-18q0-17-9.5-31.5T444-312q-20-9-40.5-13.5T360-330q-23 0-43.5 4.5T276-312q-17 8-26.5 22.5T240-258v18Zm320-60h160v-60H560v60Zm-200-60q25 0 42.5-17.5T420-420q0-25-17.5-42.5T360-480q-25 0-42.5 17.5T300-420q0 25 17.5 42.5T360-360Zm200-60h160v-60H560v60ZM440-600h80v-200h-80v200Zm40 220Z\" />\n          </svg>\n        </div>\n        <div class=\"title\">New visitor</div>\n        <div class=\"subtitle\">Please enter your details below</div>\n        <form id=\"onboardForm\" autocomplete=\"on\">\n          <div class=\"form-group\">\n            <div class=\"outlined-input\">\n              <select id=\"company\" name=\"company\" required>\n                {{#payload}}\n                <option value=\"{{Id}}\">{{Name}}</option>\n                {{/payload}}\n              </select>\n              <label for=\"company\">Company</label>\n            </div>\n          </div>\n          <div class=\"form-group\">\n            <div class=\"outlined-input\">\n              <input type=\"text\" id=\"visitedPerson\" name=\"visitedPerson\" placeholder=\" \" autocomplete=\"off\">\n              <label for=\"visitedPerson\">Visited person</label>\n              <div id=\"visitedPersonDropdown\" class=\"search-dropdown\"></div>\n            </div>\n          </div>\n          <div class=\"form-group\">\n            <div class=\"outlined-input\">\n              <input type=\"text\" id=\"name\" name=\"name\" required placeholder=\" \" autocomplete=\"off\">\n              <label for=\"name\">Full Name</label>\n            </div>\n          </div>\n          <div class=\"form-group\">\n            <div class=\"outlined-input\">\n              <input type=\"email\" id=\"email\" name=\"email\" required placeholder=\" \" autocomplete=\"off\">\n              <label for=\"email\">Email</label>\n            </div>\n          </div>\n          <div class=\"button-container\">\n            <button type=\"submit\" class=\"button\">\n              <span class=\"button-text\">Submit</span>\n            </button>\n          </div>\n        </form>\n        <div id=\"notification\" class=\"notification\"></div>\n      </div>\n    </div>\n  </div>\n  <script>\n    let searchTimeout;\n    let selectedPersonId = null;\n\n    // Notification function with customizable duration and fade effect\n    function showNotification(message, type, duration = 5000) {\n      const notification = document.getElementById('notification');\n      \n      // Reset classes and set content\n      notification.className = 'notification';\n      notification.textContent = message;\n      \n      // Show notification with fade-in effect\n      notification.style.display = 'block';\n      // Force reflow to ensure display change is applied\n      notification.offsetHeight;\n      \n      // Add classes for styling and animation\n      notification.classList.add(type, 'show');\n      \n      // Auto-hide after specified duration\n      setTimeout(() => {\n        hideNotification();\n      }, duration);\n    }\n\n    function hideNotification() {\n      const notification = document.getElementById('notification');\n      \n      // Start fade-out animation\n      notification.classList.add('fade-out');\n      notification.classList.remove('show');\n      \n      // Hide completely after transition\n      setTimeout(() => {\n        notification.style.display = 'none';\n        notification.classList.remove('fade-out');\n      }, 300); // Match transition duration\n    }\n\n    // Function to update label position based on field content\n    function updateLabelPosition(input) {\n      const label = input.nextElementSibling;\n      if (input.value.trim() !== '') {\n        // Field has content - move label up\n        input.setAttribute('data-has-content', 'true');\n      } else {\n        // Field is empty - remove the attribute to let CSS handle it\n        input.removeAttribute('data-has-content');\n      }\n    }\n\n    // Search function for visited person\n    async function searchVisitedPerson(query, companyId) {\n      if (!query || query.length < 1 || !companyId) {\n        hideDropdown();\n        return;\n      }\n\n      try {\n        const response = await fetch(`./visitor/users?filter=${encodeURIComponent(query)}&company=${companyId}`);\n        \n        if (response.ok) {\n          const users = await response.json();\n          showDropdown(users);\n        } else {\n          hideDropdown();\n        }\n      } catch (error) {\n        console.error('Error searching users:', error);\n        hideDropdown();\n      }\n    }\n\n    function showDropdown(users) {\n      const dropdown = document.getElementById('visitedPersonDropdown');\n      dropdown.innerHTML = '';\n\n      if (users.length === 0) {\n        hideDropdown();\n        return;\n      }\n\n      users.forEach(user => {\n        const item = document.createElement('div');\n        item.className = 'dropdown-item';\n        item.textContent = user.Name;\n        item.dataset.id = user.Id;\n        \n        item.addEventListener('click', () => {\n          selectPerson(user.Name, user.Id);\n        });\n        \n        dropdown.appendChild(item);\n      });\n\n      dropdown.classList.add('show');\n    }\n\n    function hideDropdown() {\n      const dropdown = document.getElementById('visitedPersonDropdown');\n      dropdown.classList.remove('show');\n      dropdown.innerHTML = '';\n    }\n\n    function selectPerson(name, id) {\n      const input = document.getElementById('visitedPerson');\n      input.value = name;\n      selectedPersonId = id;\n      hideDropdown();\n      \n      // Update label position after selection\n      updateLabelPosition(input);\n    }\n\n    // Event listeners\n    document.getElementById('visitedPerson').addEventListener('input', function(e) {\n      const query = e.target.value;\n      const companyId = document.getElementById('company').value;\n      \n      // Clear previous timeout\n      clearTimeout(searchTimeout);\n      \n      // Reset selected person when typing\n      selectedPersonId = null;\n      \n      // Update label position when typing\n      updateLabelPosition(e.target);\n      \n      // Debounce search requests\n      searchTimeout = setTimeout(() => {\n        searchVisitedPerson(query, companyId);\n      }, 300);\n    });\n\n    // Hide dropdown when clicking outside\n    document.addEventListener('click', function(e) {\n      if (!e.target.closest('.outlined-input')) {\n        hideDropdown();\n      }\n    });\n\n    // Clear visited person field when company changes\n    document.getElementById('company').addEventListener('change', function() {\n      const visitedPersonInput = document.getElementById('visitedPerson');\n      visitedPersonInput.value = '';\n      selectedPersonId = null;\n      hideDropdown();\n      \n      // Update label position after clearing\n      updateLabelPosition(visitedPersonInput);\n      \n      // Handle label animation for company select\n      const label = this.nextElementSibling;\n      if (this.value) {\n        label.style.top = '0';\n        label.style.left = '15px';\n        label.style.fontSize = '0.75rem';\n        label.style.transform = 'translateY(-50%)';\n      }\n    });\n\n    document.getElementById('onboardForm').addEventListener('submit', async function (e) {\n      e.preventDefault();\n      const form = e.target;\n      const formData = new FormData(form);\n\n      // Convert FormData to object and ensure company is an integer\n      const data = Object.fromEntries(formData);\n      data.company = parseInt(data.company);\n      \n      // Add visited person ID if selected\n      if (selectedPersonId) {\n        data.visitedPersonId = selectedPersonId;\n      }\n      \n      // Remove the visitedPerson field as we only need the ID\n      delete data.visitedPerson;\n\n      try {\n        const response = await fetch('./visitor', {\n          method: 'POST',\n          body: JSON.stringify(data),\n          headers: {\n            'Content-Type': 'application/json'\n          }\n        });\n\n        if (response.ok) {\n          showNotification(\"Visitor created successfully!\", \"success\", 4000);\n          form.reset();\n          selectedPersonId = null;\n          hideDropdown();\n          \n          // Reset all label positions after form reset\n          const visitedPersonInput = document.getElementById('visitedPerson');\n          updateLabelPosition(visitedPersonInput);\n        } else {\n          showNotification(\"Failed to create visitor. Please try again.\", \"error\", 6000);\n        }\n      } catch (err) {\n        showNotification(\"Network error. Please try again.\", \"error\", 6000);\n      }\n    });\n  </script>\n</body>\n\n</html>",
+        "output": "str",
+        "x": 620,
+        "y": 140,
+        "wires": [
+            [
+                "e49457c704da0d7f"
+            ]
+        ]
+    },
+    {
+        "id": "13fb9218ca1ac65a",
+        "type": "http in",
+        "z": "3a5edba4ed7f9da7",
+        "g": "5f54724064baef29",
+        "name": "GET users",
+        "url": "/visitor/users",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 220,
+        "y": 360,
+        "wires": [
+            [
+                "3fb240f3e325d7d3"
+            ]
+        ]
+    },
+    {
+        "id": "4dd4821cec2bdcb7",
+        "type": "2nac-rest-api",
+        "z": "3a5edba4ed7f9da7",
+        "g": "5f54724064baef29",
+        "name": "",
+        "method": "GET",
+        "endpoint": "users",
+        "query": "",
+        "senderr": true,
+        "x": 480,
+        "y": 360,
+        "wires": [
+            [
+                "4022b56b06f9ca22"
+            ]
+        ]
+    },
+    {
+        "id": "4022b56b06f9ca22",
+        "type": "http response",
+        "z": "3a5edba4ed7f9da7",
+        "g": "5f54724064baef29",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 610,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "3fb240f3e325d7d3",
+        "type": "function",
+        "z": "3a5edba4ed7f9da7",
+        "g": "5f54724064baef29",
+        "name": "filter",
+        "func": "msg.query = `?fields=Id,Name&filter={\"$and\":[{\"Company.Id\":{\"$eq\":${msg.req.query.company}}},{\"Name\":{\"$cti\":\"${msg.req.query.filter}\"}},{\"IsVisitor\":{\"$eq\":false}}]}&sort=Name&limit=10`\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 350,
+        "y": 360,
+        "wires": [
+            [
+                "4dd4821cec2bdcb7"
+            ]
+        ]
+    }
+]
