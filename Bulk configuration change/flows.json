@@ -61,7 +61,7 @@
         "name": "filter devices",
         "method": "GET",
         "endpoint": "devices",
-        "query": "?filter={\"$or\":[{\"Hardware.Category\":{\"$eq\":\"Intercom\"}},{\"Hardware.Category\":{\"$eq\":\"AccessUnit\"}}]}",
+        "query": "?filter={\"$and\":[{\"State.Status\":{\"$eq\":\"Online\"}},{\"$or\":[{\"Hardware.Category\":{\"$in\":[\"Intercom\",\"AccessUnit\"]}}]}]}",
         "senderr": true,
         "x": 330,
         "y": 200,

@@ -2,7 +2,7 @@
     {
         "id": "4f8d9c375ee627e0",
         "type": "tab",
-        "label": "Bulk config",
+        "label": "Bulk config (enhanced)",
         "disabled": false,
         "info": "",
         "env": []
@@ -26,7 +26,7 @@
         ],
         "x": 74,
         "y": 419,
-        "w": 932,
+        "w": 892,
         "h": 82
     },
     {
@@ -84,7 +84,7 @@
         "name": "filter devices",
         "method": "GET",
         "endpoint": "devices",
-        "query": "?filter={\"$and\":[{\"State.Status\":{\"$eq\":\"Online\"}},{\"$or\":[{\"Hardware.Category\":{\"$in\":[\"Intercom\",\"AccessUnit\"]}}]}]}",
+        "query": "?filter={\\\"$and\\\":[{\\\"State.Status\\\":{\\\"$eq\\\":\\\"Online\\\"}},{\\\"$or\\\":[{\\\"Hardware.Category\\\":{\\\"$in\\\":[\\\"Intercom\\\",\\\"AccessUnit\\\"]}}]}]}",
         "senderr": true,
         "x": 310,
         "y": 360,
@@ -233,7 +233,8 @@
         "name": "link out 14",
         "mode": "link",
         "links": [
-            "0a18a14a9439b934"
+            "0a18a14a9439b934",
+            "618c4071f303c41b"
         ],
         "x": 1485,
         "y": 360,
@@ -252,7 +253,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 500,
+        "x": 460,
         "y": 460,
         "wires": [
             [
@@ -277,7 +278,7 @@
         "authType": "",
         "senderr": false,
         "headers": [],
-        "x": 640,
+        "x": 600,
         "y": 460,
         "wires": [
             [
@@ -298,7 +299,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 780,
+        "x": 740,
         "y": 460,
         "wires": [
             [
@@ -320,7 +321,7 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 910,
+        "x": 870,
         "y": 460,
         "wires": []
     },
@@ -329,7 +330,7 @@
         "type": "function",
         "z": "4f8d9c375ee627e0",
         "g": "81b9cf6ed0fedf37",
-        "name": "edit config",
+        "name": "config",
         "func": "let config = msg.payload.DeviceDatabase;\n\nlet importedConfig = flow.get(\"importedConfig\")\n\nmsg.payload = {\n    DeviceDatabase: {\n        $: config.$,\n        ...importedConfig,\n    }\n};\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
@@ -337,7 +338,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 236.875,
+        "x": 210,
         "y": 460,
         "wires": [
             [
@@ -354,7 +355,7 @@
         "property": "payload",
         "attr": "$",
         "chr": "",
-        "x": 376.875,
+        "x": 330,
         "y": 460,
         "wires": [
             [
@@ -435,10 +436,11 @@
         "tosidebar": true,
         "console": false,
         "tostatus": false,
-        "complete": "false",
+        "complete": "payload",
+        "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 480,
+        "x": 460,
         "y": 320,
         "wires": []
     },
@@ -497,7 +499,7 @@
                 "t": "set",
                 "p": "targetKey",
                 "pt": "msg",
-                "to": "Network",
+                "to": "HttpApi",
                 "tot": "str"
             }
         ],
@@ -548,7 +550,7 @@
         "z": "4f8d9c375ee627e0",
         "g": "2a9d5c38e3f67519",
         "name": "extract target",
-        "func": "const targetKey = msg.targetKey\n\nlet content = null;\n\nif (msg.payload && msg.payload.DeviceDatabase && msg.payload.DeviceDatabase[targetKey]) {\n    content = msg.payload.DeviceDatabase[targetKey]\n} else if (msg.payload && msg.payload[targetKey]) {\n    content = msg.payload[targetKey];\n}\n    \nif (content) {\n    msg.payload = {\n        [targetKey]: content\n    };\n    return msg;\n\n} else {\n    node.error(`Error: There are no data for '${targetKey}'.`);\n    return null;\n}",
+        "func": "const targetKey = msg.targetKey\n\nlet content = null;\n\nif (msg.payload && msg.payload.DeviceDatabase && msg.payload.DeviceDatabase[targetKey]) {\n    content = msg.payload.DeviceDatabase[targetKey]\n} else if (msg.payload && msg.payload[targetKey]) {\n    content = msg.payload[targetKey];\n}\n\nif (content) {\n    msg.payload = {\n        [targetKey]: content\n    };\n    return msg;\n\n} else {\n    node.error(`Error: There are no data for '${targetKey}'.`);\n    return null;\n}",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,

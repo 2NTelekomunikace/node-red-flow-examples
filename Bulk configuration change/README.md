@@ -123,7 +123,7 @@ Once the flow is deployed and properly configured, click on the `inject` node to
 
 ### Flow Details and Explanation
 
-The flow is divided into two main logical blocks: *Filter selected devices & download config* and *Modify config & upload to device*. This first block identifies the devices to be configured and retrieves their current settings, the second part modifies and uploads the updated configuration back to each device.
+The flow is divided into two main logical blocks: *Filter selected devices & download config* and *Modify config & upload to device*. This first block identifies the devices to be configured and retrieves their current configuration, the second part modifies and uploads the updated configuration back to each device.
 
 #### 1. Input Trigger, Filtering and Retrieve Configuration
 
