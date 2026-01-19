@@ -6,9 +6,6 @@ This flow automates the process of making targeted configuration changes to mult
 
 It utilises the 2N OS API to apply these changes, significantly reducing the manual effort of configuring each node device one by one.
 
-> [!TIP]
-> You may prefer the  **enhanced version** of this flow, which allows you to easily **import** and select a specific part of an **existing configuration** file. In that case, click [here](Bulk%20config%20enhanced/).
-
 ### Features
 
 * **Targeted Parameter Modification:** Focuses on updating specific, user-selected parameters.

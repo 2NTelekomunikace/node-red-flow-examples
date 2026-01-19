@@ -1,0 +1,597 @@
+[
+    {
+        "id": "4f8d9c375ee627e0",
+        "type": "tab",
+        "label": "Bulk config",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "81b9cf6ed0fedf37",
+        "type": "group",
+        "z": "4f8d9c375ee627e0",
+        "name": "Modify config & upload to device",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "1dd9d8bde5baab5f",
+            "9144d11cc7ba4d31",
+            "65bd74662eda0b51",
+            "7e8076f3e0bb8589",
+            "c007d82db8f831d4",
+            "fabd0f2ce4eb7501",
+            "0a18a14a9439b934"
+        ],
+        "x": 74,
+        "y": 419,
+        "w": 932,
+        "h": 82
+    },
+    {
+        "id": "4fff918673c7ec36",
+        "type": "group",
+        "z": "4f8d9c375ee627e0",
+        "name": "Filter selected devices & download config",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "8b5d082052f41cdd",
+            "ea1c13fa50f1ee68",
+            "1219b0719031441b",
+            "9ca71c873633991c",
+            "48d3763bad12b356",
+            "abcd14586fbe09c8",
+            "48c6d5892cd9b741",
+            "ef3619376e3a8a7a",
+            "884a778c02296ccd",
+            "7b8a63be243fdb77",
+            "9a97748349d856c4"
+        ],
+        "x": 74,
+        "y": 279,
+        "w": 1452,
+        "h": 122
+    },
+    {
+        "id": "2a9d5c38e3f67519",
+        "type": "group",
+        "z": "4f8d9c375ee627e0",
+        "name": "Import config",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "9ca288c80c3260aa",
+            "8f7f781a927f306f",
+            "5e9d250b503b1433",
+            "34781a99058588d0",
+            "3ebcb2ad5215c110",
+            "6ad3d74d636e7a2c"
+        ],
+        "x": 74,
+        "y": 179,
+        "w": 992,
+        "h": 82
+    },
+    {
+        "id": "8b5d082052f41cdd",
+        "type": "2nac-rest-api",
+        "z": "4f8d9c375ee627e0",
+        "g": "4fff918673c7ec36",
+        "name": "filter devices",
+        "method": "GET",
+        "endpoint": "devices",
+        "query": "?filter={\"$and\":[{\"State.Status\":{\"$eq\":\"Online\"}},{\"$or\":[{\"Hardware.Category\":{\"$in\":[\"Intercom\",\"AccessUnit\"]}}]}]}",
+        "senderr": true,
+        "x": 310,
+        "y": 360,
+        "wires": [
+            [
+                "ea1c13fa50f1ee68",
+                "9a97748349d856c4"
+            ]
+        ]
+    },
+    {
+        "id": "ea1c13fa50f1ee68",
+        "type": "split",
+        "z": "4f8d9c375ee627e0",
+        "g": "4fff918673c7ec36",
+        "name": "",
+        "splt": "\\n",
+        "spltType": "str",
+        "arraySplt": 1,
+        "arraySpltType": "len",
+        "stream": false,
+        "addname": "",
+        "property": "payload",
+        "x": 450,
+        "y": 360,
+        "wires": [
+            [
+                "7b8a63be243fdb77"
+            ]
+        ]
+    },
+    {
+        "id": "1219b0719031441b",
+        "type": "http request",
+        "z": "4f8d9c375ee627e0",
+        "g": "4fff918673c7ec36",
+        "name": "auth login",
+        "method": "use",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "f45fddb864bd1da6",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 900,
+        "y": 360,
+        "wires": [
+            [
+                "48d3763bad12b356"
+            ]
+        ]
+    },
+    {
+        "id": "9ca71c873633991c",
+        "type": "function",
+        "z": "4f8d9c375ee627e0",
+        "g": "4fff918673c7ec36",
+        "name": "auth login",
+        "func": "msg.ip = msg.payload.IpAddress\nmsg.name = msg.payload.Name\nmsg.method = \"POST\"\nmsg.url = `https://${msg.ip}/api/auth/login`\nmsg.payload = { user: \"admin\", password: msg.payload.Password}\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 760,
+        "y": 360,
+        "wires": [
+            [
+                "1219b0719031441b"
+            ]
+        ]
+    },
+    {
+        "id": "48d3763bad12b356",
+        "type": "function",
+        "z": "4f8d9c375ee627e0",
+        "g": "4fff918673c7ec36",
+        "name": "get SID & get config",
+        "func": "msg.sid = msg.payload.result.sid\nmsg.method = \"GET\"\nmsg.url = `https://${msg.ip}/api/config`\nmsg.headers = {\n    \"Cookie\": \"sid=\"+msg.sid\n};\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1080,
+        "y": 360,
+        "wires": [
+            [
+                "abcd14586fbe09c8"
+            ]
+        ]
+    },
+    {
+        "id": "abcd14586fbe09c8",
+        "type": "http request",
+        "z": "4f8d9c375ee627e0",
+        "g": "4fff918673c7ec36",
+        "name": "get config",
+        "method": "use",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "f45fddb864bd1da6",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 1260,
+        "y": 360,
+        "wires": [
+            [
+                "48c6d5892cd9b741"
+            ]
+        ]
+    },
+    {
+        "id": "48c6d5892cd9b741",
+        "type": "xml",
+        "z": "4f8d9c375ee627e0",
+        "g": "4fff918673c7ec36",
+        "name": "",
+        "property": "payload",
+        "attr": "$",
+        "chr": "",
+        "x": 1390,
+        "y": 360,
+        "wires": [
+            [
+                "ef3619376e3a8a7a"
+            ]
+        ]
+    },
+    {
+        "id": "ef3619376e3a8a7a",
+        "type": "link out",
+        "z": "4f8d9c375ee627e0",
+        "g": "4fff918673c7ec36",
+        "name": "link out 14",
+        "mode": "link",
+        "links": [
+            "0a18a14a9439b934"
+        ],
+        "x": 1485,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "1dd9d8bde5baab5f",
+        "type": "function",
+        "z": "4f8d9c375ee627e0",
+        "g": "81b9cf6ed0fedf37",
+        "name": "set config",
+        "func": "msg.method = \"PUT\"\nmsg.url = `https://${msg.ip}/api/config`\nmsg.headers = {\n    \"Cookie\": \"sid=\" + msg.sid,\n    \"Content-Type\": \"application/xml\"\n};\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 500,
+        "y": 460,
+        "wires": [
+            [
+                "9144d11cc7ba4d31"
+            ]
+        ]
+    },
+    {
+        "id": "9144d11cc7ba4d31",
+        "type": "http request",
+        "z": "4f8d9c375ee627e0",
+        "g": "81b9cf6ed0fedf37",
+        "name": "set config",
+        "method": "use",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "f45fddb864bd1da6",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 640,
+        "y": 460,
+        "wires": [
+            [
+                "65bd74662eda0b51"
+            ]
+        ]
+    },
+    {
+        "id": "65bd74662eda0b51",
+        "type": "function",
+        "z": "4f8d9c375ee627e0",
+        "g": "81b9cf6ed0fedf37",
+        "name": "message",
+        "func": "//print ip and success (true/false)\nmsg.payload = { name: msg.name, ip: msg.ip, success: msg.payload.success}\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 780,
+        "y": 460,
+        "wires": [
+            [
+                "7e8076f3e0bb8589"
+            ]
+        ]
+    },
+    {
+        "id": "7e8076f3e0bb8589",
+        "type": "debug",
+        "z": "4f8d9c375ee627e0",
+        "g": "81b9cf6ed0fedf37",
+        "name": "results",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 910,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "c007d82db8f831d4",
+        "type": "function",
+        "z": "4f8d9c375ee627e0",
+        "g": "81b9cf6ed0fedf37",
+        "name": "edit config",
+        "func": "let config = msg.payload.DeviceDatabase;\n\nlet importedConfig = flow.get(\"importedConfig\")\n\nmsg.payload = {\n    DeviceDatabase: {\n        $: config.$,\n        ...importedConfig,\n    }\n};\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 236.875,
+        "y": 460,
+        "wires": [
+            [
+                "fabd0f2ce4eb7501"
+            ]
+        ]
+    },
+    {
+        "id": "fabd0f2ce4eb7501",
+        "type": "xml",
+        "z": "4f8d9c375ee627e0",
+        "g": "81b9cf6ed0fedf37",
+        "name": "",
+        "property": "payload",
+        "attr": "$",
+        "chr": "",
+        "x": 376.875,
+        "y": 460,
+        "wires": [
+            [
+                "1dd9d8bde5baab5f"
+            ]
+        ]
+    },
+    {
+        "id": "0a18a14a9439b934",
+        "type": "link in",
+        "z": "4f8d9c375ee627e0",
+        "g": "81b9cf6ed0fedf37",
+        "name": "link in 15",
+        "links": [
+            "ef3619376e3a8a7a"
+        ],
+        "x": 115,
+        "y": 460,
+        "wires": [
+            [
+                "c007d82db8f831d4"
+            ]
+        ]
+    },
+    {
+        "id": "884a778c02296ccd",
+        "type": "inject",
+        "z": "4f8d9c375ee627e0",
+        "g": "4fff918673c7ec36",
+        "name": "START",
+        "props": [],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 170,
+        "y": 360,
+        "wires": [
+            [
+                "8b5d082052f41cdd"
+            ]
+        ]
+    },
+    {
+        "id": "7b8a63be243fdb77",
+        "type": "delay",
+        "z": "4f8d9c375ee627e0",
+        "g": "4fff918673c7ec36",
+        "name": "",
+        "pauseType": "rate",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "3",
+        "nbRateUnits": "2",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 600,
+        "y": 360,
+        "wires": [
+            [
+                "9ca71c873633991c"
+            ]
+        ]
+    },
+    {
+        "id": "9a97748349d856c4",
+        "type": "debug",
+        "z": "4f8d9c375ee627e0",
+        "g": "4fff918673c7ec36",
+        "name": "debug 69",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 480,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "9ca288c80c3260aa",
+        "type": "inject",
+        "z": "4f8d9c375ee627e0",
+        "g": "2a9d5c38e3f67519",
+        "name": "IMPORT",
+        "props": [],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 180,
+        "y": 220,
+        "wires": [
+            [
+                "5e9d250b503b1433"
+            ]
+        ]
+    },
+    {
+        "id": "8f7f781a927f306f",
+        "type": "xml",
+        "z": "4f8d9c375ee627e0",
+        "g": "2a9d5c38e3f67519",
+        "name": "",
+        "property": "payload",
+        "attr": "",
+        "chr": "",
+        "x": 430,
+        "y": 220,
+        "wires": [
+            [
+                "3ebcb2ad5215c110"
+            ]
+        ]
+    },
+    {
+        "id": "5e9d250b503b1433",
+        "type": "change",
+        "z": "4f8d9c375ee627e0",
+        "g": "2a9d5c38e3f67519",
+        "name": "setup",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "targetKey",
+                "pt": "msg",
+                "to": "Network",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 310,
+        "y": 220,
+        "wires": [
+            [
+                "8f7f781a927f306f"
+            ]
+        ]
+    },
+    {
+        "id": "34781a99058588d0",
+        "type": "change",
+        "z": "4f8d9c375ee627e0",
+        "g": "2a9d5c38e3f67519",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "importedConfig",
+                "pt": "flow",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 770,
+        "y": 220,
+        "wires": [
+            [
+                "6ad3d74d636e7a2c"
+            ]
+        ]
+    },
+    {
+        "id": "3ebcb2ad5215c110",
+        "type": "function",
+        "z": "4f8d9c375ee627e0",
+        "g": "2a9d5c38e3f67519",
+        "name": "extract target",
+        "func": "const targetKey = msg.targetKey\n\nlet content = null;\n\nif (msg.payload && msg.payload.DeviceDatabase && msg.payload.DeviceDatabase[targetKey]) {\n    content = msg.payload.DeviceDatabase[targetKey]\n} else if (msg.payload && msg.payload[targetKey]) {\n    content = msg.payload[targetKey];\n}\n    \nif (content) {\n    msg.payload = {\n        [targetKey]: content\n    };\n    return msg;\n\n} else {\n    node.error(`Error: There are no data for '${targetKey}'.`);\n    return null;\n}",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 570,
+        "y": 220,
+        "wires": [
+            [
+                "34781a99058588d0"
+            ]
+        ]
+    },
+    {
+        "id": "6ad3d74d636e7a2c",
+        "type": "debug",
+        "z": "4f8d9c375ee627e0",
+        "g": "2a9d5c38e3f67519",
+        "name": "debug 71",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 960,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "f45fddb864bd1da6",
+        "type": "tls-config",
+        "name": "TLS",
+        "cert": "",
+        "key": "",
+        "ca": "",
+        "certname": "",
+        "keyname": "",
+        "caname": "",
+        "servername": "",
+        "verifyservercert": false,
+        "alpnprotocol": ""
+    }
+]
