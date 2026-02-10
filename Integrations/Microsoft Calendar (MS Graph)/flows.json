@@ -1,0 +1,1760 @@
+[
+    {
+        "id": "f76933b40eb15e67",
+        "type": "subflow",
+        "name": "Verify JWT or API key",
+        "info": "",
+        "category": "",
+        "in": [
+            {
+                "x": 280,
+                "y": 140,
+                "wires": [
+                    {
+                        "id": "6d293d4095b7533c"
+                    }
+                ]
+            }
+        ],
+        "out": [
+            {
+                "x": 620,
+                "y": 120,
+                "wires": [
+                    {
+                        "id": "6d293d4095b7533c",
+                        "port": 0
+                    }
+                ]
+            }
+        ],
+        "env": [
+            {
+                "name": "API_KEY",
+                "type": "cred",
+                "ui": {
+                    "label": {
+                        "en-US": "API key"
+                    },
+                    "type": "input",
+                    "opts": {
+                        "types": [
+                            "env",
+                            "cred"
+                        ]
+                    }
+                }
+            }
+        ],
+        "meta": {},
+        "color": "#E9967A",
+        "icon": "font-awesome/fa-lock"
+    },
+    {
+        "id": "6d293d4095b7533c",
+        "type": "function",
+        "z": "f76933b40eb15e67",
+        "name": "Verify JWT token or API key",
+        "func": "// Load JWT SECRET and API token\nconst SECRET = global.get('JWT_SECRET'); \nconst API_KEY = env.get(\"API_KEY\");\nconst TOKEN_COOKIE_NAME = 'auth_token';\n\n// Initialization\nlet isAuthorized = false;\nlet authMessage = \"Missing Authorization (Neither Bearer Token nor JWT Cookie found)\"; // Default message, no token or JWT provided\nlet token = null;\n\n\n// First, try API token\nconst authHeader = msg.req.headers.authorization;\n\nif (API_KEY && authHeader && authHeader.startsWith('Bearer ')) {\n    const receivedKey = authHeader.substring(7).trim();\n\n    if (receivedKey === API_KEY) {\n        // API key is valid\n        isAuthorized = true;\n    } else {\n        authMessage = \"Invalid Bearer Token (API Key)\";\n    }\n}\n\n// Second, try JWT cookie\nif (!isAuthorized) {\n    token = msg.req.cookies ? msg.req.cookies[TOKEN_COOKIE_NAME] : null;\n\n    if (token) {\n        // Only now do we care if the SECRET exists\n        if (!SECRET) {\n            node.warn(\"JWT Secret is missing, but a cookie was presented.\");\n            authMessage = \"Server configuration error: JWT Secret missing.\";\n        } else {\n            try {\n                // Verify JWT token\n                jsonwebtoken.verify(token, SECRET);\n                isAuthorized = true;\n            } catch (err) {\n                // Invalidate the cookie if not valid\n                const deleteCookie = `${TOKEN_COOKIE_NAME}=; Path=/; HttpOnly; Secure; Max-Age=0`;\n                msg.headers = { 'Set-Cookie': deleteCookie };\n                authMessage = `JWT Error: ${err.message}`;\n            }\n        }\n    }\n}\n\nif (isAuthorized) {\n\n    // Set headers \n    msg.headers = { \n        'Cache-Control': 'no-cache, no-store, must-revalidate',\n        'Pragma': 'no-cache',\n        'Expires': '0',\n        'X-Content-Type-Options': 'nosniff',\n        'X-Frame-Options': 'DENY'\n    };\n    \n    return [msg, null];\n\n} else {\n\n    // Unauthorized\n    msg.statusCode = 401;\n    msg.headers = {\n        'Cache-Control': 'no-store',\n        ...(msg.headers || {}) \n    };\n    \n    msg.payload = {\n        success: false,\n        message: authMessage \n    };\n\n    return [null, msg];\n}",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [
+            {
+                "var": "jsonwebtoken",
+                "module": "jsonwebtoken"
+            }
+        ],
+        "x": 440,
+        "y": 140,
+        "wires": [
+            [],
+            [
+                "2064e71ddf082400"
+            ]
+        ]
+    },
+    {
+        "id": "2064e71ddf082400",
+        "type": "http response",
+        "z": "f76933b40eb15e67",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 650,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "e0e1f32e0262e39e",
+        "type": "subflow",
+        "name": "Basic Auth + JWT",
+        "info": "",
+        "category": "",
+        "in": [
+            {
+                "x": 160,
+                "y": 180,
+                "wires": [
+                    {
+                        "id": "48c9ddbe2487b373"
+                    }
+                ]
+            }
+        ],
+        "out": [],
+        "env": [
+            {
+                "name": "Username",
+                "type": "str",
+                "value": "",
+                "ui": {
+                    "type": "input",
+                    "opts": {
+                        "types": [
+                            "str"
+                        ]
+                    }
+                }
+            },
+            {
+                "name": "Password",
+                "type": "cred",
+                "ui": {
+                    "type": "input",
+                    "opts": {
+                        "types": [
+                            "env",
+                            "cred"
+                        ]
+                    }
+                }
+            },
+            {
+                "name": "Redirect",
+                "type": "str",
+                "value": "",
+                "ui": {
+                    "label": {
+                        "en-US": "Redirect path"
+                    },
+                    "type": "input",
+                    "opts": {
+                        "types": [
+                            "str"
+                        ]
+                    }
+                }
+            }
+        ],
+        "meta": {},
+        "color": "#E9967A",
+        "icon": "font-awesome/fa-lock"
+    },
+    {
+        "id": "48c9ddbe2487b373",
+        "type": "function",
+        "z": "e0e1f32e0262e39e",
+        "name": "Basic Auth + JWT",
+        "func": "const USERNAME = env.get(\"Username\");\nconst PASSWORD = env.get(\"Password\");\nconst SECRET = global.get('JWT_SECRET');\nconst REDIRECT_URL = env.get(\"Redirect\"); \n\n// Check basic variables for authentication\nif (!USERNAME || !PASSWORD || !SECRET || !REDIRECT_URL) { \n    node.warn(\"Subflow is not properly configured. Username, password and redirect must be set\");\n    msg.statusCode = 500;\n    msg.payload = {\n        success: false,\n        message: \"Flow configuration error, please check if username, password and redirect are set\"\n    };\n    return msg;\n}\n\n// Get auth header\nconst authHeader = msg.req.headers.authorization;\n\n// Basic auth\nif (!authHeader || !authHeader.startsWith('Basic ')) {\n    msg.statusCode = 401;\n    msg.headers = { 'WWW-Authenticate': 'Basic realm=\"Secure Area\"' };\n    msg.payload = {\n        success: false,\n        message: \"Authentication Required\"\n    };\n    return msg;\n}\n\n// Extract and decode the username and password\nconst encoded = authHeader.substring(6);\nconst [clientUsername, clientPassword] = Buffer.from(encoded, 'base64').toString().split(':');\n\n// Verify the username and password\nif (clientUsername === USERNAME && clientPassword === PASSWORD) {\n\n    const payload = {\n        sub: clientUsername,\n        id: 1,\n        role: 'system_client'\n    };\n\n    // Sign JWT token\n    const token = jsonwebtoken.sign(payload, SECRET, { expiresIn: '1h' });\n\n    // Set JWT token as cookie\n    msg.cookies = {\n        auth_token: {\n            value: token,\n            maxAge: 3600000,\n            httpOnly: true,\n            secure: true,\n            sameSite: 'Strict',\n            path: '/'\n        }\n    }\n\n    // Redirect browser\n    msg.statusCode = 302;\n    msg.headers = {\n        'Location': REDIRECT_URL\n    };\n\n    return msg;\n\n}\n\n// Wrong username or password\nelse {\n    msg.statusCode = 401;\n    msg.headers = { 'WWW-Authenticate': 'Basic realm=\"Secure Area\"' };\n    msg.payload = {\n        success: false,\n        message: \"Invalid Credentials\"\n    };\n    return msg;\n}",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "// Generate JWT secret with each flow deployment\nconst newSecret = crypto.randomBytes(32).toString('hex');\nglobal.set('JWT_SECRET', newSecret);",
+        "finalize": "",
+        "libs": [
+            {
+                "var": "jsonwebtoken",
+                "module": "jsonwebtoken"
+            },
+            {
+                "var": "crypto",
+                "module": "crypto"
+            }
+        ],
+        "x": 290,
+        "y": 180,
+        "wires": [
+            [
+                "6b46ffabdb1cb7dc"
+            ]
+        ],
+        "outputLabels": [
+            "Fail"
+        ]
+    },
+    {
+        "id": "6b46ffabdb1cb7dc",
+        "type": "http response",
+        "z": "e0e1f32e0262e39e",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 450,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "2bd8c41a5a846ce1",
+        "type": "tab",
+        "label": "MS Graph",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "2039f41f1d71e923",
+        "type": "group",
+        "z": "2bd8c41a5a846ce1",
+        "name": "Frontend",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "21b5c21797561b6b",
+            "6f5d2bd60c92eaf2",
+            "7d6b19ea2870b294",
+            "58027febe4e45e7e",
+            "ca560c21d7856c73"
+        ],
+        "x": 94,
+        "y": 99,
+        "w": 412,
+        "h": 122
+    },
+    {
+        "id": "8960e3cd2ca393d3",
+        "type": "group",
+        "z": "2bd8c41a5a846ce1",
+        "name": "Logout",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "5f31b825839581a0",
+            "91cbcaec74d01d98",
+            "b5a62fbfde96a4ad",
+            "38295a6f1b7ab3f8",
+            "e4e8d2805387c304",
+            "d389d3735df5b272",
+            "9eae27bbad307692"
+        ],
+        "x": 94,
+        "y": 759,
+        "w": 672,
+        "h": 162
+    },
+    {
+        "id": "94cfe4876929b61d",
+        "type": "group",
+        "z": "2bd8c41a5a846ce1",
+        "name": "Login link",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "4cab4781f802b081",
+            "83b4f9488ac9198b",
+            "a31da5a30f957211",
+            "ea875c9e332f0e70",
+            "8af5f855d010b7d5"
+        ],
+        "x": 94,
+        "y": 239,
+        "w": 812,
+        "h": 82
+    },
+    {
+        "id": "d357151e139ebb12",
+        "type": "group",
+        "z": "2bd8c41a5a846ce1",
+        "name": "OAuth resposne",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "b67db0dc843c6ef0",
+            "ef52aaf8d68dd85e",
+            "32a845651112f57f",
+            "079c310061384077",
+            "cd42a18f86e0bad1"
+        ],
+        "x": 94,
+        "y": 619,
+        "w": 612,
+        "h": 122
+    },
+    {
+        "id": "46c8e0da91700e7b",
+        "type": "group",
+        "z": "2bd8c41a5a846ce1",
+        "name": "Connection status",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "d09585ecdb3f8633",
+            "f8ac6e4a26943076",
+            "5105d47f014b6ebf",
+            "b947824ce7aba684",
+            "9a838c294f944d6d",
+            "5ebc7c08847f60bc",
+            "39e2efd39ccd3726",
+            "fe456e7fcae66374",
+            "d197072b08cd9130",
+            "1a399dec19b9fd09",
+            "ef1dc4b9f83d20bd",
+            "be6d4e6784a85ece",
+            "f43a72bb5deac808"
+        ],
+        "x": 94,
+        "y": 339,
+        "w": 1032,
+        "h": 262
+    },
+    {
+        "id": "e574f2e17c6016fe",
+        "type": "group",
+        "z": "2bd8c41a5a846ce1",
+        "name": "Init config",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "94918129da848015",
+            "73eb351cfeea12e0",
+            "29aca0712779a3b6",
+            "6ad8b9c6046064ef",
+            "23b04e93474c9146",
+            "e536b9ba646b5429",
+            "0b2b354a57063821",
+            "9c890e7f97dd3f81",
+            "c2adfb3ca1ae07ad",
+            "2a20c327a349c370"
+        ],
+        "x": 534,
+        "y": 59,
+        "w": 812,
+        "h": 162
+    },
+    {
+        "id": "996ef6453d1b514c",
+        "type": "group",
+        "z": "2bd8c41a5a846ce1",
+        "name": "Sync logic",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "3dcf6a6cb3020d8a",
+            "3dae8c69828d538d",
+            "14e165fbc62f8fda",
+            "f08f7de05d73ba01",
+            "4ad28177581c8bba",
+            "4877481fc322fd4a",
+            "3cd31bfeff4c4fa1",
+            "cf78ed3c866c6d4c",
+            "8d6e27fc7ce58f3c",
+            "655e9f5bd0ad92f7",
+            "bc5c4d521b5c6325",
+            "522c4ab3736d47a5",
+            "04fbc1f3c894e844",
+            "b668b89371241274",
+            "2cca6d01b7559b8c",
+            "4f208c39945bae4d",
+            "3b4d99b3414e0940",
+            "69f3e3c78a950fba",
+            "02668d081dda7f8d",
+            "46bcb66e791b89df"
+        ],
+        "x": 94,
+        "y": 939,
+        "w": 1292,
+        "h": 202
+    },
+    {
+        "id": "83b4f9488ac9198b",
+        "type": "log in",
+        "z": "2bd8c41a5a846ce1",
+        "g": "94cfe4876929b61d",
+        "client": "42afd4cfd92ebae2",
+        "x": 550,
+        "y": 280,
+        "wires": [
+            [
+                "8af5f855d010b7d5"
+            ]
+        ]
+    },
+    {
+        "id": "5f31b825839581a0",
+        "type": "log out",
+        "z": "2bd8c41a5a846ce1",
+        "g": "8960e3cd2ca393d3",
+        "client": "42afd4cfd92ebae2",
+        "x": 530,
+        "y": 840,
+        "wires": [
+            [
+                "b5a62fbfde96a4ad",
+                "e4e8d2805387c304",
+                "9eae27bbad307692"
+            ]
+        ]
+    },
+    {
+        "id": "91cbcaec74d01d98",
+        "type": "inject",
+        "z": "2bd8c41a5a846ce1",
+        "g": "8960e3cd2ca393d3",
+        "name": "log out",
+        "props": [],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 410,
+        "y": 880,
+        "wires": [
+            [
+                "5f31b825839581a0"
+            ]
+        ]
+    },
+    {
+        "id": "b5a62fbfde96a4ad",
+        "type": "debug",
+        "z": "2bd8c41a5a846ce1",
+        "g": "8960e3cd2ca393d3",
+        "name": "debug 75",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 660,
+        "y": 800,
+        "wires": []
+    },
+    {
+        "id": "ef52aaf8d68dd85e",
+        "type": "log in response",
+        "z": "2bd8c41a5a846ce1",
+        "g": "d357151e139ebb12",
+        "client": "42afd4cfd92ebae2",
+        "x": 320,
+        "y": 660,
+        "wires": [
+            [
+                "079c310061384077"
+            ]
+        ]
+    },
+    {
+        "id": "32a845651112f57f",
+        "type": "http in",
+        "z": "2bd8c41a5a846ce1",
+        "g": "d357151e139ebb12",
+        "name": "redirect",
+        "url": "/calendar/redirect",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 170,
+        "y": 660,
+        "wires": [
+            [
+                "ef52aaf8d68dd85e"
+            ]
+        ]
+    },
+    {
+        "id": "b67db0dc843c6ef0",
+        "type": "http response",
+        "z": "2bd8c41a5a846ce1",
+        "g": "d357151e139ebb12",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 630,
+        "y": 660,
+        "wires": []
+    },
+    {
+        "id": "a31da5a30f957211",
+        "type": "http in",
+        "z": "2bd8c41a5a846ce1",
+        "g": "94cfe4876929b61d",
+        "name": "ms/auth",
+        "url": "/calendar/ms/auth",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 170,
+        "y": 280,
+        "wires": [
+            [
+                "ea875c9e332f0e70"
+            ]
+        ]
+    },
+    {
+        "id": "21b5c21797561b6b",
+        "type": "template",
+        "z": "2bd8c41a5a846ce1",
+        "g": "2039f41f1d71e923",
+        "name": "",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Connect calendar</title>\n    <link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n    <link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin>\n    <link href=\"https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap\" rel=\"stylesheet\">\n\n  <script type=\"module\" crossorigin>(function(){const r=document.createElement(\"link\").relList;if(r&&r.supports&&r.supports(\"modulepreload\"))return;for(const e of document.querySelectorAll('link[rel=\"modulepreload\"]'))i(e);new MutationObserver(e=>{for(const o of e)if(o.type===\"childList\")for(const n of o.addedNodes)n.tagName===\"LINK\"&&n.rel===\"modulepreload\"&&i(n)}).observe(document,{childList:!0,subtree:!0});function s(e){const o={};return e.integrity&&(o.integrity=e.integrity),e.referrerPolicy&&(o.referrerPolicy=e.referrerPolicy),e.crossOrigin===\"use-credentials\"?o.credentials=\"include\":e.crossOrigin===\"anonymous\"?o.credentials=\"omit\":o.credentials=\"same-origin\",o}function i(e){if(e.ep)return;e.ep=!0;const o=s(e);fetch(e.href,o)}})();let c=null;async function a(){try{const t=await fetch(\"./ms/auth\");t.ok?c=(await t.json()).authUrl:t.status===401?window.location.href=\"./login\":console.error(\"Error fetching auth URL, status:\",t.status)}catch(t){console.error(\"Network error during authorization:\",t)}}async function u(){const t=document.getElementById(\"ms-status-indicator\");if(!t){console.error(\"Status indicator element not found.\");return}try{const r=await fetch(\"./ms/status\");r.status===200?t.className=\"status-indicator active\":r.status===409?t.className=\"status-indicator ready\":(t.className=\"status-indicator error\",console.error(\"Error fetching MS status, unexpected status:\",r.status))}catch(r){t.className=\"status-indicator error\",console.error(\"Network error fetching MS status:\",r)}}document.addEventListener(\"DOMContentLoaded\",async()=>{await a(),await u();const t=document.getElementById(\"signin-button\");t&&t.addEventListener(\"click\",()=>{c?window.location.href=c:(console.warn(\"Auth URL not available on button click, attempting to re-fetch or redirect.\"),a())});const r=document.getElementById(\"logout-button\");r&&r.addEventListener(\"click\",async()=>{try{const s=await fetch(\"./ms/logout\");s.ok?console.log(\"Logged out successfully.\"):console.error(\"Error during logout:\",s.status)}catch(s){console.error(\"Network error during logout:\",s)}finally{await u()}})});</script>\n  <style rel=\"stylesheet\" crossorigin>:root{--md-primary: rgb(61, 105, 244);--md-primary-hover: rgb(26, 72, 188);--md-on-primary: #FFFFFF;--md-surface: #FFFBFE;--md-surface-container: rgb(246, 246, 251);--md-outline: rgb(100, 116, 157);--md-error: #B3261E}*{margin:0;padding:0;box-sizing:border-box;font-family:Roboto,sans-serif}body{background-color:var(--md-surface-container);min-height:100vh;display:flex;align-items:center;justify-content:center}.signin-card{background-color:var(--md-surface);border-radius:18px;box-shadow:0 4px 12px #00000014;padding:32px;max-width:400px;width:100%;text-align:left}.signin-card h1{color:var(--primary-text);font-size:28px;font-weight:700;margin:0 0 8px}.signin-card p{color:var(--secondary-text);font-size:16px;line-height:1.5;margin-bottom:24px}.signin-button-container{display:flex;flex-wrap:wrap;align-items:center;gap:12px;overflow-x:auto}.signin-button{display:flex;line-height:0;border:1px solid var(--md-outline)}.signin-button img{display:block}.status-indicator{width:24px;height:24px;border-radius:50%;background-size:16px 16px;background-position:center;background-repeat:no-repeat;display:inline-block;vertical-align:middle;border:2px solid transparent}.status-indicator.active{background-color:#4caf50;border-color:#388e3c;background-image:url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z'/%3E%3C/svg%3E\")}.status-indicator.ready{background-color:#9e9e9e;border-color:#616161;background-image:url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z'/%3E%3C/svg%3E\")}.status-indicator.error{background-color:#f44336;border-color:#d32f2f;background-image:url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M11 15h2v2h-2zm0-8h2v6h-2zm-.01-4h2.02L13 21h-2z'/%3E%3C/svg%3E\")}.icon-button{width:30px;height:30px;border-radius:50%;background-color:var(--md-surface);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background-color .3s ease;padding:0}@media (hover: hover){.icon-button:hover{background-color:#bdbdbd}}.icon-button:active{background-color:#d0d0d0;transform:scale(.9);transition:transform .2s ease}.signin-button:active{background-color:#d0d0d0;transform:scale(.98);transition:transform .2s ease}.icon-button{-webkit-tap-highlight-color:transparent;outline:none}#logout-button{fill:var(--md-outline)}</style>\n</head>\n<body>\n\n    <div class=\"signin-card\">\n        <h1>Sign in</h1>\n        <p>to connect your calendar with <b style=\"white-space: nowrap;\">2N Access Commander</b></p>\n        <div class=\"signin-button-container\">\n            <a class=\"signin-button\" id=\"signin-button\" title=\"Sign in with Microsoft\">\n                <svg xmlns=\"http://www.w3.org/2000/svg\" width=\"215\" height=\"41\" viewBox=\"0 0 215 41\"><title>MS-SymbolLockup</title><rect width=\"215\" height=\"41\" fill=\"#fff\"/><path d=\"M214,1V40H1V1H214m1-1H0V41H215V0Z\" fill=\"#8c8c8c\"/><path d=\"M45.812,25.082V23.288a2.849,2.849,0,0,0,.576.4,4.5,4.5,0,0,0,.707.3,5.513,5.513,0,0,0,.747.187,3.965,3.965,0,0,0,.688.065,2.937,2.937,0,0,0,1.637-.365,1.2,1.2,0,0,0,.538-1.062,1.16,1.16,0,0,0-.179-.649,1.928,1.928,0,0,0-.5-.5,5.355,5.355,0,0,0-.757-.435q-.437-.209-.935-.436c-.356-.19-.687-.383-1-.578a4.358,4.358,0,0,1-.8-.648,2.728,2.728,0,0,1-.534-.8,2.6,2.6,0,0,1-.194-1.047,2.416,2.416,0,0,1,.333-1.285,2.811,2.811,0,0,1,.879-.9,4.026,4.026,0,0,1,1.242-.528,5.922,5.922,0,0,1,1.42-.172,5.715,5.715,0,0,1,2.4.374v1.721a3.832,3.832,0,0,0-2.3-.645,4.106,4.106,0,0,0-.773.074,2.348,2.348,0,0,0-.689.241,1.5,1.5,0,0,0-.494.433,1.054,1.054,0,0,0-.19.637,1.211,1.211,0,0,0,.146.608,1.551,1.551,0,0,0,.429.468,4.276,4.276,0,0,0,.688.414c.271.134.584.28.942.436q.547.285,1.036.6a4.881,4.881,0,0,1,.856.7,3.015,3.015,0,0,1,.586.846,2.464,2.464,0,0,1,.217,1.058,2.635,2.635,0,0,1-.322,1.348,2.608,2.608,0,0,1-.868.892,3.82,3.82,0,0,1-1.257.5,6.988,6.988,0,0,1-1.5.155c-.176,0-.392-.014-.649-.04s-.518-.067-.787-.117a7.772,7.772,0,0,1-.761-.187A2.4,2.4,0,0,1,45.812,25.082Z\" fill=\"#5e5e5e\"/><path d=\"M55.129,16.426a1.02,1.02,0,0,1-.714-.272.89.89,0,0,1-.3-.688.916.916,0,0,1,.3-.7,1.008,1.008,0,0,1,.714-.278,1.039,1.039,0,0,1,.732.278.909.909,0,0,1,.3.7.9.9,0,0,1-.3.678A1.034,1.034,0,0,1,55.129,16.426Zm.842,9.074h-1.7V18h1.7Z\" fill=\"#5e5e5e\"/><path d=\"M65.017,24.9q0,4.131-4.153,4.131a6.187,6.187,0,0,1-2.556-.491V26.986a4.726,4.726,0,0,0,2.337.7,2.342,2.342,0,0,0,2.672-2.628V24.24h-.029a2.947,2.947,0,0,1-4.742.436,4.041,4.041,0,0,1-.838-2.684,4.738,4.738,0,0,1,.9-3.04,3,3,0,0,1,2.476-1.128,2.384,2.384,0,0,1,2.2,1.216h.029V18h1.7Zm-1.684-2.835v-.973a1.91,1.91,0,0,0-.524-1.352A1.718,1.718,0,0,0,61.5,19.18a1.793,1.793,0,0,0-1.512.714,3.217,3.217,0,0,0-.546,2,2.774,2.774,0,0,0,.524,1.769,1.678,1.678,0,0,0,1.387.662,1.805,1.805,0,0,0,1.429-.632A2.391,2.391,0,0,0,63.333,22.064Z\" fill=\"#5e5e5e\"/><path d=\"M73.908,25.5h-1.7V21.273q0-2.1-1.486-2.1a1.622,1.622,0,0,0-1.282.582,2.162,2.162,0,0,0-.5,1.469V25.5H67.229V18h1.707v1.245h.029A2.673,2.673,0,0,1,71.4,17.824a2.265,2.265,0,0,1,1.868.795,3.57,3.57,0,0,1,.644,2.3Z\" fill=\"#5e5e5e\"/><path d=\"M80.962,16.426a1.02,1.02,0,0,1-.714-.272.89.89,0,0,1-.3-.688.916.916,0,0,1,.3-.7,1.008,1.008,0,0,1,.714-.278,1.039,1.039,0,0,1,.732.278.909.909,0,0,1,.3.7.9.9,0,0,1-.3.678A1.034,1.034,0,0,1,80.962,16.426ZM81.8,25.5H80.1V18h1.7Z\" fill=\"#5e5e5e\"/><path d=\"M90.7,25.5H89V21.273q0-2.1-1.486-2.1a1.622,1.622,0,0,0-1.282.582,2.157,2.157,0,0,0-.506,1.469V25.5H84.023V18H85.73v1.245h.03a2.673,2.673,0,0,1,2.431-1.421,2.265,2.265,0,0,1,1.868.795,3.57,3.57,0,0,1,.644,2.3Z\" fill=\"#5e5e5e\"/><path d=\"M106.984,18l-2.212,7.5h-1.78l-1.361-5.083a3.215,3.215,0,0,1-.1-.659H101.5a3.069,3.069,0,0,1-.131.644l-1.48,5.1H98.145L95.939,18H97.7l1.363,5.405a3.16,3.16,0,0,1,.087.645H99.2a3.384,3.384,0,0,1,.117-.659L100.832,18h1.6l1.347,5.428a3.732,3.732,0,0,1,.095.644h.052a3.387,3.387,0,0,1,.11-.644L105.365,18Z\" fill=\"#5e5e5e\"/><path d=\"M109.1,16.426a1.018,1.018,0,0,1-.714-.272.886.886,0,0,1-.3-.688.912.912,0,0,1,.3-.7,1.006,1.006,0,0,1,.714-.278,1.039,1.039,0,0,1,.732.278.912.912,0,0,1,.3.7.9.9,0,0,1-.3.678A1.034,1.034,0,0,1,109.1,16.426Zm.841,9.074h-1.7V18h1.7Z\" fill=\"#5e5e5e\"/><path d=\"M116.117,25.42a2.955,2.955,0,0,1-1.31.248q-2.182,0-2.183-2.094V19.333h-1.253V18h1.253V16.264l1.7-.483V18h1.794v1.333h-1.794v3.75a1.484,1.484,0,0,0,.241.952,1.006,1.006,0,0,0,.807.285,1.167,1.167,0,0,0,.746-.248Z\" fill=\"#5e5e5e\"/><path d=\"M124.248,25.5h-1.7V21.4q0-2.226-1.487-2.226a1.556,1.556,0,0,0-1.26.644,2.568,2.568,0,0,0-.513,1.649V25.5h-1.707V14.4h1.707v4.849h.029a2.685,2.685,0,0,1,2.432-1.421q2.5,0,2.5,3.055Z\" fill=\"#5e5e5e\"/><path d=\"M141.907,25.5h-1.728V18.7q0-.835.1-2.043h-.029a6.992,6.992,0,0,1-.285.988L136.831,25.5h-1.2l-3.143-7.793a7.236,7.236,0,0,1-.277-1.047h-.029q.057.63.058,2.058V25.5h-1.611V15h2.453l2.762,7a10.884,10.884,0,0,1,.41,1.2h.036c.181-.551.327-.962.44-1.23L139.541,15h2.366Z\" fill=\"#5e5e5e\"/><path d=\"M145.158,16.426a1.022,1.022,0,0,1-.714-.272.89.89,0,0,1-.3-.688.916.916,0,0,1,.3-.7,1.009,1.009,0,0,1,.714-.278,1.043,1.043,0,0,1,.733.278.911.911,0,0,1,.3.7.9.9,0,0,1-.3.678A1.038,1.038,0,0,1,145.158,16.426ZM146,25.5h-1.7V18H146Z\" fill=\"#5e5e5e\"/><path d=\"M153.589,25.156a4.2,4.2,0,0,1-2.131.52,3.606,3.606,0,0,1-2.695-1.044,3.691,3.691,0,0,1-1.026-2.706,4.07,4.07,0,0,1,1.1-2.978,3.944,3.944,0,0,1,2.948-1.124,4.3,4.3,0,0,1,1.81.36v1.582a2.743,2.743,0,0,0-1.67-.586,2.32,2.32,0,0,0-1.766.728,2.665,2.665,0,0,0-.688,1.908,2.536,2.536,0,0,0,.648,1.838,2.3,2.3,0,0,0,1.739.674,2.716,2.716,0,0,0,1.729-.652Z\" fill=\"#5e5e5e\"/><path d=\"M159.625,19.619a1.4,1.4,0,0,0-.887-.242,1.513,1.513,0,0,0-1.259.682,3.04,3.04,0,0,0-.506,1.852V25.5h-1.7V18h1.7v1.545H157a2.606,2.606,0,0,1,.766-1.233,1.724,1.724,0,0,1,1.154-.444,1.432,1.432,0,0,1,.7.14Z\" fill=\"#5e5e5e\"/><path d=\"M164.02,25.676a3.719,3.719,0,0,1-2.773-1.051,3.8,3.8,0,0,1-1.036-2.787,3.7,3.7,0,0,1,3.991-4.014,3.6,3.6,0,0,1,2.739,1.033,3.986,3.986,0,0,1,.982,2.864,3.932,3.932,0,0,1-1.059,2.875A3.8,3.8,0,0,1,164.02,25.676Zm.08-6.5a1.938,1.938,0,0,0-1.575.7,2.913,2.913,0,0,0-.579,1.919,2.744,2.744,0,0,0,.586,1.856,1.965,1.965,0,0,0,1.568.678,1.87,1.87,0,0,0,1.542-.666,2.956,2.956,0,0,0,.538-1.9,3,3,0,0,0-.538-1.911A1.858,1.858,0,0,0,164.1,19.18Z\" fill=\"#5e5e5e\"/><path d=\"M169.182,25.266V23.691a3.392,3.392,0,0,0,2.1.725q1.539,0,1.538-.908a.714.714,0,0,0-.132-.436,1.241,1.241,0,0,0-.355-.318,2.784,2.784,0,0,0-.527-.25q-.3-.108-.677-.248a7.052,7.052,0,0,1-.832-.389,2.545,2.545,0,0,1-.615-.465,1.745,1.745,0,0,1-.37-.59,2.145,2.145,0,0,1-.125-.769,1.775,1.775,0,0,1,.256-.955,2.223,2.223,0,0,1,.69-.7,3.289,3.289,0,0,1,.98-.425,4.511,4.511,0,0,1,1.136-.143,5.181,5.181,0,0,1,1.86.315v1.487a3.136,3.136,0,0,0-1.816-.542,2.317,2.317,0,0,0-.582.066,1.472,1.472,0,0,0-.443.183.886.886,0,0,0-.286.282.669.669,0,0,0-.1.363.77.77,0,0,0,.1.41.93.93,0,0,0,.3.3,2.654,2.654,0,0,0,.483.234q.282.105.649.23a9.4,9.4,0,0,1,.867.4,2.886,2.886,0,0,1,.656.465,1.806,1.806,0,0,1,.417.6,2.034,2.034,0,0,1,.147.81,1.847,1.847,0,0,1-.264,1,2.205,2.205,0,0,1-.7.7,3.292,3.292,0,0,1-1.015.413,5.222,5.222,0,0,1-1.212.136A5.115,5.115,0,0,1,169.182,25.266Z\" fill=\"#5e5e5e\"/><path d=\"M179.443,25.676a3.717,3.717,0,0,1-2.772-1.051,3.793,3.793,0,0,1-1.036-2.787,3.7,3.7,0,0,1,3.991-4.014,3.6,3.6,0,0,1,2.739,1.033,3.986,3.986,0,0,1,.982,2.864,3.932,3.932,0,0,1-1.059,2.875A3.8,3.8,0,0,1,179.443,25.676Zm.08-6.5a1.936,1.936,0,0,0-1.574.7,2.908,2.908,0,0,0-.579,1.919,2.739,2.739,0,0,0,.586,1.856,1.964,1.964,0,0,0,1.567.678,1.868,1.868,0,0,0,1.542-.666,2.95,2.95,0,0,0,.539-1.9,2.99,2.99,0,0,0-.539-1.911A1.857,1.857,0,0,0,179.523,19.18Z\" fill=\"#5e5e5e\"/><path d=\"M189.067,15.781a1.533,1.533,0,0,0-.784-.2q-1.237,0-1.237,1.4V18h1.743v1.333h-1.736V25.5h-1.7V19.333h-1.282V18h1.282V16.784a2.362,2.362,0,0,1,.777-1.871,2.82,2.82,0,0,1,1.94-.684,2.879,2.879,0,0,1,1,.138Z\" fill=\"#5e5e5e\"/><path d=\"M194.23,25.42a2.955,2.955,0,0,1-1.31.248q-2.182,0-2.183-2.094V19.333h-1.253V18h1.253V16.264l1.7-.483V18h1.793v1.333h-1.793v3.75a1.484,1.484,0,0,0,.241.952,1,1,0,0,0,.806.285,1.165,1.165,0,0,0,.746-.248Z\" fill=\"#5e5e5e\"/><rect x=\"13\" y=\"11\" width=\"9\" height=\"9\" fill=\"#f25022\"/><rect x=\"13\" y=\"21\" width=\"9\" height=\"9\" fill=\"#00a4ef\"/><rect x=\"23\" y=\"11\" width=\"9\" height=\"9\" fill=\"#7fba00\"/><rect x=\"23\" y=\"21\" width=\"9\" height=\"9\" fill=\"#ffb900\"/></svg>\n            </a>\n        <div id=\"ms-status-indicator\" class=\"status-indicator ready\"></div>\n            <button id=\"logout-button\" class=\"icon-button\" title=\"Logout\">\n                <svg xmlns=\"http://www.w3.org/2000/svg\" height=\"26px\" viewBox=\"0 -960 960 960\" width=\"26px\"><path d=\"M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z\"/></svg>\n            </button>\n        </div>\n    </div>\n\n\n\n</body>\n</html>\n",
+        "output": "str",
+        "x": 300,
+        "y": 180,
+        "wires": [
+            [
+                "6f5d2bd60c92eaf2"
+            ]
+        ]
+    },
+    {
+        "id": "6f5d2bd60c92eaf2",
+        "type": "http response",
+        "z": "2bd8c41a5a846ce1",
+        "g": "2039f41f1d71e923",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 430,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "7d6b19ea2870b294",
+        "type": "http in",
+        "z": "2bd8c41a5a846ce1",
+        "g": "2039f41f1d71e923",
+        "name": "login",
+        "url": "/calendar/login",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 170,
+        "y": 140,
+        "wires": [
+            [
+                "58027febe4e45e7e"
+            ]
+        ]
+    },
+    {
+        "id": "58027febe4e45e7e",
+        "type": "subflow:e0e1f32e0262e39e",
+        "z": "2bd8c41a5a846ce1",
+        "g": "2039f41f1d71e923",
+        "name": "",
+        "env": [
+            {
+                "name": "Username",
+                "value": "admin",
+                "type": "str"
+            },
+            {
+                "name": "Password",
+                "type": "cred"
+            },
+            {
+                "name": "Redirect",
+                "value": "./setup",
+                "type": "str"
+            },
+            {
+                "name": "Redirect path",
+                "value": "./test",
+                "type": "str"
+            },
+            {
+                "name": "SECRET",
+                "type": "cred"
+            },
+            {
+                "name": "JWT_SIGNING_SECRET",
+                "type": "cred"
+            }
+        ],
+        "x": 330,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "ca560c21d7856c73",
+        "type": "http in",
+        "z": "2bd8c41a5a846ce1",
+        "g": "2039f41f1d71e923",
+        "name": "setup",
+        "url": "/calendar/setup",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 170,
+        "y": 180,
+        "wires": [
+            [
+                "21b5c21797561b6b"
+            ]
+        ]
+    },
+    {
+        "id": "ea875c9e332f0e70",
+        "type": "subflow:f76933b40eb15e67",
+        "z": "2bd8c41a5a846ce1",
+        "g": "94cfe4876929b61d",
+        "name": "",
+        "env": [
+            {
+                "name": "API_KEY",
+                "type": "cred"
+            }
+        ],
+        "x": 380,
+        "y": 280,
+        "wires": [
+            [
+                "83b4f9488ac9198b"
+            ]
+        ]
+    },
+    {
+        "id": "4cab4781f802b081",
+        "type": "http response",
+        "z": "2bd8c41a5a846ce1",
+        "g": "94cfe4876929b61d",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 830,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "f8ac6e4a26943076",
+        "type": "http in",
+        "z": "2bd8c41a5a846ce1",
+        "g": "46c8e0da91700e7b",
+        "name": "ms/status",
+        "url": "/calendar/ms/status",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 180,
+        "y": 500,
+        "wires": [
+            [
+                "1a399dec19b9fd09"
+            ]
+        ]
+    },
+    {
+        "id": "5105d47f014b6ebf",
+        "type": "query",
+        "z": "2bd8c41a5a846ce1",
+        "g": "46c8e0da91700e7b",
+        "client": "42afd4cfd92ebae2",
+        "x": 690,
+        "y": 500,
+        "wires": [
+            [
+                "9a838c294f944d6d",
+                "d197072b08cd9130",
+                "f43a72bb5deac808"
+            ]
+        ]
+    },
+    {
+        "id": "b947824ce7aba684",
+        "type": "function",
+        "z": "2bd8c41a5a846ce1",
+        "g": "46c8e0da91700e7b",
+        "name": "function 14",
+        "func": "msg.payload = {\n    \n    \"method\": \"GET\", // HTTP method for the API request\n    \"endpoint\": \"/me\", // API endpoint to be queried\n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 550,
+        "y": 500,
+        "wires": [
+            [
+                "5105d47f014b6ebf"
+            ]
+        ]
+    },
+    {
+        "id": "9a838c294f944d6d",
+        "type": "debug",
+        "z": "2bd8c41a5a846ce1",
+        "g": "46c8e0da91700e7b",
+        "name": "debug 80",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 820,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "5ebc7c08847f60bc",
+        "type": "http response",
+        "z": "2bd8c41a5a846ce1",
+        "g": "46c8e0da91700e7b",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 1010,
+        "y": 500,
+        "wires": []
+    },
+    {
+        "id": "39e2efd39ccd3726",
+        "type": "catch",
+        "z": "2bd8c41a5a846ce1",
+        "g": "46c8e0da91700e7b",
+        "name": "",
+        "scope": [
+            "5105d47f014b6ebf"
+        ],
+        "uncaught": false,
+        "x": 690,
+        "y": 560,
+        "wires": [
+            [
+                "fe456e7fcae66374"
+            ]
+        ]
+    },
+    {
+        "id": "d09585ecdb3f8633",
+        "type": "debug",
+        "z": "2bd8c41a5a846ce1",
+        "g": "46c8e0da91700e7b",
+        "name": "debug 81",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1020,
+        "y": 560,
+        "wires": []
+    },
+    {
+        "id": "fe456e7fcae66374",
+        "type": "function",
+        "z": "2bd8c41a5a846ce1",
+        "g": "46c8e0da91700e7b",
+        "name": "function 16",
+        "func": "if (msg.statusCode == 500){\n    msg.statusCode = 409\n    msg.payload = \"Access token not available. Please sign in first.\"\n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 830,
+        "y": 560,
+        "wires": [
+            [
+                "d09585ecdb3f8633",
+                "5ebc7c08847f60bc"
+            ]
+        ]
+    },
+    {
+        "id": "d197072b08cd9130",
+        "type": "function",
+        "z": "2bd8c41a5a846ce1",
+        "g": "46c8e0da91700e7b",
+        "name": "function 19",
+        "func": "msg.headers = {\n    \"Cache-Control\": \"no-store, no-cache, must-revalidate, proxy-revalidate\",\n    \"Pragma\": \"no-cache\",\n    \"Expires\": \"0\"\n};\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 830,
+        "y": 500,
+        "wires": [
+            [
+                "5ebc7c08847f60bc"
+            ]
+        ]
+    },
+    {
+        "id": "1a399dec19b9fd09",
+        "type": "subflow:f76933b40eb15e67",
+        "z": "2bd8c41a5a846ce1",
+        "g": "46c8e0da91700e7b",
+        "name": "",
+        "env": [
+            {
+                "name": "API_KEY",
+                "type": "cred"
+            }
+        ],
+        "x": 360,
+        "y": 500,
+        "wires": [
+            [
+                "b947824ce7aba684"
+            ]
+        ]
+    },
+    {
+        "id": "079c310061384077",
+        "type": "function",
+        "z": "2bd8c41a5a846ce1",
+        "g": "d357151e139ebb12",
+        "name": "function 24",
+        "func": "msg.statusCode = 302\nmsg.headers = {\n    Location: \"./setup\"\n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 490,
+        "y": 660,
+        "wires": [
+            [
+                "b67db0dc843c6ef0"
+            ]
+        ]
+    },
+    {
+        "id": "3dcf6a6cb3020d8a",
+        "type": "query",
+        "z": "2bd8c41a5a846ce1",
+        "g": "996ef6453d1b514c",
+        "client": "42afd4cfd92ebae2",
+        "x": 630,
+        "y": 980,
+        "wires": [
+            [
+                "f08f7de05d73ba01"
+            ]
+        ]
+    },
+    {
+        "id": "3dae8c69828d538d",
+        "type": "function",
+        "z": "2bd8c41a5a846ce1",
+        "g": "996ef6453d1b514c",
+        "name": "function 25",
+        "func": "if (msg.isActive === false) {\n    node.warn(\"User is not signed in\")\n    return null;\n}\n\nfunction getCalendarUrl() {\n    const now = new Date();\n    \n    // Start: před 3 dny (00:00)\n    const startDate = new Date(now);\n    startDate.setDate(now.getDate() - 3);\n    startDate.setHours(0, 0, 0, 0);\n\n    // End: za 5 dní (23:59)\n    const endDate = new Date(now);\n    endDate.setDate(now.getDate() + 5);\n    endDate.setHours(23, 59, 59, 999);\n\n    const startISO = startDate.toISOString();\n    const endISO = endDate.toISOString();\n\n    const selectFields = \"subject,start,end,attendees,lastModifiedDateTime,organizer\";\n    \n    return `/me/calendarView?startDateTime=${startISO}&endDateTime=${endISO}&$select=${selectFields}`;\n}\n\nmsg.payload = {\n    \n    \"method\": \"GET\",\n    \"endpoint\": getCalendarUrl()\n}\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 490,
+        "y": 980,
+        "wires": [
+            [
+                "3dcf6a6cb3020d8a"
+            ]
+        ]
+    },
+    {
+        "id": "14e165fbc62f8fda",
+        "type": "inject",
+        "z": "2bd8c41a5a846ce1",
+        "g": "996ef6453d1b514c",
+        "name": "Query",
+        "props": [],
+        "repeat": "300",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 200,
+        "y": 980,
+        "wires": [
+            [
+                "4877481fc322fd4a"
+            ]
+        ]
+    },
+    {
+        "id": "cd42a18f86e0bad1",
+        "type": "catch",
+        "z": "2bd8c41a5a846ce1",
+        "g": "d357151e139ebb12",
+        "name": "",
+        "scope": [
+            "ef52aaf8d68dd85e"
+        ],
+        "uncaught": false,
+        "x": 350,
+        "y": 700,
+        "wires": [
+            [
+                "079c310061384077"
+            ]
+        ]
+    },
+    {
+        "id": "8af5f855d010b7d5",
+        "type": "function",
+        "z": "2bd8c41a5a846ce1",
+        "g": "94cfe4876929b61d",
+        "name": "function 26",
+        "func": "// funkce, která upraví link pro správnou funkčnost resource accountem\n\nlet urlString = msg.payload.authUrl;\n\nif (urlString) {\n    try {\n        let y = new url.URL(urlString)\n        y.searchParams.set(\"prompt\", \"select_account\");\n        msg.payload.authUrl = y.toString();\n    } catch (e) {\n        node.error(\"Neplatná URL v payloadu: \" + e.message);\n    }\n}\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [
+            {
+                "var": "url",
+                "module": "url"
+            }
+        ],
+        "x": 690,
+        "y": 280,
+        "wires": [
+            [
+                "4cab4781f802b081"
+            ]
+        ]
+    },
+    {
+        "id": "38295a6f1b7ab3f8",
+        "type": "http in",
+        "z": "2bd8c41a5a846ce1",
+        "g": "8960e3cd2ca393d3",
+        "name": "ms/logout",
+        "url": "/calendar/ms/logout",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 180,
+        "y": 840,
+        "wires": [
+            [
+                "d389d3735df5b272"
+            ]
+        ]
+    },
+    {
+        "id": "e4e8d2805387c304",
+        "type": "http response",
+        "z": "2bd8c41a5a846ce1",
+        "g": "8960e3cd2ca393d3",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 650,
+        "y": 840,
+        "wires": []
+    },
+    {
+        "id": "d389d3735df5b272",
+        "type": "subflow:f76933b40eb15e67",
+        "z": "2bd8c41a5a846ce1",
+        "g": "8960e3cd2ca393d3",
+        "name": "",
+        "env": [
+            {
+                "name": "API_KEY",
+                "type": "cred"
+            }
+        ],
+        "x": 360,
+        "y": 840,
+        "wires": [
+            [
+                "5f31b825839581a0"
+            ]
+        ]
+    },
+    {
+        "id": "f08f7de05d73ba01",
+        "type": "split",
+        "z": "2bd8c41a5a846ce1",
+        "g": "996ef6453d1b514c",
+        "name": "split events",
+        "splt": "\\n",
+        "spltType": "str",
+        "arraySplt": 1,
+        "arraySpltType": "len",
+        "stream": false,
+        "addname": "",
+        "property": "payload.value",
+        "x": 770,
+        "y": 980,
+        "wires": [
+            [
+                "4ad28177581c8bba"
+            ]
+        ]
+    },
+    {
+        "id": "4ad28177581c8bba",
+        "type": "split",
+        "z": "2bd8c41a5a846ce1",
+        "g": "996ef6453d1b514c",
+        "name": "split attendees",
+        "splt": "\\n",
+        "spltType": "str",
+        "arraySplt": 1,
+        "arraySpltType": "len",
+        "stream": false,
+        "addname": "",
+        "property": "payload.value.attendees",
+        "x": 940,
+        "y": 980,
+        "wires": [
+            [
+                "cf78ed3c866c6d4c"
+            ]
+        ]
+    },
+    {
+        "id": "94918129da848015",
+        "type": "inject",
+        "z": "2bd8c41a5a846ce1",
+        "g": "e574f2e17c6016fe",
+        "name": "configuration",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "{\"method\":\"GET\",\"endpoint\":\"/me\"}",
+        "payloadType": "json",
+        "x": 730,
+        "y": 160,
+        "wires": [
+            [
+                "73eb351cfeea12e0",
+                "0b2b354a57063821"
+            ]
+        ]
+    },
+    {
+        "id": "73eb351cfeea12e0",
+        "type": "change",
+        "z": "2bd8c41a5a846ce1",
+        "g": "e574f2e17c6016fe",
+        "name": "configuration",
+        "rules": [
+            {
+                "t": "set",
+                "p": "companyId",
+                "pt": "flow",
+                "to": "1",
+                "tot": "num"
+            },
+            {
+                "t": "set",
+                "p": "companyId",
+                "pt": "msg",
+                "to": "companyId",
+                "tot": "flow"
+            },
+            {
+                "t": "set",
+                "p": "domain",
+                "pt": "flow",
+                "to": "testovani2N.onmicrosoft.com",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 910,
+        "y": 100,
+        "wires": [
+            [
+                "29aca0712779a3b6"
+            ]
+        ]
+    },
+    {
+        "id": "4877481fc322fd4a",
+        "type": "change",
+        "z": "2bd8c41a5a846ce1",
+        "g": "996ef6453d1b514c",
+        "name": "get config",
+        "rules": [
+            {
+                "t": "set",
+                "p": "companyId",
+                "pt": "msg",
+                "to": "companyId",
+                "tot": "flow"
+            },
+            {
+                "t": "set",
+                "p": "groupIds",
+                "pt": "msg",
+                "to": "groupIds",
+                "tot": "flow"
+            },
+            {
+                "t": "set",
+                "p": "domain",
+                "pt": "msg",
+                "to": "domain",
+                "tot": "flow"
+            },
+            {
+                "t": "set",
+                "p": "isActive",
+                "pt": "msg",
+                "to": "isActive",
+                "tot": "flow"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 340,
+        "y": 980,
+        "wires": [
+            [
+                "3dae8c69828d538d"
+            ]
+        ]
+    },
+    {
+        "id": "3cd31bfeff4c4fa1",
+        "type": "2nac-rest-api",
+        "z": "2bd8c41a5a846ce1",
+        "g": "996ef6453d1b514c",
+        "name": "",
+        "method": "POST",
+        "endpoint": "visitors",
+        "query": "",
+        "senderr": true,
+        "x": 980,
+        "y": 1100,
+        "wires": [
+            [
+                "522c4ab3736d47a5"
+            ]
+        ]
+    },
+    {
+        "id": "29aca0712779a3b6",
+        "type": "2nac-rest-api",
+        "z": "2bd8c41a5a846ce1",
+        "g": "e574f2e17c6016fe",
+        "name": "",
+        "method": "GET",
+        "endpoint": "companies/{companyId}",
+        "query": "",
+        "senderr": true,
+        "x": 1060,
+        "y": 100,
+        "wires": [
+            [
+                "6ad8b9c6046064ef"
+            ]
+        ]
+    },
+    {
+        "id": "6ad8b9c6046064ef",
+        "type": "change",
+        "z": "2bd8c41a5a846ce1",
+        "g": "e574f2e17c6016fe",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "groupIds",
+                "pt": "flow",
+                "to": "payload.VisitorSettings.PredefinedVisitorGroups",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1230,
+        "y": 100,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "cf78ed3c866c6d4c",
+        "type": "function",
+        "z": "2bd8c41a5a846ce1",
+        "g": "996ef6453d1b514c",
+        "name": "main function",
+        "func": "let start = new Date(msg.payload.value.start.dateTime + \"Z\");\nlet end = new Date(msg.payload.value.end.dateTime + \"Z\");\n\n// start a konec posunout o hodinu (návštěvník přijde několik minut před naplánovou schůzkou a několik minut po ní)\nstart.setHours(start.getHours() - 1);\nend.setHours(end.getHours() + 1);\n\n// převést čas na lokální\nmsg.accessStartTime = start.toLocaleString();\nmsg.accessEndTime = end.toLocaleString();\n\n// nastav proměnné\nmsg.organizerEmail = msg.payload.value.organizer.emailAddress.address\nmsg.organizerName = msg.payload.value.organizer.emailAddress.name\n\nmsg.eventId = msg.payload.value.id\nmsg.email = msg.payload.value.attendees.emailAddress.address\nmsg.fullName = msg.payload.value.attendees.emailAddress.name\n\n// Odfiltruj uživatele s domovskou doménou\nconst emailDomain = msg.email.split('@')[1];\nif (emailDomain === msg.domain) {\n    return null;\n}\n\n// najdi existující uživatele\nmsg.query = `?filter={\"$and\":[{\"Email\":{\"$cti\":\"${msg.email}\"}},{\"Note\":{\"$cti\":\"${msg.eventId}\"}}]}`\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1110,
+        "y": 980,
+        "wires": [
+            [
+                "655e9f5bd0ad92f7"
+            ]
+        ]
+    },
+    {
+        "id": "8d6e27fc7ce58f3c",
+        "type": "switch",
+        "z": "2bd8c41a5a846ce1",
+        "g": "996ef6453d1b514c",
+        "name": "update or create",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "nempty"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 360,
+        "y": 1080,
+        "wires": [
+            [
+                "4f208c39945bae4d"
+            ],
+            [
+                "69f3e3c78a950fba"
+            ]
+        ]
+    },
+    {
+        "id": "655e9f5bd0ad92f7",
+        "type": "2nac-rest-api",
+        "z": "2bd8c41a5a846ce1",
+        "g": "996ef6453d1b514c",
+        "name": "Get visitors",
+        "method": "GET",
+        "endpoint": "visitors",
+        "query": "",
+        "senderr": true,
+        "x": 190,
+        "y": 1080,
+        "wires": [
+            [
+                "8d6e27fc7ce58f3c"
+            ]
+        ]
+    },
+    {
+        "id": "bc5c4d521b5c6325",
+        "type": "function",
+        "z": "2bd8c41a5a846ce1",
+        "g": "996ef6453d1b514c",
+        "name": "create visitor",
+        "func": "msg.body = {\n    \"Name\": msg.fullName,\n    \"Note\": msg.eventId,\n    \"Company\": { \"Id\": msg.companyId },\n    \"Groups\": msg.groupIds,\n    \"VisitFrom\": msg.accessStartTime,\n    \"VisitTo\": msg.accessEndTime,\n    \"Email\": msg.email\n};\n\nif (Array.isArray(msg.payload) && msg.payload.length > 0) {\n    msg.body.VisitedPersonId = msg.payload[0].Id;\n} else {\n    msg.body.VisitedPerson = msg.organizerName || null;\n}\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 830,
+        "y": 1100,
+        "wires": [
+            [
+                "3cd31bfeff4c4fa1"
+            ]
+        ]
+    },
+    {
+        "id": "522c4ab3736d47a5",
+        "type": "change",
+        "z": "2bd8c41a5a846ce1",
+        "g": "996ef6453d1b514c",
+        "name": "get ID & email",
+        "rules": [
+            {
+                "t": "set",
+                "p": "visitorId",
+                "pt": "msg",
+                "to": "payload.Id",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "body",
+                "pt": "msg",
+                "to": "payload.Email",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1140,
+        "y": 1100,
+        "wires": [
+            [
+                "04fbc1f3c894e844"
+            ]
+        ]
+    },
+    {
+        "id": "04fbc1f3c894e844",
+        "type": "2nac-rest-api",
+        "z": "2bd8c41a5a846ce1",
+        "g": "996ef6453d1b514c",
+        "name": "createQR",
+        "method": "POST",
+        "endpoint": "visitors/{visitorId}/qrcode",
+        "query": "",
+        "senderr": true,
+        "x": 1300,
+        "y": 1100,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "b668b89371241274",
+        "type": "function",
+        "z": "2bd8c41a5a846ce1",
+        "g": "996ef6453d1b514c",
+        "name": "update visitor",
+        "func": "msg.body = [\n  { \"op\": \"replace\", \"path\": \"/Name\", \"value\": msg.fullName },\n  { \"op\": \"replace\", \"path\": \"/Email\", \"value\": msg.email },\n  { \"op\": \"replace\", \"path\": \"/IsSuspended\", \"value\": false },\n  { \"op\": \"replace\", \"path\": \"/VisitFrom\", \"value\": msg.accessStartTime },\n  { \"op\": \"replace\", \"path\": \"/VisitTo\", \"value\": msg.accessEndTime },\n  { \"op\": \"replace\", \"path\": \"/IsSuspended\", \"value\": false },\n  { \"op\": \"replace\", \"path\": \"/Groups\", \"value\": msg.groupIds},\n]\n\nif (Array.isArray(msg.payload) && msg.payload.length > 0) {\n  msg.body.push({op: \"replace\", path: \"/VisitedPersonId\", value: msg.payload[0].Id})\n\n} else {\n  msg.body.push({op: \"replace\", path: \"/VisitedPerson\", value: msg.organizerName})\n}\n\n \nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 950,
+        "y": 1060,
+        "wires": [
+            [
+                "2cca6d01b7559b8c"
+            ]
+        ]
+    },
+    {
+        "id": "2cca6d01b7559b8c",
+        "type": "2nac-rest-api",
+        "z": "2bd8c41a5a846ce1",
+        "g": "996ef6453d1b514c",
+        "name": "Update visitor",
+        "method": "PATCH",
+        "endpoint": "visitors/{visitorId}",
+        "query": "",
+        "senderr": true,
+        "x": 1120,
+        "y": 1060,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "4f208c39945bae4d",
+        "type": "split",
+        "z": "2bd8c41a5a846ce1",
+        "g": "996ef6453d1b514c",
+        "name": "",
+        "splt": "\\n",
+        "spltType": "str",
+        "arraySplt": 1,
+        "arraySpltType": "len",
+        "stream": false,
+        "addname": "",
+        "property": "payload",
+        "x": 510,
+        "y": 1060,
+        "wires": [
+            [
+                "46bcb66e791b89df"
+            ]
+        ]
+    },
+    {
+        "id": "3b4d99b3414e0940",
+        "type": "2nac-rest-api",
+        "z": "2bd8c41a5a846ce1",
+        "g": "996ef6453d1b514c",
+        "name": "",
+        "method": "GET",
+        "endpoint": "users",
+        "query": "",
+        "senderr": true,
+        "x": 680,
+        "y": 1100,
+        "wires": [
+            [
+                "bc5c4d521b5c6325"
+            ]
+        ]
+    },
+    {
+        "id": "69f3e3c78a950fba",
+        "type": "function",
+        "z": "2bd8c41a5a846ce1",
+        "g": "996ef6453d1b514c",
+        "name": "function 28",
+        "func": "msg.query = `?filter={\"Account.Email\":{\"$eq\":\"${msg.organizerEmail}\"}}`\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 530,
+        "y": 1100,
+        "wires": [
+            [
+                "3b4d99b3414e0940"
+            ]
+        ]
+    },
+    {
+        "id": "02668d081dda7f8d",
+        "type": "2nac-rest-api",
+        "z": "2bd8c41a5a846ce1",
+        "g": "996ef6453d1b514c",
+        "name": "",
+        "method": "GET",
+        "endpoint": "users",
+        "query": "",
+        "senderr": true,
+        "x": 800,
+        "y": 1060,
+        "wires": [
+            [
+                "b668b89371241274"
+            ]
+        ]
+    },
+    {
+        "id": "46bcb66e791b89df",
+        "type": "function",
+        "z": "2bd8c41a5a846ce1",
+        "g": "996ef6453d1b514c",
+        "name": "function 33",
+        "func": "msg.visitorId = msg.payload.Id\nmsg.query = `?filter={\"Account.Email\":{\"$eq\":\"${msg.organizerEmail}\"}}`\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 650,
+        "y": 1060,
+        "wires": [
+            [
+                "02668d081dda7f8d"
+            ]
+        ]
+    },
+    {
+        "id": "23b04e93474c9146",
+        "type": "catch",
+        "z": "2bd8c41a5a846ce1",
+        "g": "e574f2e17c6016fe",
+        "name": "",
+        "scope": [
+            "29aca0712779a3b6"
+        ],
+        "uncaught": false,
+        "x": 610,
+        "y": 100,
+        "wires": [
+            [
+                "e536b9ba646b5429"
+            ]
+        ]
+    },
+    {
+        "id": "e536b9ba646b5429",
+        "type": "delay",
+        "z": "2bd8c41a5a846ce1",
+        "g": "e574f2e17c6016fe",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 740,
+        "y": 100,
+        "wires": [
+            [
+                "73eb351cfeea12e0"
+            ]
+        ]
+    },
+    {
+        "id": "0b2b354a57063821",
+        "type": "query",
+        "z": "2bd8c41a5a846ce1",
+        "g": "e574f2e17c6016fe",
+        "client": "42afd4cfd92ebae2",
+        "x": 890,
+        "y": 160,
+        "wires": [
+            [
+                "9c890e7f97dd3f81"
+            ]
+        ]
+    },
+    {
+        "id": "9c890e7f97dd3f81",
+        "type": "switch",
+        "z": "2bd8c41a5a846ce1",
+        "g": "e574f2e17c6016fe",
+        "name": "",
+        "property": "statusCode",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "200",
+                "vt": "num"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 1030,
+        "y": 160,
+        "wires": [
+            [
+                "c2adfb3ca1ae07ad"
+            ],
+            [
+                "2a20c327a349c370"
+            ]
+        ]
+    },
+    {
+        "id": "c2adfb3ca1ae07ad",
+        "type": "change",
+        "z": "2bd8c41a5a846ce1",
+        "g": "e574f2e17c6016fe",
+        "name": "activated",
+        "rules": [
+            {
+                "t": "set",
+                "p": "isActive",
+                "pt": "flow",
+                "to": "true",
+                "tot": "bool"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1200,
+        "y": 140,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "2a20c327a349c370",
+        "type": "change",
+        "z": "2bd8c41a5a846ce1",
+        "g": "e574f2e17c6016fe",
+        "name": "deactivated",
+        "rules": [
+            {
+                "t": "set",
+                "p": "isActive",
+                "pt": "flow",
+                "to": "false",
+                "tot": "bool"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1210,
+        "y": 180,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "9eae27bbad307692",
+        "type": "change",
+        "z": "2bd8c41a5a846ce1",
+        "g": "8960e3cd2ca393d3",
+        "name": "deactivated",
+        "rules": [
+            {
+                "t": "set",
+                "p": "isActive",
+                "pt": "flow",
+                "to": "false",
+                "tot": "bool"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 670,
+        "y": 880,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "ef1dc4b9f83d20bd",
+        "type": "change",
+        "z": "2bd8c41a5a846ce1",
+        "g": "46c8e0da91700e7b",
+        "name": "deactivated",
+        "rules": [
+            {
+                "t": "set",
+                "p": "isActive",
+                "pt": "flow",
+                "to": "false",
+                "tot": "bool"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1030,
+        "y": 420,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "be6d4e6784a85ece",
+        "type": "change",
+        "z": "2bd8c41a5a846ce1",
+        "g": "46c8e0da91700e7b",
+        "name": "activated",
+        "rules": [
+            {
+                "t": "set",
+                "p": "isActive",
+                "pt": "flow",
+                "to": "true",
+                "tot": "bool"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1020,
+        "y": 380,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "f43a72bb5deac808",
+        "type": "switch",
+        "z": "2bd8c41a5a846ce1",
+        "g": "46c8e0da91700e7b",
+        "name": "",
+        "property": "statusCode",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "200",
+                "vt": "num"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 830,
+        "y": 400,
+        "wires": [
+            [
+                "be6d4e6784a85ece"
+            ],
+            [
+                "ef1dc4b9f83d20bd"
+            ]
+        ]
+    },
+    {
+        "id": "42afd4cfd92ebae2",
+        "type": "msgraph integration",
+        "name": "ACOM",
+        "clientId": "",
+        "tenantId": "",
+        "clientSecret": "",
+        "redirectUri": ""
+    }
+]
