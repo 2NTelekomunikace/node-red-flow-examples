@@ -54,17 +54,7 @@ List all the non-standard nodes required for the flow to work. You should includ
 
 ## Installation and Setup
 
-### 1. Importing the Flow
-
-1. Download the JSON code [flows.json](flows.json) file or copy its contents.
-
-2. In your Node-RED editor (`Access Commander Automation`), go to the menu (top right) and select **Import**.
-
-3. Choose **Clipboard** and paste the JSON code or **select a file to import**.
-
-4. Click **Import**.
-
-### 2. Installing Required Nodes
+### 1. Installing Required Nodes
 
 If you haven't already installed the required palettes, you can do so via the Node-RED Palette Manager:
 
@@ -73,6 +63,16 @@ If you haven't already installed the required palettes, you can do so via the No
 2. Switch to the **Install** tab.
 
 3. Search for each required node (e.g., `@flowfuse/node-red-dashboard`) and click **install**.
+
+### 2. Importing the Flow
+
+1. Download the JSON code [flows.json](flows.json) file or copy its contents.
+
+2. In your Node-RED editor (`Access Commander Automation`), go to the menu (top right) and select **Import**.
+
+3. Choose **Clipboard** and paste the JSON code or **select a file to import**.
+
+4. Click **Import**.
 
 ### 3. Configuration
 
