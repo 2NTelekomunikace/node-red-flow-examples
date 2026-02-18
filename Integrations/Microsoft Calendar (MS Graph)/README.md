@@ -104,9 +104,23 @@ In order to open the setup page, you first need to create an account to access t
 
 6. If needed you can logout using the **Bin** icon.
 
+#### QR Code Sending
+
+You can also set the flow to automatically send the QR code once the user is created inside the 2N Access Commander. Do not forget to **enable and configure the SMTP service** in the 2N Access Commander settings.
+
+1. Locate the `REST API` (*send QR*) node.
+
+2. Double-click on the node to open its properties.
+
+3. In the bottom left corner, click on **Disabled** (default), in order to **Enable** the node.
+
+4. Once set up, click on `Done` and `Deploy`.
+
 ## Usage
 
-* When creating a calendar invitation, **invite the account** `Equipment Mailbox` that is linked to 2N Access Commander. All attendees (expect users with the same domain) will be created inside 2N Access Commander as visitors (it is the same workflow as booking a meeting room).
+* When creating a calendar invitation, **invite the account** `Equipment Mailbox` that is linked to 2N Access Commander. All attendees (expect users with the same domain) will be created inside 2N Access Commander as visitors (it is a similar workflow to booking a meeting room).
+
+* Make sure the organizer is created in the 2N Access Commander database as a user; this will determine which company the visitor will be created in.
 
 ### Flow Diagram
 
