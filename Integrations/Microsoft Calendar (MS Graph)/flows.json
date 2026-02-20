@@ -197,7 +197,7 @@
         "wires": []
     },
     {
-        "id": "7bc0941d86fa92ef",
+        "id": "1fbdd7bcdb3287b4",
         "type": "tab",
         "label": "MS Graph",
         "disabled": false,
@@ -205,19 +205,19 @@
         "env": []
     },
     {
-        "id": "c7552720f195904b",
+        "id": "1b4e99923ffa34ed",
         "type": "group",
-        "z": "7bc0941d86fa92ef",
+        "z": "1fbdd7bcdb3287b4",
         "name": "Frontend",
         "style": {
             "label": true
         },
         "nodes": [
-            "c5f789395dad5719",
-            "3218d01bbd6e48d2",
-            "280975ff4c771648",
-            "2a47187a55e392ae",
-            "0785232c7f605455"
+            "4b5d38aa3c86db14",
+            "9ce06ecde68d57cc",
+            "e2ab5994c9b22ec8",
+            "6c0e49260fa07513",
+            "fcf7e35c795144f4"
         ],
         "x": 794,
         "y": 619,
@@ -225,21 +225,21 @@
         "h": 122
     },
     {
-        "id": "248ac4d8eb7b9523",
+        "id": "6d898b77b13f166b",
         "type": "group",
-        "z": "7bc0941d86fa92ef",
+        "z": "1fbdd7bcdb3287b4",
         "name": "Logout",
         "style": {
             "label": true
         },
         "nodes": [
-            "98330f4c9e1e0bd3",
-            "219a144377097b23",
-            "0be7f4697533b2e8",
-            "083d5d800177ef2a",
-            "76ee448f6025c903",
-            "65b33d01f2cceac7",
-            "a6f2e01d8826850c"
+            "3dc86b7f86e5ab87",
+            "0889fc22e2db2ba7",
+            "ac282acec187f42a",
+            "6d7da95fdbcb0358",
+            "5eb80f11744c7755",
+            "260c89c69d298a0d",
+            "1bafaef11910936a"
         ],
         "x": 94,
         "y": 759,
@@ -247,19 +247,19 @@
         "h": 162
     },
     {
-        "id": "629fe36906570208",
+        "id": "e9c207d76268fead",
         "type": "group",
-        "z": "7bc0941d86fa92ef",
+        "z": "1fbdd7bcdb3287b4",
         "name": "Login link",
         "style": {
             "label": true
         },
         "nodes": [
-            "266675e4b4161b4b",
-            "518e2da6ef4258f8",
-            "991ee6dbf605e371",
-            "a9b699d971a71dd0",
-            "79c2a68da149a0ea"
+            "3d0596f197d5cf91",
+            "ddb07bb28ab119d5",
+            "996a46e580946b23",
+            "1fd8bd39fbce69a1",
+            "2df2a63cfe7416f1"
         ],
         "x": 94,
         "y": 239,
@@ -267,19 +267,19 @@
         "h": 82
     },
     {
-        "id": "f9b27d71b3a7f0e3",
+        "id": "e40b855910389819",
         "type": "group",
-        "z": "7bc0941d86fa92ef",
+        "z": "1fbdd7bcdb3287b4",
         "name": "OAuth resposne",
         "style": {
             "label": true
         },
         "nodes": [
-            "c0fd0881400c28a5",
-            "3cff1032f6952aa5",
-            "62bc4db833e22689",
-            "f1f09b0a0611ae74",
-            "130d30c6574d3b20"
+            "53e27bb5eecdde52",
+            "091588205ef7098a",
+            "bf84c867deead7de",
+            "3e8a509647ae9731",
+            "95ce88415263efaf"
         ],
         "x": 94,
         "y": 619,
@@ -287,27 +287,27 @@
         "h": 122
     },
     {
-        "id": "56248fe9710e58e8",
+        "id": "27860bf48d8e7bc0",
         "type": "group",
-        "z": "7bc0941d86fa92ef",
+        "z": "1fbdd7bcdb3287b4",
         "name": "Connection status",
         "style": {
             "label": true
         },
         "nodes": [
-            "3bb3e40bd7a8d767",
-            "3709dd4c3ce5d221",
-            "23ecbd7bf1e4f523",
-            "c0db34f34a0704e1",
-            "8ca4312cb8663b44",
-            "10229a2ff00e58da",
-            "816355dab9bbc2b9",
-            "95bbe55502c53703",
-            "fd83ef995e0799cc",
-            "9ce49eddb72629a2",
-            "a6a47db3be8455ab",
-            "d2b6518999cbf25b",
-            "3cc03150d7ea59a4"
+            "2b4af6c29f31b660",
+            "a80d030fda055404",
+            "0398558e149cc5ae",
+            "113bde47c6c17205",
+            "ea1c50259a91aefe",
+            "d998a8d1068b0775",
+            "30f64b2bd1e56043",
+            "8a2d8b516dacb616",
+            "1eb4b500f80f59f1",
+            "dfd1d7395816051c",
+            "b00135dff5c648ee",
+            "0b941aaac0af4008",
+            "396f505afef51c2b"
         ],
         "x": 94,
         "y": 339,
@@ -315,21 +315,21 @@
         "h": 262
     },
     {
-        "id": "091f4e8fe254574a",
+        "id": "a167402833b8b30c",
         "type": "group",
-        "z": "7bc0941d86fa92ef",
+        "z": "1fbdd7bcdb3287b4",
         "name": "Init status",
         "style": {
             "label": true
         },
         "nodes": [
-            "ae6d4774a587eeb2",
-            "0dc57953b149039b",
-            "f717248a8d9dcc79",
-            "730bb0a5fa272e46",
-            "d137bba3c0eece18",
-            "94eb143bc0c539db",
-            "42cafd7299fdc1cb"
+            "4a3d413370790ec6",
+            "69ca58ad966aeaac",
+            "b1749630574b6195",
+            "18d7e9d19a1476ad",
+            "86b8f673b33d2b85",
+            "7ca291173c7be277",
+            "22075ed16ba28297"
         ],
         "x": 794,
         "y": 759,
@@ -337,78 +337,104 @@
         "h": 162
     },
     {
-        "id": "7ef36b64c58a50b3",
+        "id": "f592373cf669c1fe",
         "type": "group",
-        "z": "7bc0941d86fa92ef",
+        "z": "1fbdd7bcdb3287b4",
         "name": "Sync logic",
         "style": {
             "label": true
         },
         "nodes": [
-            "d0db5a91155e20cb",
-            "89314dfb0780de26",
-            "84a7486fee6dfcd2",
-            "8f9f7c4d96093448",
-            "c0c47a3072186f4a",
-            "a716cca164a78e55",
-            "1f93de987a4b32e2",
-            "e74e8ca1c865c20f",
-            "e629f56aaa63d5eb",
-            "8b3852360af65b19",
-            "1f6a422378de3075",
-            "453da446e2f7a9a6",
-            "2c25445a25d24adc",
-            "f9c2e2800850f7fc",
-            "560531b04e76452a",
-            "0efb192e8f82c62a",
-            "4b37c228132ce728",
-            "819262b40c702173",
-            "5bfdcb3a86c3c5b8",
-            "2392fb5e25202b05",
-            "3e1dc3fa6f8dba5b",
-            "68be796fb7c40237",
-            "c48e5086b4f32aa7"
+            "62c9ad924f77f6a7",
+            "b5b466a4057ec34e",
+            "dd0a98a343a78a5f",
+            "283f0199ba61ff1b",
+            "5acf7641ef9149e0",
+            "0061394415bae2fb",
+            "a6086548b8a5c422",
+            "9554b137d197c15a",
+            "38996048232f754a",
+            "0f19a7614750504a",
+            "35e197d04246857f",
+            "e989a5c18e7b21bc",
+            "f0c1e6888e4e2ae4",
+            "44c4e5dc5404acc3",
+            "7d3bf839c5a11eef",
+            "42096c6e2e85e982",
+            "aeb4c3962cb74d9c",
+            "11be3a7544ae28dd",
+            "c077e4d8dc5b85f2",
+            "af6efeb33791deb7",
+            "66585599b741767c",
+            "a81915c04390048b",
+            "be4123205ec9d846",
+            "6bd725dc10f02d4f"
         ],
         "x": 94,
         "y": 939,
         "w": 1872,
-        "h": 202
+        "h": 388
     },
     {
-        "id": "518e2da6ef4258f8",
+        "id": "6bd725dc10f02d4f",
+        "type": "group",
+        "z": "1fbdd7bcdb3287b4",
+        "g": "f592373cf669c1fe",
+        "name": "Canceled meeting logic",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "b1eeb8fb4e39c46f",
+            "115674be25d4af0a",
+            "c12249204a0f5dce",
+            "a16462706be768d3",
+            "80c6387778e24711",
+            "f0e1ed24087634b6",
+            "2ab3bdd91aac1c1f",
+            "f2587f3741ca04ec",
+            "7b31e94ad8588be2"
+        ],
+        "x": 154,
+        "y": 1159,
+        "w": 1252,
+        "h": 142
+    },
+    {
+        "id": "ddb07bb28ab119d5",
         "type": "log in",
-        "z": "7bc0941d86fa92ef",
-        "g": "629fe36906570208",
+        "z": "1fbdd7bcdb3287b4",
+        "g": "e9c207d76268fead",
         "client": "dbaa645779d59529",
         "x": 510,
         "y": 280,
         "wires": [
             [
-                "79c2a68da149a0ea"
+                "2df2a63cfe7416f1"
             ]
         ]
     },
     {
-        "id": "98330f4c9e1e0bd3",
+        "id": "3dc86b7f86e5ab87",
         "type": "log out",
-        "z": "7bc0941d86fa92ef",
-        "g": "248ac4d8eb7b9523",
+        "z": "1fbdd7bcdb3287b4",
+        "g": "6d898b77b13f166b",
         "client": "dbaa645779d59529",
         "x": 530,
         "y": 840,
         "wires": [
             [
-                "0be7f4697533b2e8",
-                "76ee448f6025c903",
-                "a6f2e01d8826850c"
+                "ac282acec187f42a",
+                "5eb80f11744c7755",
+                "1bafaef11910936a"
             ]
         ]
     },
     {
-        "id": "219a144377097b23",
+        "id": "0889fc22e2db2ba7",
         "type": "inject",
-        "z": "7bc0941d86fa92ef",
-        "g": "248ac4d8eb7b9523",
+        "z": "1fbdd7bcdb3287b4",
+        "g": "6d898b77b13f166b",
         "name": "log out",
         "props": [],
         "repeat": "",
@@ -420,15 +446,15 @@
         "y": 880,
         "wires": [
             [
-                "98330f4c9e1e0bd3"
+                "3dc86b7f86e5ab87"
             ]
         ]
     },
     {
-        "id": "0be7f4697533b2e8",
+        "id": "ac282acec187f42a",
         "type": "debug",
-        "z": "7bc0941d86fa92ef",
-        "g": "248ac4d8eb7b9523",
+        "z": "1fbdd7bcdb3287b4",
+        "g": "6d898b77b13f166b",
         "name": "debug 75",
         "active": true,
         "tosidebar": true,
@@ -443,24 +469,24 @@
         "wires": []
     },
     {
-        "id": "3cff1032f6952aa5",
+        "id": "091588205ef7098a",
         "type": "log in response",
-        "z": "7bc0941d86fa92ef",
-        "g": "f9b27d71b3a7f0e3",
+        "z": "1fbdd7bcdb3287b4",
+        "g": "e40b855910389819",
         "client": "dbaa645779d59529",
         "x": 320,
         "y": 660,
         "wires": [
             [
-                "f1f09b0a0611ae74"
+                "3e8a509647ae9731"
             ]
         ]
     },
     {
-        "id": "62bc4db833e22689",
+        "id": "bf84c867deead7de",
         "type": "http in",
-        "z": "7bc0941d86fa92ef",
-        "g": "f9b27d71b3a7f0e3",
+        "z": "1fbdd7bcdb3287b4",
+        "g": "e40b855910389819",
         "name": "redirect",
         "url": "/calendar/redirect",
         "method": "get",
@@ -470,15 +496,15 @@
         "y": 660,
         "wires": [
             [
-                "3cff1032f6952aa5"
+                "091588205ef7098a"
             ]
         ]
     },
     {
-        "id": "c0fd0881400c28a5",
+        "id": "53e27bb5eecdde52",
         "type": "http response",
-        "z": "7bc0941d86fa92ef",
-        "g": "f9b27d71b3a7f0e3",
+        "z": "1fbdd7bcdb3287b4",
+        "g": "e40b855910389819",
         "name": "",
         "statusCode": "",
         "headers": {},
@@ -487,10 +513,10 @@
         "wires": []
     },
     {
-        "id": "991ee6dbf605e371",
+        "id": "996a46e580946b23",
         "type": "http in",
-        "z": "7bc0941d86fa92ef",
-        "g": "629fe36906570208",
+        "z": "1fbdd7bcdb3287b4",
+        "g": "e9c207d76268fead",
         "name": "ms/auth",
         "url": "/calendar/ms/auth",
         "method": "get",
@@ -500,15 +526,15 @@
         "y": 280,
         "wires": [
             [
-                "a9b699d971a71dd0"
+                "1fd8bd39fbce69a1"
             ]
         ]
     },
     {
-        "id": "c5f789395dad5719",
+        "id": "4b5d38aa3c86db14",
         "type": "template",
-        "z": "7bc0941d86fa92ef",
-        "g": "c7552720f195904b",
+        "z": "1fbdd7bcdb3287b4",
+        "g": "1b4e99923ffa34ed",
         "name": "",
         "field": "payload",
         "fieldType": "msg",
@@ -520,15 +546,15 @@
         "y": 700,
         "wires": [
             [
-                "3218d01bbd6e48d2"
+                "9ce06ecde68d57cc"
             ]
         ]
     },
     {
-        "id": "3218d01bbd6e48d2",
+        "id": "9ce06ecde68d57cc",
         "type": "http response",
-        "z": "7bc0941d86fa92ef",
-        "g": "c7552720f195904b",
+        "z": "1fbdd7bcdb3287b4",
+        "g": "1b4e99923ffa34ed",
         "name": "",
         "statusCode": "",
         "headers": {},
@@ -537,10 +563,10 @@
         "wires": []
     },
     {
-        "id": "280975ff4c771648",
+        "id": "e2ab5994c9b22ec8",
         "type": "http in",
-        "z": "7bc0941d86fa92ef",
-        "g": "c7552720f195904b",
+        "z": "1fbdd7bcdb3287b4",
+        "g": "1b4e99923ffa34ed",
         "name": "login",
         "url": "/calendar/login",
         "method": "get",
@@ -550,15 +576,15 @@
         "y": 660,
         "wires": [
             [
-                "2a47187a55e392ae"
+                "6c0e49260fa07513"
             ]
         ]
     },
     {
-        "id": "2a47187a55e392ae",
+        "id": "6c0e49260fa07513",
         "type": "subflow:e0e1f32e0262e39e",
-        "z": "7bc0941d86fa92ef",
-        "g": "c7552720f195904b",
+        "z": "1fbdd7bcdb3287b4",
+        "g": "1b4e99923ffa34ed",
         "name": "",
         "env": [
             {
@@ -594,10 +620,10 @@
         "wires": []
     },
     {
-        "id": "0785232c7f605455",
+        "id": "fcf7e35c795144f4",
         "type": "http in",
-        "z": "7bc0941d86fa92ef",
-        "g": "c7552720f195904b",
+        "z": "1fbdd7bcdb3287b4",
+        "g": "1b4e99923ffa34ed",
         "name": "setup",
         "url": "/calendar/setup",
         "method": "get",
@@ -607,15 +633,15 @@
         "y": 700,
         "wires": [
             [
-                "c5f789395dad5719"
+                "4b5d38aa3c86db14"
             ]
         ]
     },
     {
-        "id": "a9b699d971a71dd0",
+        "id": "1fd8bd39fbce69a1",
         "type": "subflow:f76933b40eb15e67",
-        "z": "7bc0941d86fa92ef",
-        "g": "629fe36906570208",
+        "z": "1fbdd7bcdb3287b4",
+        "g": "e9c207d76268fead",
         "name": "",
         "env": [
             {
@@ -627,15 +653,15 @@
         "y": 280,
         "wires": [
             [
-                "518e2da6ef4258f8"
+                "ddb07bb28ab119d5"
             ]
         ]
     },
     {
-        "id": "266675e4b4161b4b",
+        "id": "3d0596f197d5cf91",
         "type": "http response",
-        "z": "7bc0941d86fa92ef",
-        "g": "629fe36906570208",
+        "z": "1fbdd7bcdb3287b4",
+        "g": "e9c207d76268fead",
         "name": "",
         "statusCode": "",
         "headers": {},
@@ -644,10 +670,10 @@
         "wires": []
     },
     {
-        "id": "3709dd4c3ce5d221",
+        "id": "a80d030fda055404",
         "type": "http in",
-        "z": "7bc0941d86fa92ef",
-        "g": "56248fe9710e58e8",
+        "z": "1fbdd7bcdb3287b4",
+        "g": "27860bf48d8e7bc0",
         "name": "ms/status",
         "url": "/calendar/ms/status",
         "method": "get",
@@ -657,31 +683,31 @@
         "y": 500,
         "wires": [
             [
-                "9ce49eddb72629a2"
+                "dfd1d7395816051c"
             ]
         ]
     },
     {
-        "id": "23ecbd7bf1e4f523",
+        "id": "0398558e149cc5ae",
         "type": "query",
-        "z": "7bc0941d86fa92ef",
-        "g": "56248fe9710e58e8",
+        "z": "1fbdd7bcdb3287b4",
+        "g": "27860bf48d8e7bc0",
         "client": "dbaa645779d59529",
         "x": 690,
         "y": 500,
         "wires": [
             [
-                "8ca4312cb8663b44",
-                "fd83ef995e0799cc",
-                "3cc03150d7ea59a4"
+                "ea1c50259a91aefe",
+                "1eb4b500f80f59f1",
+                "396f505afef51c2b"
             ]
         ]
     },
     {
-        "id": "c0db34f34a0704e1",
+        "id": "113bde47c6c17205",
         "type": "function",
-        "z": "7bc0941d86fa92ef",
-        "g": "56248fe9710e58e8",
+        "z": "1fbdd7bcdb3287b4",
+        "g": "27860bf48d8e7bc0",
         "name": "function 14",
         "func": "msg.payload = {\n    \n    \"method\": \"GET\", // HTTP method for the API request\n    \"endpoint\": \"/me/calendar\", // API endpoint to be queried\n}\nreturn msg;",
         "outputs": 1,
@@ -694,17 +720,17 @@
         "y": 500,
         "wires": [
             [
-                "23ecbd7bf1e4f523"
+                "0398558e149cc5ae"
             ]
         ]
     },
     {
-        "id": "8ca4312cb8663b44",
+        "id": "ea1c50259a91aefe",
         "type": "debug",
-        "z": "7bc0941d86fa92ef",
-        "g": "56248fe9710e58e8",
+        "z": "1fbdd7bcdb3287b4",
+        "g": "27860bf48d8e7bc0",
         "name": "debug 80",
-        "active": false,
+        "active": true,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -717,10 +743,10 @@
         "wires": []
     },
     {
-        "id": "10229a2ff00e58da",
+        "id": "d998a8d1068b0775",
         "type": "http response",
-        "z": "7bc0941d86fa92ef",
-        "g": "56248fe9710e58e8",
+        "z": "1fbdd7bcdb3287b4",
+        "g": "27860bf48d8e7bc0",
         "name": "",
         "statusCode": "",
         "headers": {},
@@ -729,28 +755,28 @@
         "wires": []
     },
     {
-        "id": "816355dab9bbc2b9",
+        "id": "30f64b2bd1e56043",
         "type": "catch",
-        "z": "7bc0941d86fa92ef",
-        "g": "56248fe9710e58e8",
+        "z": "1fbdd7bcdb3287b4",
+        "g": "27860bf48d8e7bc0",
         "name": "",
         "scope": [
-            "23ecbd7bf1e4f523"
+            "0398558e149cc5ae"
         ],
         "uncaught": false,
         "x": 690,
         "y": 560,
         "wires": [
             [
-                "95bbe55502c53703"
+                "8a2d8b516dacb616"
             ]
         ]
     },
     {
-        "id": "3bb3e40bd7a8d767",
+        "id": "2b4af6c29f31b660",
         "type": "debug",
-        "z": "7bc0941d86fa92ef",
-        "g": "56248fe9710e58e8",
+        "z": "1fbdd7bcdb3287b4",
+        "g": "27860bf48d8e7bc0",
         "name": "debug 81",
         "active": true,
         "tosidebar": true,
@@ -765,10 +791,10 @@
         "wires": []
     },
     {
-        "id": "95bbe55502c53703",
+        "id": "8a2d8b516dacb616",
         "type": "function",
-        "z": "7bc0941d86fa92ef",
-        "g": "56248fe9710e58e8",
+        "z": "1fbdd7bcdb3287b4",
+        "g": "27860bf48d8e7bc0",
         "name": "function 16",
         "func": "if (msg.statusCode == 500){\n    msg.statusCode = 409\n    msg.payload = \"Access token not available. Please sign in first.\"\n}\nreturn msg;",
         "outputs": 1,
@@ -781,16 +807,16 @@
         "y": 560,
         "wires": [
             [
-                "3bb3e40bd7a8d767",
-                "10229a2ff00e58da"
+                "2b4af6c29f31b660",
+                "d998a8d1068b0775"
             ]
         ]
     },
     {
-        "id": "fd83ef995e0799cc",
+        "id": "1eb4b500f80f59f1",
         "type": "function",
-        "z": "7bc0941d86fa92ef",
-        "g": "56248fe9710e58e8",
+        "z": "1fbdd7bcdb3287b4",
+        "g": "27860bf48d8e7bc0",
         "name": "function 19",
         "func": "msg.headers = {\n    \"Cache-Control\": \"no-store, no-cache, must-revalidate, proxy-revalidate\",\n    \"Pragma\": \"no-cache\",\n    \"Expires\": \"0\"\n};\nreturn msg;",
         "outputs": 1,
@@ -803,15 +829,15 @@
         "y": 500,
         "wires": [
             [
-                "10229a2ff00e58da"
+                "d998a8d1068b0775"
             ]
         ]
     },
     {
-        "id": "9ce49eddb72629a2",
+        "id": "dfd1d7395816051c",
         "type": "subflow:f76933b40eb15e67",
-        "z": "7bc0941d86fa92ef",
-        "g": "56248fe9710e58e8",
+        "z": "1fbdd7bcdb3287b4",
+        "g": "27860bf48d8e7bc0",
         "name": "",
         "env": [
             {
@@ -823,15 +849,15 @@
         "y": 500,
         "wires": [
             [
-                "c0db34f34a0704e1"
+                "113bde47c6c17205"
             ]
         ]
     },
     {
-        "id": "f1f09b0a0611ae74",
+        "id": "3e8a509647ae9731",
         "type": "function",
-        "z": "7bc0941d86fa92ef",
-        "g": "f9b27d71b3a7f0e3",
+        "z": "1fbdd7bcdb3287b4",
+        "g": "e40b855910389819",
         "name": "function 24",
         "func": "msg.statusCode = 302\nmsg.headers = {\n    Location: \"./setup\"\n}\nreturn msg;",
         "outputs": 1,
@@ -844,31 +870,31 @@
         "y": 660,
         "wires": [
             [
-                "c0fd0881400c28a5"
+                "53e27bb5eecdde52"
             ]
         ]
     },
     {
-        "id": "d0db5a91155e20cb",
+        "id": "62c9ad924f77f6a7",
         "type": "query",
-        "z": "7bc0941d86fa92ef",
-        "g": "7ef36b64c58a50b3",
+        "z": "1fbdd7bcdb3287b4",
+        "g": "f592373cf669c1fe",
         "client": "dbaa645779d59529",
         "x": 630,
         "y": 980,
         "wires": [
             [
-                "8f9f7c4d96093448"
+                "283f0199ba61ff1b"
             ]
         ]
     },
     {
-        "id": "89314dfb0780de26",
+        "id": "b5b466a4057ec34e",
         "type": "function",
-        "z": "7bc0941d86fa92ef",
-        "g": "7ef36b64c58a50b3",
+        "z": "1fbdd7bcdb3287b4",
+        "g": "f592373cf669c1fe",
         "name": "function 25",
-        "func": "if (msg.isActive === false) {\n    node.warn(\"User is not signed in\")\n    return null;\n}\n\nfunction getCalendarUrl() {\n    const now = new Date();\n    \n    // Start: před 3 dny (00:00)\n    const startDate = new Date(now);\n    startDate.setDate(now.getDate() - 3);\n    startDate.setHours(0, 0, 0, 0);\n\n    // End: za 5 dní (23:59)\n    const endDate = new Date(now);\n    endDate.setDate(now.getDate() + 5);\n    endDate.setHours(23, 59, 59, 999);\n\n    const startISO = startDate.toISOString();\n    const endISO = endDate.toISOString();\n\n    const selectFields = \"subject,start,end,attendees,lastModifiedDateTime,organizer\";\n    \n    return `/me/calendarView?startDateTime=${startISO}&endDateTime=${endISO}&$select=${selectFields}`;\n}\n\nmsg.payload = {\n    \n    \"method\": \"GET\",\n    \"endpoint\": getCalendarUrl()\n}\nreturn msg;\n",
+        "func": "if (msg.isActive === false) {\n    node.warn(\"User is not signed in\")\n    return null;\n}\n\nfunction getCalendarUrl() {\n    const now = new Date();\n    \n    // Start: před 0 dny (00:00)\n    const startDate = new Date(now);\n    startDate.setDate(now.getDate());\n    startDate.setHours(0, 0, 0, 0);\n\n    // End: za 5 dní (23:59)\n    const endDate = new Date(now);\n    endDate.setDate(now.getDate() + 5);\n    endDate.setHours(23, 59, 59, 999);\n\n    const startISO = startDate.toISOString();\n    const endISO = endDate.toISOString();\n\n    const selectFields = \"subject,start,end,attendees,lastModifiedDateTime,organizer\";\n    \n    return `/me/calendarView?startDateTime=${startISO}&endDateTime=${endISO}&$select=${selectFields}`;\n}\n\nmsg.payload = {\n    \n    \"method\": \"GET\",\n    \"endpoint\": getCalendarUrl()\n}\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -879,15 +905,15 @@
         "y": 980,
         "wires": [
             [
-                "d0db5a91155e20cb"
+                "62c9ad924f77f6a7"
             ]
         ]
     },
     {
-        "id": "84a7486fee6dfcd2",
+        "id": "dd0a98a343a78a5f",
         "type": "inject",
-        "z": "7bc0941d86fa92ef",
-        "g": "7ef36b64c58a50b3",
+        "z": "1fbdd7bcdb3287b4",
+        "g": "f592373cf669c1fe",
         "name": "Query",
         "props": [],
         "repeat": "300",
@@ -899,33 +925,34 @@
         "y": 980,
         "wires": [
             [
-                "a716cca164a78e55"
+                "0061394415bae2fb",
+                "115674be25d4af0a"
             ]
         ]
     },
     {
-        "id": "130d30c6574d3b20",
+        "id": "95ce88415263efaf",
         "type": "catch",
-        "z": "7bc0941d86fa92ef",
-        "g": "f9b27d71b3a7f0e3",
+        "z": "1fbdd7bcdb3287b4",
+        "g": "e40b855910389819",
         "name": "",
         "scope": [
-            "3cff1032f6952aa5"
+            "091588205ef7098a"
         ],
         "uncaught": false,
         "x": 350,
         "y": 700,
         "wires": [
             [
-                "f1f09b0a0611ae74"
+                "3e8a509647ae9731"
             ]
         ]
     },
     {
-        "id": "083d5d800177ef2a",
+        "id": "6d7da95fdbcb0358",
         "type": "http in",
-        "z": "7bc0941d86fa92ef",
-        "g": "248ac4d8eb7b9523",
+        "z": "1fbdd7bcdb3287b4",
+        "g": "6d898b77b13f166b",
         "name": "ms/logout",
         "url": "/calendar/ms/logout",
         "method": "get",
@@ -935,15 +962,15 @@
         "y": 840,
         "wires": [
             [
-                "65b33d01f2cceac7"
+                "260c89c69d298a0d"
             ]
         ]
     },
     {
-        "id": "76ee448f6025c903",
+        "id": "5eb80f11744c7755",
         "type": "http response",
-        "z": "7bc0941d86fa92ef",
-        "g": "248ac4d8eb7b9523",
+        "z": "1fbdd7bcdb3287b4",
+        "g": "6d898b77b13f166b",
         "name": "",
         "statusCode": "",
         "headers": {},
@@ -952,10 +979,10 @@
         "wires": []
     },
     {
-        "id": "65b33d01f2cceac7",
+        "id": "260c89c69d298a0d",
         "type": "subflow:f76933b40eb15e67",
-        "z": "7bc0941d86fa92ef",
-        "g": "248ac4d8eb7b9523",
+        "z": "1fbdd7bcdb3287b4",
+        "g": "6d898b77b13f166b",
         "name": "",
         "env": [
             {
@@ -967,15 +994,15 @@
         "y": 840,
         "wires": [
             [
-                "98330f4c9e1e0bd3"
+                "3dc86b7f86e5ab87"
             ]
         ]
     },
     {
-        "id": "8f9f7c4d96093448",
+        "id": "283f0199ba61ff1b",
         "type": "split",
-        "z": "7bc0941d86fa92ef",
-        "g": "7ef36b64c58a50b3",
+        "z": "1fbdd7bcdb3287b4",
+        "g": "f592373cf669c1fe",
         "name": "split events",
         "splt": "\\n",
         "spltType": "str",
@@ -988,15 +1015,15 @@
         "y": 980,
         "wires": [
             [
-                "c0c47a3072186f4a"
+                "5acf7641ef9149e0"
             ]
         ]
     },
     {
-        "id": "c0c47a3072186f4a",
+        "id": "5acf7641ef9149e0",
         "type": "split",
-        "z": "7bc0941d86fa92ef",
-        "g": "7ef36b64c58a50b3",
+        "z": "1fbdd7bcdb3287b4",
+        "g": "f592373cf669c1fe",
         "name": "split attendees",
         "splt": "\\n",
         "spltType": "str",
@@ -1009,15 +1036,15 @@
         "y": 980,
         "wires": [
             [
-                "e74e8ca1c865c20f"
+                "9554b137d197c15a"
             ]
         ]
     },
     {
-        "id": "ae6d4774a587eeb2",
+        "id": "4a3d413370790ec6",
         "type": "inject",
-        "z": "7bc0941d86fa92ef",
-        "g": "091f4e8fe254574a",
+        "z": "1fbdd7bcdb3287b4",
+        "g": "a167402833b8b30c",
         "name": "configuration",
         "props": [
             {
@@ -1035,15 +1062,15 @@
         "y": 860,
         "wires": [
             [
-                "730bb0a5fa272e46"
+                "18d7e9d19a1476ad"
             ]
         ]
     },
     {
-        "id": "a716cca164a78e55",
+        "id": "0061394415bae2fb",
         "type": "change",
-        "z": "7bc0941d86fa92ef",
-        "g": "7ef36b64c58a50b3",
+        "z": "1fbdd7bcdb3287b4",
+        "g": "f592373cf669c1fe",
         "name": "get config",
         "rules": [
             {
@@ -1084,15 +1111,15 @@
         "y": 980,
         "wires": [
             [
-                "89314dfb0780de26"
+                "b5b466a4057ec34e"
             ]
         ]
     },
     {
-        "id": "1f93de987a4b32e2",
+        "id": "a6086548b8a5c422",
         "type": "2nac-rest-api",
-        "z": "7bc0941d86fa92ef",
-        "g": "7ef36b64c58a50b3",
+        "z": "1fbdd7bcdb3287b4",
+        "g": "f592373cf669c1fe",
         "name": "create visitor",
         "method": "POST",
         "endpoint": "visitors",
@@ -1102,17 +1129,17 @@
         "y": 1100,
         "wires": [
             [
-                "1f6a422378de3075"
+                "35e197d04246857f"
             ]
         ]
     },
     {
-        "id": "e74e8ca1c865c20f",
+        "id": "9554b137d197c15a",
         "type": "function",
-        "z": "7bc0941d86fa92ef",
-        "g": "7ef36b64c58a50b3",
+        "z": "1fbdd7bcdb3287b4",
+        "g": "f592373cf669c1fe",
         "name": "main function",
-        "func": "let start = new Date(msg.payload.value.start.dateTime + \"Z\");\nlet end = new Date(msg.payload.value.end.dateTime + \"Z\");\n\n// start a konec posunout o hodinu (návštěvník přijde několik minut před naplánovou schůzkou a několik minut po ní)\nstart.setHours(start.getHours() - 1);\nend.setHours(end.getHours() + 1);\n\n// převést čas na lokální\nmsg.accessStartTime = start.toLocaleString();\nmsg.accessEndTime = end.toLocaleString();\n\n// nastav proměnné\nmsg.organizerEmail = msg.payload.value.organizer.emailAddress.address\nmsg.organizerName = msg.payload.value.organizer.emailAddress.name\n\nmsg.eventId = msg.payload.value.id\nmsg.email = msg.payload.value.attendees.emailAddress.address\nmsg.fullName = msg.payload.value.attendees.emailAddress.name\n\n\n// Odfiltruj uživatele se stejnou doménou\nconst organizerDomain = msg.organizerEmail.split('@')[1];\nconst attendeeDomain = msg.email.split('@')[1];\n\nif (organizerDomain === attendeeDomain) {\n    return null;\n}\n\n// najdi existující uživatele\nmsg.query = `?filter={\"$and\":[{\"Email\":{\"$cti\":\"${msg.email}\"}},{\"Note\":{\"$cti\":\"${msg.eventId}\"}}]}`\n\nreturn msg;",
+        "func": "let start = new Date(msg.payload.value.start.dateTime + \"Z\");\nlet end = new Date(msg.payload.value.end.dateTime + \"Z\");\n\n// start a konec posunout o hodinu (návštěvník přijde několik minut před naplánovou schůzkou a několik minut po ní)\nstart.setHours(start.getHours() - 1);\nend.setHours(end.getHours() + 1);\n\n// převést čas na lokální\nmsg.accessStartTime = start.toLocaleString();\nmsg.accessEndTime = end.toLocaleString();\n\n// nastav proměnné\nmsg.organizerEmail = msg.payload.value.organizer.emailAddress.address\nmsg.organizerName = msg.payload.value.organizer.emailAddress.name\n\nmsg.eventId = \"ms_graph|\" + msg.payload.value.id;\nmsg.email = msg.payload.value.attendees.emailAddress.address\nmsg.fullName = msg.payload.value.attendees.emailAddress.name\n\n\n// Odfiltruj uživatele se stejnou doménou\nconst organizerDomain = msg.organizerEmail.split('@')[1];\nconst attendeeDomain = msg.email.split('@')[1];\n\nif (organizerDomain === attendeeDomain) {\n    return null;\n}\n\n// najdi existující uživatele\nmsg.query = `?filter={\"$and\":[{\"Email\":{\"$eq\":\"${msg.email}\"}},{\"Note\":{\"$eq\":\"${msg.eventId}\"}}]}`\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -1123,15 +1150,15 @@
         "y": 980,
         "wires": [
             [
-                "8b3852360af65b19"
+                "0f19a7614750504a"
             ]
         ]
     },
     {
-        "id": "e629f56aaa63d5eb",
+        "id": "38996048232f754a",
         "type": "switch",
-        "z": "7bc0941d86fa92ef",
-        "g": "7ef36b64c58a50b3",
+        "z": "1fbdd7bcdb3287b4",
+        "g": "f592373cf669c1fe",
         "name": "update or create",
         "property": "payload",
         "propertyType": "msg",
@@ -1150,18 +1177,18 @@
         "y": 1080,
         "wires": [
             [
-                "560531b04e76452a"
+                "7d3bf839c5a11eef"
             ],
             [
-                "4b37c228132ce728"
+                "aeb4c3962cb74d9c"
             ]
         ]
     },
     {
-        "id": "8b3852360af65b19",
+        "id": "0f19a7614750504a",
         "type": "2nac-rest-api",
-        "z": "7bc0941d86fa92ef",
-        "g": "7ef36b64c58a50b3",
+        "z": "1fbdd7bcdb3287b4",
+        "g": "f592373cf669c1fe",
         "name": "Get visitors",
         "method": "GET",
         "endpoint": "visitors",
@@ -1171,15 +1198,15 @@
         "y": 1080,
         "wires": [
             [
-                "e629f56aaa63d5eb"
+                "38996048232f754a"
             ]
         ]
     },
     {
-        "id": "1f6a422378de3075",
+        "id": "35e197d04246857f",
         "type": "change",
-        "z": "7bc0941d86fa92ef",
-        "g": "7ef36b64c58a50b3",
+        "z": "1fbdd7bcdb3287b4",
+        "g": "f592373cf669c1fe",
         "name": "get ID & email",
         "rules": [
             {
@@ -1206,15 +1233,15 @@
         "y": 1100,
         "wires": [
             [
-                "453da446e2f7a9a6"
+                "e989a5c18e7b21bc"
             ]
         ]
     },
     {
-        "id": "453da446e2f7a9a6",
+        "id": "e989a5c18e7b21bc",
         "type": "2nac-rest-api",
-        "z": "7bc0941d86fa92ef",
-        "g": "7ef36b64c58a50b3",
+        "z": "1fbdd7bcdb3287b4",
+        "g": "f592373cf669c1fe",
         "name": "createQR",
         "method": "POST",
         "endpoint": "visitors/{visitorId}/qrcode",
@@ -1224,15 +1251,15 @@
         "y": 1100,
         "wires": [
             [
-                "c48e5086b4f32aa7"
+                "be4123205ec9d846"
             ]
         ]
     },
     {
-        "id": "2c25445a25d24adc",
+        "id": "f0c1e6888e4e2ae4",
         "type": "function",
-        "z": "7bc0941d86fa92ef",
-        "g": "7ef36b64c58a50b3",
+        "z": "1fbdd7bcdb3287b4",
+        "g": "f592373cf669c1fe",
         "name": "update visitor",
         "func": "msg.groupIds = msg.payload.VisitorSettings.PredefinedVisitorGroups\n\nmsg.body = [\n  { \"op\": \"replace\", \"path\": \"/Name\", \"value\": msg.fullName },\n  { \"op\": \"replace\", \"path\": \"/Email\", \"value\": msg.email },\n  { \"op\": \"replace\", \"path\": \"/IsSuspended\", \"value\": false },\n  { \"op\": \"replace\", \"path\": \"/VisitFrom\", \"value\": msg.accessStartTime },\n  { \"op\": \"replace\", \"path\": \"/VisitTo\", \"value\": msg.accessEndTime },\n  { \"op\": \"replace\", \"path\": \"/Groups\", \"value\": msg.groupIds},\n]\n \nreturn msg;",
         "outputs": 1,
@@ -1245,15 +1272,15 @@
         "y": 1060,
         "wires": [
             [
-                "f9c2e2800850f7fc"
+                "44c4e5dc5404acc3"
             ]
         ]
     },
     {
-        "id": "f9c2e2800850f7fc",
+        "id": "44c4e5dc5404acc3",
         "type": "2nac-rest-api",
-        "z": "7bc0941d86fa92ef",
-        "g": "7ef36b64c58a50b3",
+        "z": "1fbdd7bcdb3287b4",
+        "g": "f592373cf669c1fe",
         "name": "update visitor",
         "method": "PATCH",
         "endpoint": "visitors/{visitorId}",
@@ -1266,10 +1293,10 @@
         ]
     },
     {
-        "id": "560531b04e76452a",
+        "id": "7d3bf839c5a11eef",
         "type": "split",
-        "z": "7bc0941d86fa92ef",
-        "g": "7ef36b64c58a50b3",
+        "z": "1fbdd7bcdb3287b4",
+        "g": "f592373cf669c1fe",
         "name": "",
         "splt": "\\n",
         "spltType": "str",
@@ -1282,15 +1309,15 @@
         "y": 1060,
         "wires": [
             [
-                "819262b40c702173"
+                "11be3a7544ae28dd"
             ]
         ]
     },
     {
-        "id": "0efb192e8f82c62a",
+        "id": "42096c6e2e85e982",
         "type": "2nac-rest-api",
-        "z": "7bc0941d86fa92ef",
-        "g": "7ef36b64c58a50b3",
+        "z": "1fbdd7bcdb3287b4",
+        "g": "f592373cf669c1fe",
         "name": "find organizer",
         "method": "GET",
         "endpoint": "users",
@@ -1300,15 +1327,15 @@
         "y": 1100,
         "wires": [
             [
-                "3e1dc3fa6f8dba5b"
+                "66585599b741767c"
             ]
         ]
     },
     {
-        "id": "4b37c228132ce728",
+        "id": "aeb4c3962cb74d9c",
         "type": "function",
-        "z": "7bc0941d86fa92ef",
-        "g": "7ef36b64c58a50b3",
+        "z": "1fbdd7bcdb3287b4",
+        "g": "f592373cf669c1fe",
         "name": "find organizer",
         "func": "msg.query = `?filter={\"Account.Email\":{\"$eq\":\"${msg.organizerEmail}\"}}`\nreturn msg;",
         "outputs": 1,
@@ -1321,15 +1348,15 @@
         "y": 1100,
         "wires": [
             [
-                "0efb192e8f82c62a"
+                "42096c6e2e85e982"
             ]
         ]
     },
     {
-        "id": "819262b40c702173",
+        "id": "11be3a7544ae28dd",
         "type": "function",
-        "z": "7bc0941d86fa92ef",
-        "g": "7ef36b64c58a50b3",
+        "z": "1fbdd7bcdb3287b4",
+        "g": "f592373cf669c1fe",
         "name": "function 33",
         "func": "msg.visitorId = msg.payload.Id\nmsg.companyId = msg.payload.Company.Id\nreturn msg;",
         "outputs": 1,
@@ -1342,33 +1369,33 @@
         "y": 1060,
         "wires": [
             [
-                "68be796fb7c40237"
+                "a81915c04390048b"
             ]
         ]
     },
     {
-        "id": "0dc57953b149039b",
+        "id": "69ca58ad966aeaac",
         "type": "catch",
-        "z": "7bc0941d86fa92ef",
-        "g": "091f4e8fe254574a",
+        "z": "1fbdd7bcdb3287b4",
+        "g": "a167402833b8b30c",
         "name": "",
         "scope": [
-            "730bb0a5fa272e46"
+            "18d7e9d19a1476ad"
         ],
         "uncaught": false,
         "x": 870,
         "y": 800,
         "wires": [
             [
-                "f717248a8d9dcc79"
+                "b1749630574b6195"
             ]
         ]
     },
     {
-        "id": "f717248a8d9dcc79",
+        "id": "b1749630574b6195",
         "type": "delay",
-        "z": "7bc0941d86fa92ef",
-        "g": "091f4e8fe254574a",
+        "z": "1fbdd7bcdb3287b4",
+        "g": "a167402833b8b30c",
         "name": "",
         "pauseType": "delay",
         "timeout": "5",
@@ -1386,29 +1413,29 @@
         "y": 800,
         "wires": [
             [
-                "730bb0a5fa272e46"
+                "18d7e9d19a1476ad"
             ]
         ]
     },
     {
-        "id": "730bb0a5fa272e46",
+        "id": "18d7e9d19a1476ad",
         "type": "query",
-        "z": "7bc0941d86fa92ef",
-        "g": "091f4e8fe254574a",
+        "z": "1fbdd7bcdb3287b4",
+        "g": "a167402833b8b30c",
         "client": "dbaa645779d59529",
         "x": 1150,
         "y": 860,
         "wires": [
             [
-                "d137bba3c0eece18"
+                "86b8f673b33d2b85"
             ]
         ]
     },
     {
-        "id": "d137bba3c0eece18",
+        "id": "86b8f673b33d2b85",
         "type": "switch",
-        "z": "7bc0941d86fa92ef",
-        "g": "091f4e8fe254574a",
+        "z": "1fbdd7bcdb3287b4",
+        "g": "a167402833b8b30c",
         "name": "",
         "property": "statusCode",
         "propertyType": "msg",
@@ -1429,18 +1456,18 @@
         "y": 860,
         "wires": [
             [
-                "94eb143bc0c539db"
+                "7ca291173c7be277"
             ],
             [
-                "42cafd7299fdc1cb"
+                "22075ed16ba28297"
             ]
         ]
     },
     {
-        "id": "94eb143bc0c539db",
+        "id": "7ca291173c7be277",
         "type": "change",
-        "z": "7bc0941d86fa92ef",
-        "g": "091f4e8fe254574a",
+        "z": "1fbdd7bcdb3287b4",
+        "g": "a167402833b8b30c",
         "name": "activated",
         "rules": [
             {
@@ -1463,10 +1490,10 @@
         ]
     },
     {
-        "id": "42cafd7299fdc1cb",
+        "id": "22075ed16ba28297",
         "type": "change",
-        "z": "7bc0941d86fa92ef",
-        "g": "091f4e8fe254574a",
+        "z": "1fbdd7bcdb3287b4",
+        "g": "a167402833b8b30c",
         "name": "deactivated",
         "rules": [
             {
@@ -1489,10 +1516,10 @@
         ]
     },
     {
-        "id": "a6f2e01d8826850c",
+        "id": "1bafaef11910936a",
         "type": "change",
-        "z": "7bc0941d86fa92ef",
-        "g": "248ac4d8eb7b9523",
+        "z": "1fbdd7bcdb3287b4",
+        "g": "6d898b77b13f166b",
         "name": "deactivated",
         "rules": [
             {
@@ -1515,10 +1542,10 @@
         ]
     },
     {
-        "id": "a6a47db3be8455ab",
+        "id": "b00135dff5c648ee",
         "type": "change",
-        "z": "7bc0941d86fa92ef",
-        "g": "56248fe9710e58e8",
+        "z": "1fbdd7bcdb3287b4",
+        "g": "27860bf48d8e7bc0",
         "name": "deactivated",
         "rules": [
             {
@@ -1541,10 +1568,10 @@
         ]
     },
     {
-        "id": "d2b6518999cbf25b",
+        "id": "0b941aaac0af4008",
         "type": "change",
-        "z": "7bc0941d86fa92ef",
-        "g": "56248fe9710e58e8",
+        "z": "1fbdd7bcdb3287b4",
+        "g": "27860bf48d8e7bc0",
         "name": "activated",
         "rules": [
             {
@@ -1567,10 +1594,10 @@
         ]
     },
     {
-        "id": "3cc03150d7ea59a4",
+        "id": "396f505afef51c2b",
         "type": "switch",
-        "z": "7bc0941d86fa92ef",
-        "g": "56248fe9710e58e8",
+        "z": "1fbdd7bcdb3287b4",
+        "g": "27860bf48d8e7bc0",
         "name": "",
         "property": "statusCode",
         "propertyType": "msg",
@@ -1591,18 +1618,18 @@
         "y": 400,
         "wires": [
             [
-                "d2b6518999cbf25b"
+                "0b941aaac0af4008"
             ],
             [
-                "a6a47db3be8455ab"
+                "b00135dff5c648ee"
             ]
         ]
     },
     {
-        "id": "79c2a68da149a0ea",
+        "id": "2df2a63cfe7416f1",
         "type": "function",
-        "z": "7bc0941d86fa92ef",
-        "g": "629fe36906570208",
+        "z": "1fbdd7bcdb3287b4",
+        "g": "e9c207d76268fead",
         "name": "function 26",
         "func": "// funkce, která upraví link pro správnou funkčnost s resource accountem\n\nlet urlString = msg.payload.authUrl;\n\nif (urlString) {\n    try {\n        let y = new url.URL(urlString)\n        y.searchParams.set(\"prompt\", \"select_account\");\n        msg.payload.authUrl = y.toString();\n    } catch (e) {\n        node.error(\"Neplatná URL v payloadu: \" + e.message);\n    }\n}\n\nreturn msg;",
         "outputs": 1,
@@ -1620,15 +1647,15 @@
         "y": 280,
         "wires": [
             [
-                "266675e4b4161b4b"
+                "3d0596f197d5cf91"
             ]
         ]
     },
     {
-        "id": "5bfdcb3a86c3c5b8",
+        "id": "c077e4d8dc5b85f2",
         "type": "2nac-rest-api",
-        "z": "7bc0941d86fa92ef",
-        "g": "7ef36b64c58a50b3",
+        "z": "1fbdd7bcdb3287b4",
+        "g": "f592373cf669c1fe",
         "name": "get company",
         "method": "GET",
         "endpoint": "companies/{companyId}",
@@ -1638,15 +1665,15 @@
         "y": 1100,
         "wires": [
             [
-                "2392fb5e25202b05"
+                "af6efeb33791deb7"
             ]
         ]
     },
     {
-        "id": "2392fb5e25202b05",
+        "id": "af6efeb33791deb7",
         "type": "function",
-        "z": "7bc0941d86fa92ef",
-        "g": "7ef36b64c58a50b3",
+        "z": "1fbdd7bcdb3287b4",
+        "g": "f592373cf669c1fe",
         "name": "create visitor",
         "func": "msg.groupIds = msg.payload.VisitorSettings.PredefinedVisitorGroups\n\nmsg.body = {\n    \"Name\": msg.fullName,\n    \"Note\": msg.eventId,\n    \"Company\": { \"Id\": msg.companyId },\n    \"Groups\": msg.groupIds,\n    \"VisitFrom\": msg.accessStartTime,\n    \"VisitTo\": msg.accessEndTime,\n    \"Email\": msg.email,\n    \"VisitedPersonId\": msg.visitedPersonId\n};\n\nreturn msg;",
         "outputs": 1,
@@ -1659,15 +1686,15 @@
         "y": 1100,
         "wires": [
             [
-                "1f93de987a4b32e2"
+                "a6086548b8a5c422"
             ]
         ]
     },
     {
-        "id": "3e1dc3fa6f8dba5b",
+        "id": "66585599b741767c",
         "type": "function",
-        "z": "7bc0941d86fa92ef",
-        "g": "7ef36b64c58a50b3",
+        "z": "1fbdd7bcdb3287b4",
+        "g": "f592373cf669c1fe",
         "name": "function 34",
         "func": "if (Array.isArray(msg.payload) && msg.payload.length > 0) {\n    msg.companyId = msg.payload[0].Company.Id\n    msg.visitedPersonId = msg.payload[0].Id\n    return msg;\n}\n\nelse {\n    node.warn(`Organizer with email \"${msg.organizerEmail}\" does not exists in 2N Access Commander, skipping creation!`);\n}",
         "outputs": 1,
@@ -1680,15 +1707,15 @@
         "y": 1100,
         "wires": [
             [
-                "5bfdcb3a86c3c5b8"
+                "c077e4d8dc5b85f2"
             ]
         ]
     },
     {
-        "id": "68be796fb7c40237",
+        "id": "a81915c04390048b",
         "type": "2nac-rest-api",
-        "z": "7bc0941d86fa92ef",
-        "g": "7ef36b64c58a50b3",
+        "z": "1fbdd7bcdb3287b4",
+        "g": "f592373cf669c1fe",
         "name": "get company",
         "method": "GET",
         "endpoint": "companies/{companyId}",
@@ -1698,16 +1725,16 @@
         "y": 1060,
         "wires": [
             [
-                "2c25445a25d24adc"
+                "f0c1e6888e4e2ae4"
             ]
         ]
     },
     {
-        "id": "c48e5086b4f32aa7",
+        "id": "be4123205ec9d846",
         "type": "2nac-rest-api",
-        "z": "7bc0941d86fa92ef",
+        "z": "1fbdd7bcdb3287b4",
         "d": true,
-        "g": "7ef36b64c58a50b3",
+        "g": "f592373cf669c1fe",
         "name": "sendQR",
         "method": "PUT",
         "endpoint": "visitors/{visitorId}/sendcredentials",
@@ -1717,6 +1744,176 @@
         "y": 1100,
         "wires": [
             []
+        ]
+    },
+    {
+        "id": "b1eeb8fb4e39c46f",
+        "type": "2nac-rest-api",
+        "z": "1fbdd7bcdb3287b4",
+        "g": "6bd725dc10f02d4f",
+        "name": "Get visitors",
+        "method": "GET",
+        "endpoint": "visitors",
+        "query": "",
+        "senderr": true,
+        "x": 410,
+        "y": 1200,
+        "wires": [
+            [
+                "a16462706be768d3"
+            ]
+        ]
+    },
+    {
+        "id": "115674be25d4af0a",
+        "type": "function",
+        "z": "1fbdd7bcdb3287b4",
+        "g": "6bd725dc10f02d4f",
+        "name": "filter visitors",
+        "func": "if (msg.isActive === false) {\n    node.warn(\"User is not signed in\")\n    return null;\n}\n\nmsg.query = `?filter={\"$and\":[{\"$or\":[{\"State\":{\"$eq\":\"Planned\"}},{\"State\":{\"$eq\":\"Active\"}}]},{\"Note\":{\"$cti\":\"ms_graph|\"}}]}`\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 250,
+        "y": 1200,
+        "wires": [
+            [
+                "b1eeb8fb4e39c46f"
+            ]
+        ]
+    },
+    {
+        "id": "c12249204a0f5dce",
+        "type": "debug",
+        "z": "1fbdd7bcdb3287b4",
+        "g": "6bd725dc10f02d4f",
+        "name": "debug 27",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1300,
+        "y": 1200,
+        "wires": []
+    },
+    {
+        "id": "a16462706be768d3",
+        "type": "split",
+        "z": "1fbdd7bcdb3287b4",
+        "g": "6bd725dc10f02d4f",
+        "name": "",
+        "splt": "\\n",
+        "spltType": "str",
+        "arraySplt": 1,
+        "arraySpltType": "len",
+        "stream": false,
+        "addname": "",
+        "property": "payload",
+        "x": 550,
+        "y": 1200,
+        "wires": [
+            [
+                "f0e1ed24087634b6"
+            ]
+        ]
+    },
+    {
+        "id": "80c6387778e24711",
+        "type": "query",
+        "z": "1fbdd7bcdb3287b4",
+        "g": "6bd725dc10f02d4f",
+        "client": "dbaa645779d59529",
+        "x": 830,
+        "y": 1200,
+        "wires": [
+            [
+                "f2587f3741ca04ec"
+            ]
+        ]
+    },
+    {
+        "id": "f0e1ed24087634b6",
+        "type": "function",
+        "z": "1fbdd7bcdb3287b4",
+        "g": "6bd725dc10f02d4f",
+        "name": "get eventId",
+        "func": "msg.eventId = msg.payload.Note;\nmsg.visitorId = msg.payload.Id;\n\nfunction getEventUrl(storedId) {\n    const parts = storedId.split('|');\n    const eventId = parts[1];\n    \n    return `/me/events/${eventId}`;\n}\n\nmsg.payload = {\n    \"method\": \"GET\",\n    \"endpoint\": getEventUrl(msg.eventId)\n};\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 690,
+        "y": 1200,
+        "wires": [
+            [
+                "80c6387778e24711"
+            ]
+        ]
+    },
+    {
+        "id": "2ab3bdd91aac1c1f",
+        "type": "2nac-rest-api",
+        "z": "1fbdd7bcdb3287b4",
+        "g": "6bd725dc10f02d4f",
+        "name": "update visitor",
+        "method": "PATCH",
+        "endpoint": "visitors/{visitorId}",
+        "query": "",
+        "senderr": true,
+        "x": 1150,
+        "y": 1200,
+        "wires": [
+            [
+                "c12249204a0f5dce"
+            ]
+        ]
+    },
+    {
+        "id": "f2587f3741ca04ec",
+        "type": "function",
+        "z": "1fbdd7bcdb3287b4",
+        "g": "6bd725dc10f02d4f",
+        "name": "suspend visitor",
+        "func": "if (msg.statusCode == 404){\n    msg.body = [\n        {\"op\":\"replace\",\"path\":\"/IsSuspended\",\"value\": true}\n    ]\n    return msg;\n}\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 980,
+        "y": 1200,
+        "wires": [
+            [
+                "2ab3bdd91aac1c1f"
+            ]
+        ]
+    },
+    {
+        "id": "7b31e94ad8588be2",
+        "type": "catch",
+        "z": "1fbdd7bcdb3287b4",
+        "g": "6bd725dc10f02d4f",
+        "name": "",
+        "scope": [
+            "80c6387778e24711"
+        ],
+        "uncaught": false,
+        "x": 830,
+        "y": 1260,
+        "wires": [
+            [
+                "f2587f3741ca04ec"
+            ]
         ]
     },
     {
