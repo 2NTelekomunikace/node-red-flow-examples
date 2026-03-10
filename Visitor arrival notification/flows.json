@@ -1,0 +1,330 @@
+[
+    {
+        "id": "4847cc51ebc8708c",
+        "type": "tab",
+        "label": "Visitor arrival notification",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "8e35b04ec45a08b9",
+        "type": "group",
+        "z": "4847cc51ebc8708c",
+        "name": "Sending email once the visitor arrives",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "c27b21f1d2dca7eb",
+            "68e1ec326fe549b8",
+            "969423a6cfbc27b0",
+            "a0ee2080e4d1e0ac",
+            "44471b93717086d7",
+            "4e76a1fddc42139f",
+            "95740d0f321d6a4d",
+            "5668fb3086f2f663",
+            "833d3d8eaa7e341d",
+            "0e5320de4bdf72d7",
+            "1b420ec5e8892e65",
+            "85e1248fcb77a874",
+            "24634df8f755f52b"
+        ],
+        "x": 54,
+        "y": 99,
+        "w": 1212,
+        "h": 222
+    },
+    {
+        "id": "24634df8f755f52b",
+        "type": "e-mail",
+        "z": "4847cc51ebc8708c",
+        "g": "8e35b04ec45a08b9",
+        "server": "smtp.gmail.com",
+        "port": "587",
+        "authtype": "BASIC",
+        "saslformat": true,
+        "token": "oauth2Response.access_token",
+        "secure": false,
+        "tls": true,
+        "name": "",
+        "dname": "sendEmailNotification",
+        "x": 1140,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "c27b21f1d2dca7eb",
+        "type": "switch",
+        "z": "4847cc51ebc8708c",
+        "g": "8e35b04ec45a08b9",
+        "name": "isVisitor?",
+        "property": "payload.Person.IsVisitor",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "true"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 280,
+        "y": 180,
+        "wires": [
+            [
+                "969423a6cfbc27b0"
+            ]
+        ]
+    },
+    {
+        "id": "68e1ec326fe549b8",
+        "type": "2nac-access-log",
+        "z": "4847cc51ebc8708c",
+        "g": "8e35b04ec45a08b9",
+        "filter": "{\"category\":\"Granted\",\"deviceId\":\"1,18\"}",
+        "name": "",
+        "filtertype": "json",
+        "x": 140,
+        "y": 180,
+        "wires": [
+            [
+                "c27b21f1d2dca7eb",
+                "1b420ec5e8892e65"
+            ]
+        ]
+    },
+    {
+        "id": "969423a6cfbc27b0",
+        "type": "change",
+        "z": "4847cc51ebc8708c",
+        "g": "8e35b04ec45a08b9",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "visitorId",
+                "pt": "msg",
+                "to": "payload.Person.Id",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 440,
+        "y": 180,
+        "wires": [
+            [
+                "a0ee2080e4d1e0ac"
+            ]
+        ]
+    },
+    {
+        "id": "a0ee2080e4d1e0ac",
+        "type": "2nac-rest-api",
+        "z": "4847cc51ebc8708c",
+        "g": "8e35b04ec45a08b9",
+        "name": "getVisitorDetails",
+        "method": "GET",
+        "endpoint": "visitors/{visitorId}",
+        "query": "",
+        "senderr": true,
+        "x": 620,
+        "y": 180,
+        "wires": [
+            [
+                "85e1248fcb77a874"
+            ]
+        ]
+    },
+    {
+        "id": "44471b93717086d7",
+        "type": "2nac-rest-api",
+        "z": "4847cc51ebc8708c",
+        "g": "8e35b04ec45a08b9",
+        "name": "getVisitedPerson",
+        "method": "GET",
+        "endpoint": "users/{userId}",
+        "query": "",
+        "senderr": true,
+        "x": 370,
+        "y": 240,
+        "wires": [
+            [
+                "4e76a1fddc42139f"
+            ]
+        ]
+    },
+    {
+        "id": "4e76a1fddc42139f",
+        "type": "switch",
+        "z": "4847cc51ebc8708c",
+        "g": "8e35b04ec45a08b9",
+        "name": "isEmailEmpty?",
+        "property": "payload.Account.Email",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "nnull"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 560,
+        "y": 240,
+        "wires": [
+            [
+                "95740d0f321d6a4d"
+            ]
+        ]
+    },
+    {
+        "id": "95740d0f321d6a4d",
+        "type": "change",
+        "z": "4847cc51ebc8708c",
+        "g": "8e35b04ec45a08b9",
+        "name": "setRecipient",
+        "rules": [
+            {
+                "t": "set",
+                "p": "to",
+                "pt": "msg",
+                "to": "payload.Account.Email",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 730,
+        "y": 240,
+        "wires": [
+            [
+                "833d3d8eaa7e341d",
+                "0e5320de4bdf72d7"
+            ]
+        ]
+    },
+    {
+        "id": "5668fb3086f2f663",
+        "type": "change",
+        "z": "4847cc51ebc8708c",
+        "g": "8e35b04ec45a08b9",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "userId",
+                "pt": "msg",
+                "to": "payload.VisitedPersonId",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "visitor",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 180,
+        "y": 240,
+        "wires": [
+            [
+                "44471b93717086d7"
+            ]
+        ]
+    },
+    {
+        "id": "833d3d8eaa7e341d",
+        "type": "debug",
+        "z": "4847cc51ebc8708c",
+        "g": "8e35b04ec45a08b9",
+        "name": "debug 25",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 920,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "0e5320de4bdf72d7",
+        "type": "function",
+        "z": "4847cc51ebc8708c",
+        "g": "8e35b04ec45a08b9",
+        "name": "buildEmailBody",
+        "func": "msg.visitor.VisitFrom = new Date(msg.visitor.VisitFrom).toLocaleString()\nmsg.visitor.VisitTo = new Date(msg.visitor.VisitTo).toLocaleString()\n\nmsg.topic = \"Your visit has arrived\"\n\nmsg.payload = `\n<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n<html>\n<head>\n    <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\n    <title>Your access to 2N</title>\n    <style type=\"text/css\">\n        /* Reset Styles */\n        body{margin:0; padding:0;-webkit-text-size-adjust:none;}\n        img{border:0; height:auto; line-height:100%; outline:none; text-decoration:none;}\n        table td{border-collapse:collapse;}\n        #backgroundTable{height:100% !important; margin:0; padding:0; width:100% !important;}\n        body, #backgroundTable{background-color: #F0F0F0; font-family:Arial;}\n        h1, .h1{color:#505050; display:block; font-family:Arial; font-size:24px; font-weight:bold; line-height:100%; margin-top:0; margin-right:0; margin-bottom:10px; margin-left:0; text-align:left;}\n        h2, .h2{color:#505050; display:block; font-family:Arial; font-size:18px; font-weight:bold; line-height:100%; margin-top:0; margin-right:0; margin-bottom:10px; margin-left:0; text-align:left;}\n        /* content */\n        #preheader{background-color:#F0F0F0;}\n        .preheaderContent div{color:#505050; font-family:Arial; font-size:12px; line-height:100%; text-align:left;}\n        #header{background-color: #000000; border-bottom:0;}\n        .headerContent div{color: #FFFFFF; font-family:Arial; font-size:20px; font-weight:normal; line-height:100%; text-align:left; vertical-align:middle; padding: 5px 0;}\n        #container {border: 2px solid #F0F0F0;}\n        #container, .bodyContent{background-color:#FFFFFF;}\n        .bodyContent div{color:#505050; font-family:Arial; font-size:14px; line-height:150%; text-align:left;}\n        .bodyContent div a:link, .bodyContent div a:visited, /* Yahoo! Mail Override */ .bodyContent div a .yshortcuts /* Yahoo! Mail Override */{color:#336699; font-weight:normal; text-decoration:underline;}\n        .bodyContent img{display:inline; height:auto;}\n        .additionalmessage {border-top: 1px solid #D9D9D9;}\n        .bodyContent .pin {font-size:24px; line-height:100%; margin-top:0; margin-right:0; margin-bottom:10px; margin-left:0; text-align:left;}\n        .bodyContent .pin span {display: inline-block; padding: 5px 8px 5px 8px; border-color: #000000; border-bottom-width: 2px; border-radius: 4px;}\n        .bodyContent .highlight {color: #FFFFFF; background: #000000;}\n        .bodyContent .highlight-small {font-weight: bold; color: #FFFFFF; background: #000000; padding: 2px; display: inline-block; border-radius: 2px;}\n        #footer{background-color:#FFFFFF;}\n        #footerContent {border-top: 1px solid #D9D9D9;}\n        .footerContent div{color:#707070; font-family:Arial; font-size:12px; line-height:125%; text-align:left;}\n        .footerContent div a:link, .footerContent div a:visited, /* Yahoo! Mail Override */ .footerContent div a .yshortcuts /* Yahoo! Mail Override */{color:#336699; font-weight:normal; text-decoration:underline;}\n    </style>\n</head>\n<body leftmargin=\"0\" marginwidth=\"0\" topmargin=\"0\" marginheight=\"0\" offset=\"0\">\n<center>\n    <table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" height=\"100%\" width=\"100%\" id=\"backgroundTable\">\n        <tr>\n            <td align=\"center\" valign=\"top\">\n                <!-- Main frame -->\n                <table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"600\" id=\"container\">\n                    <tr>\n                        <td valign=\"top\">\n                            <!-- Header -->\n                            <table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\" style=\"width: 100%!important\" id=\"header\">\n                                <tr>\n                                    <td class=\"headerContent\">\n                                        <table border=\"0\" cellpadding=\"20\" cellspacing=\"0\" width=\"100%\">\n                                            <tr>\n                                                <td valign=\"top\">\n                                                    <div>\n                                                        2N\n                                                    </div>\n                                                </td>\n                                            </tr>\n                                        </table>\n                                    </td>\n                                </tr>\n                            </table>\n                        </td>\n                    </tr>\n                    <tr>\n                        <td valign=\"top\">\n                            <!-- Body -->\n                            <table border=\"0\" cellpadding=\"10\" cellspacing=\"0\" width=\"100%\" style=\"width: 100%!important\" id=\"templateBody\">\n                                <tr>\n                                    <td valign=\"top\" class=\"bodyContent\">\n                                        <table border=\"0\" cellpadding=\"10\" cellspacing=\"0\" width=\"100%\" style=\"width: 100%!important\">\n                                            <tr>\n                                                <td valign=\"top\">\n                                                    <div>\n                                                        Hello, your visitor <b>${msg.visitor.Name}</b> has arrived.<br>\n                                                        <br>\n                                                        The visit is valid from <b>${msg.visitor.VisitFrom}</b> to <b>${msg.visitor.VisitTo}</b>.<br>\n                                                    </div>\n                                                </td>\n                                            </tr>\n                                        </table>\n                                    </td>\n                                </tr>\n                            </table>\n                        </td>\n                    </tr>\n                </table>\n            </td>\n        </tr>\n    </table>\n</center>\n</body>\n</html>`;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 940,
+        "y": 280,
+        "wires": [
+            [
+                "24634df8f755f52b"
+            ]
+        ]
+    },
+    {
+        "id": "1b420ec5e8892e65",
+        "type": "debug",
+        "z": "4847cc51ebc8708c",
+        "g": "8e35b04ec45a08b9",
+        "name": "debug 26",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 280,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "85e1248fcb77a874",
+        "type": "switch",
+        "z": "4847cc51ebc8708c",
+        "g": "8e35b04ec45a08b9",
+        "name": "isVisitedPersonNull?",
+        "property": "payload.VisitedPersonId",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "nnull"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 820,
+        "y": 180,
+        "wires": [
+            [
+                "5668fb3086f2f663"
+            ]
+        ]
+    }
+]
