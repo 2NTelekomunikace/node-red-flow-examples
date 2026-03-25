@@ -128,9 +128,36 @@ You can also set the flow to automatically send the QR code once the user is cre
 
 ### Limitations and Known issues:
 
-  * If an invitee is not in your Outlook contacts (their name will not auto-populate), the visitor will be created in 2N Access Commander using their **email address as their name.**
+* If an invitee is not in your Outlook contacts (their name will not auto-populate), the visitor will be created in 2N Access Commander using their **email address as their name.**
 
-  * The visitor cannot be created if the meeting organizer’s email address is **not** present in the 2N Access Commander (stored under the user). Without this match, the system cannot **determine** which **company** to assign the visitor to.
+* The visitor cannot be created if the meeting organizer’s email address is **not** present in the 2N Access Commander (stored under the user). Without this match, the system cannot **determine** which **company** to assign the visitor to.
+
+## Usage Statistics (beta)
+
+This flow includes a **Usage Statistics** subflow designed to help us improve our product and understand which features are most valuable to our users.
+
+### What data is collected?
+
+* **Flow Name & Version:** To see which versions are currently in the wild.
+
+* **Installation ID:** A unique identifier from your 2N Access Commander, this identifier is never tied to actual users.
+
+* **System Version:** The version of the 2N Access Commander you are running.
+
+> [!NOTE]  
+> No personal data, IP addresses, credentials, or specific configuration values (like passwords or device names) are ever collected or stored.
+
+### How to Opt-Out
+
+You have full control over your data. To disable telemetry:
+
+1. Before you on click deploy, double-click the `Usage Statistics` subflow node in your workspace.
+
+2. **Uncheck** the box next to "Send Anonymous Statistics Data".
+
+3. Click `Done` and `Deploy`.
+
+Alternatively, you can delete the subflow node entirely from your flow without affecting the core functionality.
 
 ## Author and Versioning
 

@@ -1,5 +1,377 @@
 [
     {
+        "id": "a373046b187fbd7e",
+        "type": "subflow",
+        "name": "Usage statistics",
+        "info": "",
+        "category": "Access Commander",
+        "in": [],
+        "out": [],
+        "env": [
+            {
+                "name": "send_stats",
+                "type": "bool",
+                "value": "true",
+                "ui": {
+                    "label": {
+                        "en-US": "Send Anonymous Statistics Data"
+                    },
+                    "type": "checkbox"
+                }
+            },
+            {
+                "name": "version",
+                "type": "str",
+                "value": "1.0.0",
+                "ui": {
+                    "label": {
+                        "en-US": "Version"
+                    },
+                    "type": "input",
+                    "opts": {
+                        "types": [
+                            "str"
+                        ]
+                    }
+                }
+            },
+            {
+                "name": "id",
+                "type": "str",
+                "value": "",
+                "ui": {
+                    "label": {
+                        "en-US": "ID"
+                    },
+                    "type": "input",
+                    "opts": {
+                        "types": [
+                            "str"
+                        ]
+                    }
+                }
+            }
+        ],
+        "meta": {
+            "license": "MIT"
+        },
+        "color": "#C0DEED",
+        "icon": "node-red/status.svg",
+        "status": {
+            "x": 340,
+            "y": 300,
+            "wires": [
+                {
+                    "id": "0df99417dc07b3f0",
+                    "port": 0
+                }
+            ]
+        }
+    },
+    {
+        "id": "bacbd1a28c00272e",
+        "type": "inject",
+        "z": "a373046b187fbd7e",
+        "name": "",
+        "props": [],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 230,
+        "y": 180,
+        "wires": [
+            [
+                "19079c56eb824bfb"
+            ]
+        ]
+    },
+    {
+        "id": "19079c56eb824bfb",
+        "type": "switch",
+        "z": "a373046b187fbd7e",
+        "name": "consent?",
+        "property": "send_stats",
+        "propertyType": "env",
+        "rules": [
+            {
+                "t": "true"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 360,
+        "y": 180,
+        "wires": [
+            [
+                "d3a3dfa9600ade7b"
+            ]
+        ]
+    },
+    {
+        "id": "6fdf970d19e99bbc",
+        "type": "http request",
+        "z": "a373046b187fbd7e",
+        "name": "",
+        "method": "POST",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "https://stats.sync-io.com/api/public/deployed",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 1190,
+        "y": 180,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "f91180e036178a8e",
+        "type": "change",
+        "z": "a373046b187fbd7e",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "headers.user-agent",
+                "pt": "msg",
+                "to": "2n-node-red",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "headers.x-node-id",
+                "pt": "msg",
+                "to": "NR_NODE_ID",
+                "tot": "env"
+            },
+            {
+                "t": "set",
+                "p": "headers.x-node-name",
+                "pt": "msg",
+                "to": "NR_FLOW_NAME",
+                "tot": "env"
+            },
+            {
+                "t": "set",
+                "p": "headers.x-node-token",
+                "pt": "msg",
+                "to": "b3b233a3-d18a-494b-a692-59657eecc69c",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "headers.Content-Type",
+                "pt": "msg",
+                "to": "application/json",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "{\t  \"flow_name\": $env(\"NR_FLOW_NAME\"),\t  \"flow_id\": $env(\"id\") ? $env(\"id\") : \"unknown\",\t  \"version\": $env(\"version\") ? $env(\"version\") : \"unknown\",\t  \"timestamp\": $now(),\t  \"ac_version\": msg.ac_version,\t  \"installation_id\": msg.payload.Features.InstallationId ? msg.payload.Features.InstallationId : \"unknown\"\t}",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1000,
+        "y": 180,
+        "wires": [
+            [
+                "6fdf970d19e99bbc",
+                "898251a3d2638836"
+            ]
+        ]
+    },
+    {
+        "id": "898251a3d2638836",
+        "type": "function",
+        "z": "a373046b187fbd7e",
+        "name": "version",
+        "func": "node.status({ fill: \"blue\", shape: \"dot\", text: msg.payload.version });\nreturn null;",
+        "outputs": 0,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1200,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "0df99417dc07b3f0",
+        "type": "status",
+        "z": "a373046b187fbd7e",
+        "name": "",
+        "scope": [
+            "898251a3d2638836"
+        ],
+        "x": 240,
+        "y": 300,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "d3a3dfa9600ade7b",
+        "type": "2nac-rest-api",
+        "z": "a373046b187fbd7e",
+        "name": "",
+        "method": "GET",
+        "endpoint": "system/version",
+        "query": "",
+        "senderr": true,
+        "x": 500,
+        "y": 180,
+        "wires": [
+            [
+                "2c4ff609afaa5315"
+            ]
+        ]
+    },
+    {
+        "id": "b0925db91797c497",
+        "type": "catch",
+        "z": "a373046b187fbd7e",
+        "name": "",
+        "scope": [
+            "d3a3dfa9600ade7b",
+            "257581c88883db1f"
+        ],
+        "uncaught": false,
+        "x": 90,
+        "y": 140,
+        "wires": [
+            [
+                "843bbda14865acce"
+            ]
+        ]
+    },
+    {
+        "id": "843bbda14865acce",
+        "type": "delay",
+        "z": "a373046b187fbd7e",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 220,
+        "y": 140,
+        "wires": [
+            [
+                "19079c56eb824bfb"
+            ]
+        ]
+    },
+    {
+        "id": "2c4ff609afaa5315",
+        "type": "change",
+        "z": "a373046b187fbd7e",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "ac_version",
+                "pt": "msg",
+                "to": "msg.payload.Version ? msg.payload.Version : \"unknown\"",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 670,
+        "y": 180,
+        "wires": [
+            [
+                "257581c88883db1f"
+            ]
+        ]
+    },
+    {
+        "id": "257581c88883db1f",
+        "type": "2nac-rest-api",
+        "z": "a373046b187fbd7e",
+        "name": "",
+        "method": "GET",
+        "endpoint": "system/license",
+        "query": "",
+        "senderr": true,
+        "x": 840,
+        "y": 180,
+        "wires": [
+            [
+                "f91180e036178a8e"
+            ]
+        ]
+    },
+    {
+        "id": "9f4c63567b2beeca",
+        "type": "catch",
+        "z": "a373046b187fbd7e",
+        "name": "",
+        "scope": [
+            "6fdf970d19e99bbc"
+        ],
+        "uncaught": false,
+        "x": 90,
+        "y": 100,
+        "wires": [
+            [
+                "6ab19b11246c616c"
+            ]
+        ]
+    },
+    {
+        "id": "6ab19b11246c616c",
+        "type": "delay",
+        "z": "a373046b187fbd7e",
+        "name": "",
+        "pauseType": "random",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "5",
+        "randomLast": "10",
+        "randomUnits": "minutes",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 220,
+        "y": 100,
+        "wires": [
+            [
+                "19079c56eb824bfb"
+            ]
+        ]
+    },
+    {
         "id": "f76933b40eb15e67",
         "type": "subflow",
         "name": "Verify JWT or API key",
@@ -399,6 +771,27 @@
         "y": 1159,
         "w": 1252,
         "h": 142
+    },
+    {
+        "id": "b8c5a8c85a9a0a70",
+        "type": "group",
+        "z": "1fbdd7bcdb3287b4",
+        "name": "Setup page info",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "335c8fcb1bfb7f49",
+            "a24eeb8bbee219bc",
+            "a286d64ecfdf57aa",
+            "efba08fedc045e16",
+            "c5bc11990f0bd844",
+            "310e6a531178d78a"
+        ],
+        "x": 94,
+        "y": 99,
+        "w": 772,
+        "h": 122
     },
     {
         "id": "ddb07bb28ab119d5",
@@ -1913,6 +2306,148 @@
         "wires": [
             [
                 "f2587f3741ca04ec"
+            ]
+        ]
+    },
+    {
+        "id": "4ebb567e254617e0",
+        "type": "subflow:a373046b187fbd7e",
+        "z": "1fbdd7bcdb3287b4",
+        "name": "",
+        "env": [
+            {
+                "name": "version",
+                "value": "1.0.1",
+                "type": "str"
+            },
+            {
+                "name": "id",
+                "value": "msgraph-outlook-calendar",
+                "type": "str"
+            }
+        ],
+        "x": 180,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "335c8fcb1bfb7f49",
+        "type": "debug",
+        "z": "1fbdd7bcdb3287b4",
+        "g": "b8c5a8c85a9a0a70",
+        "name": "setup page",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 750,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "a24eeb8bbee219bc",
+        "type": "inject",
+        "z": "1fbdd7bcdb3287b4",
+        "g": "b8c5a8c85a9a0a70",
+        "name": "",
+        "props": [],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 310,
+        "y": 180,
+        "wires": [
+            [
+                "efba08fedc045e16"
+            ]
+        ]
+    },
+    {
+        "id": "a286d64ecfdf57aa",
+        "type": "function",
+        "z": "1fbdd7bcdb3287b4",
+        "g": "b8c5a8c85a9a0a70",
+        "name": "setup page",
+        "func": "msg.host = msg.payload?.IpAddress || \"ip_address\";\n\nconst baseUrl = `https://${msg.host}/nodered`;\n\nconst path = \"/api/calendar/setup\"\n\nconst setupUrl = baseUrl + path\n\nnode.status({\n    fill: \"blue\",\n    shape: \"dot\",\n    text: path\n});\n\nmsg.payload = setupUrl\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 590,
+        "y": 180,
+        "wires": [
+            [
+                "335c8fcb1bfb7f49"
+            ]
+        ]
+    },
+    {
+        "id": "efba08fedc045e16",
+        "type": "2nac-rest-api",
+        "z": "1fbdd7bcdb3287b4",
+        "g": "b8c5a8c85a9a0a70",
+        "name": "",
+        "method": "GET",
+        "endpoint": "settings/network",
+        "query": "",
+        "senderr": true,
+        "x": 440,
+        "y": 180,
+        "wires": [
+            [
+                "a286d64ecfdf57aa"
+            ]
+        ]
+    },
+    {
+        "id": "c5bc11990f0bd844",
+        "type": "catch",
+        "z": "1fbdd7bcdb3287b4",
+        "g": "b8c5a8c85a9a0a70",
+        "name": "",
+        "scope": [
+            "efba08fedc045e16"
+        ],
+        "uncaught": false,
+        "x": 170,
+        "y": 140,
+        "wires": [
+            [
+                "310e6a531178d78a"
+            ]
+        ]
+    },
+    {
+        "id": "310e6a531178d78a",
+        "type": "delay",
+        "z": "1fbdd7bcdb3287b4",
+        "g": "b8c5a8c85a9a0a70",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "7",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 300,
+        "y": 140,
+        "wires": [
+            [
+                "efba08fedc045e16"
             ]
         ]
     },
