@@ -4,6 +4,8 @@
 
 This flow enables automated user synchronization between HR system [Sloneek](https://www.sloneek.com/) and 2N Access Commander and real-time clock-in/out attednance monitoring via existing 2N devices.
 
+![The video shows how the flow operates](how_it_works.gif)
+
 ### Features
 
 * **Sloneek Integration:** The flow connects to the Sloneek API.
