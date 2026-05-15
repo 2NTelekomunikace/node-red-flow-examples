@@ -55,7 +55,7 @@
         "type": "function",
         "z": "f76933b40eb15e67",
         "name": "Verify JWT token or API key",
-        "func": "// Load JWT SECRET and API token\nconst SECRET = global.get('JWT_SECRET'); \nconst API_KEY = env.get(\"API_KEY\");\nconst TOKEN_COOKIE_NAME = 'auth_token';\n\n// Initialization\nlet isAuthorized = false;\nlet authMessage = \"Missing Authorization (Neither Bearer Token nor JWT Cookie found)\"; // Default message, no token or JWT provided\nlet token = null;\n\n\n// First, try API token\nconst authHeader = msg.req.headers.authorization;\n\nif (API_KEY && authHeader && authHeader.startsWith('Bearer ')) {\n    const receivedKey = authHeader.substring(7).trim();\n\n    if (receivedKey === API_KEY) {\n        // API key is valid\n        isAuthorized = true;\n    } else {\n        authMessage = \"Invalid Bearer Token (API Key)\";\n    }\n}\n\n// Second, try JWT cookie\nif (!isAuthorized) {\n    token = msg.req.cookies ? msg.req.cookies[TOKEN_COOKIE_NAME] : null;\n\n    if (token) {\n        // Only now do we care if the SECRET exists\n        if (!SECRET) {\n            node.warn(\"JWT Secret is missing, but a cookie was presented.\");\n            authMessage = \"Server configuration error: JWT Secret missing.\";\n        } else {\n            try {\n                // Verify JWT token\n                jsonwebtoken.verify(token, SECRET);\n                isAuthorized = true;\n            } catch (err) {\n                // Invalidate the cookie if not valid\n                const deleteCookie = `${TOKEN_COOKIE_NAME}=; Path=/; HttpOnly; Secure; Max-Age=0`;\n                msg.headers = { 'Set-Cookie': deleteCookie };\n                authMessage = `JWT Error: ${err.message}`;\n            }\n        }\n    }\n}\n\nif (isAuthorized) {\n\n    // Set headers \n    msg.headers = { \n        'Cache-Control': 'no-cache, no-store, must-revalidate',\n        'Pragma': 'no-cache',\n        'Expires': '0',\n        'X-Content-Type-Options': 'nosniff',\n        'X-Frame-Options': 'DENY'\n    };\n    \n    return [msg, null];\n\n} else {\n\n    // Unauthorized\n    msg.statusCode = 401;\n    msg.headers = {\n        'Cache-Control': 'no-store',\n        ...(msg.headers || {}) \n    };\n    \n    msg.payload = {\n        success: false,\n        message: authMessage \n    };\n\n    return [null, msg];\n}",
+        "func": "const SECRET = global.get('JWT_SECRET');\nconst API_KEY = env.get(\"API_KEY\");\nconst FLOW_USER = flow.get(\"$parent.authorized_user\");\n\n// 1. API KEY CHECK (Bearer Token)\nconst auth = msg.req.headers.authorization;\nif (API_KEY && auth === `Bearer ${API_KEY}`) {\n    return [msg, null]; \n}\n\n// 2. JWT COOKIE CHECK\nif (FLOW_USER && SECRET) {\n    const tokenName = `auth_token_${FLOW_USER.replace(/\\s+/g, '_')}`;\n    const token = msg.req.cookies?.[tokenName];\n\n    if (token) {\n        try {\n            const decoded = jsonwebtoken.verify(token, SECRET);\n            // Verify the token belongs to the user assigned to this specific tab\n            if (decoded.sub === FLOW_USER) {\n                return [msg, null];\n            }\n        } catch (err) {\n            // Token expired or tampered with - fall through to 401\n        }\n    }\n}\n\n// 3. UNAUTHORIZED\nmsg.statusCode = 401;\nmsg.payload = { error: \"Unauthorized\", message: \"Invalid or missing credentials\" };\nreturn [null, msg];",
         "outputs": 2,
         "timeout": 0,
         "noerr": 0,
@@ -88,378 +88,6 @@
         "wires": []
     },
     {
-        "id": "a373046b187fbd7e",
-        "type": "subflow",
-        "name": "Usage statistics",
-        "info": "",
-        "category": "Access Commander",
-        "in": [],
-        "out": [],
-        "env": [
-            {
-                "name": "send_stats",
-                "type": "bool",
-                "value": "true",
-                "ui": {
-                    "label": {
-                        "en-US": "Send Anonymous Statistics Data"
-                    },
-                    "type": "checkbox"
-                }
-            },
-            {
-                "name": "version",
-                "type": "str",
-                "value": "1.0.0",
-                "ui": {
-                    "label": {
-                        "en-US": "Version"
-                    },
-                    "type": "input",
-                    "opts": {
-                        "types": [
-                            "str"
-                        ]
-                    }
-                }
-            },
-            {
-                "name": "id",
-                "type": "str",
-                "value": "",
-                "ui": {
-                    "label": {
-                        "en-US": "ID"
-                    },
-                    "type": "input",
-                    "opts": {
-                        "types": [
-                            "str"
-                        ]
-                    }
-                }
-            }
-        ],
-        "meta": {
-            "license": "MIT"
-        },
-        "color": "#C0DEED",
-        "icon": "node-red/status.svg",
-        "status": {
-            "x": 340,
-            "y": 300,
-            "wires": [
-                {
-                    "id": "0df99417dc07b3f0",
-                    "port": 0
-                }
-            ]
-        }
-    },
-    {
-        "id": "bacbd1a28c00272e",
-        "type": "inject",
-        "z": "a373046b187fbd7e",
-        "name": "",
-        "props": [],
-        "repeat": "",
-        "crontab": "",
-        "once": true,
-        "onceDelay": 0.1,
-        "topic": "",
-        "x": 230,
-        "y": 180,
-        "wires": [
-            [
-                "19079c56eb824bfb"
-            ]
-        ]
-    },
-    {
-        "id": "19079c56eb824bfb",
-        "type": "switch",
-        "z": "a373046b187fbd7e",
-        "name": "consent?",
-        "property": "send_stats",
-        "propertyType": "env",
-        "rules": [
-            {
-                "t": "true"
-            }
-        ],
-        "checkall": "true",
-        "repair": false,
-        "outputs": 1,
-        "x": 360,
-        "y": 180,
-        "wires": [
-            [
-                "d3a3dfa9600ade7b"
-            ]
-        ]
-    },
-    {
-        "id": "6fdf970d19e99bbc",
-        "type": "http request",
-        "z": "a373046b187fbd7e",
-        "name": "",
-        "method": "POST",
-        "ret": "txt",
-        "paytoqs": "ignore",
-        "url": "https://stats.sync-io.com/api/public/deployed",
-        "tls": "",
-        "persist": false,
-        "proxy": "",
-        "insecureHTTPParser": false,
-        "authType": "",
-        "senderr": false,
-        "headers": [],
-        "x": 1190,
-        "y": 180,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "f91180e036178a8e",
-        "type": "change",
-        "z": "a373046b187fbd7e",
-        "name": "",
-        "rules": [
-            {
-                "t": "set",
-                "p": "headers.user-agent",
-                "pt": "msg",
-                "to": "2n-node-red",
-                "tot": "str"
-            },
-            {
-                "t": "set",
-                "p": "headers.x-node-id",
-                "pt": "msg",
-                "to": "NR_NODE_ID",
-                "tot": "env"
-            },
-            {
-                "t": "set",
-                "p": "headers.x-node-name",
-                "pt": "msg",
-                "to": "NR_FLOW_NAME",
-                "tot": "env"
-            },
-            {
-                "t": "set",
-                "p": "headers.x-node-token",
-                "pt": "msg",
-                "to": "b3b233a3-d18a-494b-a692-59657eecc69c",
-                "tot": "str"
-            },
-            {
-                "t": "set",
-                "p": "headers.Content-Type",
-                "pt": "msg",
-                "to": "application/json",
-                "tot": "str"
-            },
-            {
-                "t": "set",
-                "p": "payload",
-                "pt": "msg",
-                "to": "{\t  \"flow_name\": $env(\"NR_FLOW_NAME\"),\t  \"flow_id\": $env(\"id\") ? $env(\"id\") : \"unknown\",\t  \"version\": $env(\"version\") ? $env(\"version\") : \"unknown\",\t  \"timestamp\": $now(),\t  \"ac_version\": msg.ac_version,\t  \"installation_id\": msg.payload.Features.InstallationId ? msg.payload.Features.InstallationId : \"unknown\"\t}",
-                "tot": "jsonata"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 1000,
-        "y": 180,
-        "wires": [
-            [
-                "6fdf970d19e99bbc",
-                "898251a3d2638836"
-            ]
-        ]
-    },
-    {
-        "id": "898251a3d2638836",
-        "type": "function",
-        "z": "a373046b187fbd7e",
-        "name": "version",
-        "func": "node.status({ fill: \"blue\", shape: \"dot\", text: msg.payload.version });\nreturn null;",
-        "outputs": 0,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 1200,
-        "y": 240,
-        "wires": []
-    },
-    {
-        "id": "0df99417dc07b3f0",
-        "type": "status",
-        "z": "a373046b187fbd7e",
-        "name": "",
-        "scope": [
-            "898251a3d2638836"
-        ],
-        "x": 240,
-        "y": 300,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "d3a3dfa9600ade7b",
-        "type": "2nac-rest-api",
-        "z": "a373046b187fbd7e",
-        "name": "",
-        "method": "GET",
-        "endpoint": "system/version",
-        "query": "",
-        "senderr": true,
-        "x": 500,
-        "y": 180,
-        "wires": [
-            [
-                "2c4ff609afaa5315"
-            ]
-        ]
-    },
-    {
-        "id": "b0925db91797c497",
-        "type": "catch",
-        "z": "a373046b187fbd7e",
-        "name": "",
-        "scope": [
-            "d3a3dfa9600ade7b",
-            "257581c88883db1f"
-        ],
-        "uncaught": false,
-        "x": 90,
-        "y": 140,
-        "wires": [
-            [
-                "843bbda14865acce"
-            ]
-        ]
-    },
-    {
-        "id": "843bbda14865acce",
-        "type": "delay",
-        "z": "a373046b187fbd7e",
-        "name": "",
-        "pauseType": "delay",
-        "timeout": "5",
-        "timeoutUnits": "seconds",
-        "rate": "1",
-        "nbRateUnits": "1",
-        "rateUnits": "second",
-        "randomFirst": "1",
-        "randomLast": "5",
-        "randomUnits": "seconds",
-        "drop": false,
-        "allowrate": false,
-        "outputs": 1,
-        "x": 220,
-        "y": 140,
-        "wires": [
-            [
-                "19079c56eb824bfb"
-            ]
-        ]
-    },
-    {
-        "id": "2c4ff609afaa5315",
-        "type": "change",
-        "z": "a373046b187fbd7e",
-        "name": "",
-        "rules": [
-            {
-                "t": "set",
-                "p": "ac_version",
-                "pt": "msg",
-                "to": "msg.payload.Version ? msg.payload.Version : \"unknown\"",
-                "tot": "jsonata"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 670,
-        "y": 180,
-        "wires": [
-            [
-                "257581c88883db1f"
-            ]
-        ]
-    },
-    {
-        "id": "257581c88883db1f",
-        "type": "2nac-rest-api",
-        "z": "a373046b187fbd7e",
-        "name": "",
-        "method": "GET",
-        "endpoint": "system/license",
-        "query": "",
-        "senderr": true,
-        "x": 840,
-        "y": 180,
-        "wires": [
-            [
-                "f91180e036178a8e"
-            ]
-        ]
-    },
-    {
-        "id": "9f4c63567b2beeca",
-        "type": "catch",
-        "z": "a373046b187fbd7e",
-        "name": "",
-        "scope": [
-            "6fdf970d19e99bbc"
-        ],
-        "uncaught": false,
-        "x": 90,
-        "y": 100,
-        "wires": [
-            [
-                "6ab19b11246c616c"
-            ]
-        ]
-    },
-    {
-        "id": "6ab19b11246c616c",
-        "type": "delay",
-        "z": "a373046b187fbd7e",
-        "name": "",
-        "pauseType": "random",
-        "timeout": "5",
-        "timeoutUnits": "seconds",
-        "rate": "1",
-        "nbRateUnits": "1",
-        "rateUnits": "second",
-        "randomFirst": "5",
-        "randomLast": "10",
-        "randomUnits": "minutes",
-        "drop": false,
-        "allowrate": false,
-        "outputs": 1,
-        "x": 220,
-        "y": 100,
-        "wires": [
-            [
-                "19079c56eb824bfb"
-            ]
-        ]
-    },
-    {
         "id": "e0e1f32e0262e39e",
         "type": "subflow",
         "name": "Basic Auth + JWT",
@@ -486,7 +114,8 @@
                     "type": "input",
                     "opts": {
                         "types": [
-                            "str"
+                            "str",
+                            "env"
                         ]
                     }
                 }
@@ -515,7 +144,8 @@
                     "type": "input",
                     "opts": {
                         "types": [
-                            "str"
+                            "str",
+                            "env"
                         ]
                     }
                 }
@@ -530,7 +160,7 @@
         "type": "function",
         "z": "e0e1f32e0262e39e",
         "name": "Basic Auth + JWT",
-        "func": "const USERNAME = env.get(\"Username\");\nconst PASSWORD = env.get(\"Password\");\nconst SECRET = global.get('JWT_SECRET');\nconst REDIRECT_URL = env.get(\"Redirect\"); \n\n// Check basic variables for authentication\nif (!USERNAME || !PASSWORD || !SECRET || !REDIRECT_URL) { \n    node.warn(\"Subflow is not properly configured. Username, password and redirect must be set\");\n    msg.statusCode = 500;\n    msg.payload = {\n        success: false,\n        message: \"Flow configuration error, please check if username, password and redirect are set\"\n    };\n    return msg;\n}\n\n// Get auth header\nconst authHeader = msg.req.headers.authorization;\n\n// Basic auth\nif (!authHeader || !authHeader.startsWith('Basic ')) {\n    msg.statusCode = 401;\n    msg.headers = { 'WWW-Authenticate': 'Basic realm=\"Secure Area\"' };\n    msg.payload = {\n        success: false,\n        message: \"Authentication Required\"\n    };\n    return msg;\n}\n\n// Extract and decode the username and password\nconst encoded = authHeader.substring(6);\nconst [clientUsername, clientPassword] = Buffer.from(encoded, 'base64').toString().split(':');\n\n// Verify the username and password\nif (clientUsername === USERNAME && clientPassword === PASSWORD) {\n\n    const payload = {\n        sub: clientUsername,\n        id: 1,\n        role: 'system_client'\n    };\n\n    // Sign JWT token\n    const token = jsonwebtoken.sign(payload, SECRET, { expiresIn: '1h' });\n\n    // Set JWT token as cookie\n    msg.cookies = {\n        auth_token: {\n            value: token,\n            maxAge: 3600000,\n            httpOnly: true,\n            secure: true,\n            sameSite: 'Strict',\n            path: '/'\n        }\n    }\n\n    // Redirect browser\n    msg.statusCode = 302;\n    msg.headers = {\n        'Location': REDIRECT_URL\n    };\n\n    return msg;\n\n}\n\n// Wrong username or password\nelse {\n    msg.statusCode = 401;\n    msg.headers = { 'WWW-Authenticate': 'Basic realm=\"Secure Area\"' };\n    msg.payload = {\n        success: false,\n        message: \"Invalid Credentials\"\n    };\n    return msg;\n}",
+        "func": "const USER = env.get(\"Username\");\nconst PASS = env.get(\"Password\");\nconst SECRET = global.get('JWT_SECRET');\nconst REDIRECT = env.get(\"Redirect\");\n\n// 1. SYSTEM CHECK: Ensure subflow is properly configured\nif (!USER || !PASS || !SECRET || !REDIRECT) {\n    node.error(\"Subflow configuration error: Missing Username, Password, Secret, or Redirect.\");\n    msg.statusCode = 500;\n    msg.payload = { error: \"Internal Server Error\", message: \"Module misconfigured\" };\n    return msg; \n}\n\n// Set identity for the 'Verify' node on this flow tab\nflow.set(\"$parent.authorized_user\", USER);\n\nconst auth = msg.req.headers.authorization;\n\n// 2. AUTHENTICATION LOGIC\nif (auth?.startsWith('Basic ')) {\n    const encoded = auth.substring(6);\n    const [u, p] = Buffer.from(encoded, 'base64').toString().split(':');\n    \n    // Verify credentials\n    if (u === USER && p === PASS) {\n        // Create token (1 hour expiry)\n        const token = jsonwebtoken.sign({ sub: u }, SECRET, { expiresIn: '1h' });\n        \n        // Scope cookie name to the user to allow multiple logins\n        const cookieName = `auth_token_${u.replace(/\\s+/g, '_')}`;\n\n        msg.cookies = { \n            [cookieName]: { \n                value: token, \n                httpOnly: true, \n                path: '/',\n                sameSite: 'Strict'\n            } \n        };\n        \n        // redirect if successful\n        msg.statusCode = 302;\n        msg.headers = { 'Location': REDIRECT };\n        return msg;\n    }\n}\n\n// 3. UNAUTHORIZED\nmsg.statusCode = 401;\nmsg.headers = { 'WWW-Authenticate': 'Basic realm=\"Restricted Area\"' };\nmsg.payload = { error: \"Unauthorized\", message: \"Authentication required\" };\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -569,7 +199,7 @@
         "wires": []
     },
     {
-        "id": "9a2bf747674fdc20",
+        "id": "8219857e0a3eace1",
         "type": "tab",
         "label": "Sloneek connector",
         "disabled": false,
@@ -577,20 +207,20 @@
         "env": []
     },
     {
-        "id": "32fafc9fe711e035",
+        "id": "e9a30b727ff443b1",
         "type": "group",
-        "z": "9a2bf747674fdc20",
+        "z": "8219857e0a3eace1",
         "name": "Setup page info",
         "style": {
             "label": true
         },
         "nodes": [
-            "95329230a119bc39",
-            "43dad8bbc08edd8f",
-            "7731230aa44d92fe",
-            "9dd2acb1d628a738",
-            "4dc1fd8f4bfcbdb3",
-            "d08ae5dda335aac9"
+            "83b188b077ca5c36",
+            "714b1ee8e0ed2033",
+            "dbd350d19f2ccac1",
+            "9a3f663a2072f4df",
+            "d3ca39429efddb41",
+            "3c0bc9b62cb84035"
         ],
         "x": 574,
         "y": 219,
@@ -598,27 +228,27 @@
         "h": 122
     },
     {
-        "id": "aab3d7bd2f5e45b5",
+        "id": "af9a4272edbf380c",
         "type": "group",
-        "z": "9a2bf747674fdc20",
+        "z": "8219857e0a3eace1",
         "name": "Create new config",
         "style": {
             "label": true
         },
         "nodes": [
-            "200f49409fef64a4",
-            "77164011e98b6ff4",
-            "bcac46d64628b012",
-            "bdb12017aa6273e3",
-            "4e1563dbbe84e533",
-            "d52bc5ead4145e38",
-            "53544d12a818ba83",
-            "34a85ed5338dd638",
-            "7a11a6d5e25abcc4",
-            "9893868729b9c0b1",
-            "1d3d85595a2d5b80",
-            "861a88290fcd8f42",
-            "bd5966fcb997566e"
+            "c0055740ab264037",
+            "bbad3def18ddf240",
+            "9459bc0306d2d408",
+            "332f1ba72f9a4a79",
+            "b7f8639b77365863",
+            "c9301c8b4a0885cc",
+            "feb6a302fd5007b3",
+            "febda6a5180c1176",
+            "87995f4cde019707",
+            "995b6dd1dccd853a",
+            "c9b2210d2cb69616",
+            "d23caf46b796f476",
+            "f9adcc6485bf6acc"
         ],
         "x": 74,
         "y": 1459,
@@ -626,25 +256,25 @@
         "h": 162
     },
     {
-        "id": "e725433045928211",
+        "id": "8e4f6e23814eab7b",
         "type": "group",
-        "z": "9a2bf747674fdc20",
+        "z": "8219857e0a3eace1",
         "name": "Delete company config",
         "style": {
             "label": true
         },
         "nodes": [
-            "4d0c9d97cfae5e4b",
-            "6d4561da2cdf965c",
-            "511143eddcbdc8ef",
-            "9defa99ca23b851a",
-            "69646f26c049bc29",
-            "eeb4fabc15081a18",
-            "a1d3fd74e224dbdc",
-            "ecc40d4f69ad1f48",
-            "8da7132a59a08945",
-            "cbb3f4db2736d767",
-            "62d70cc2301d1796"
+            "7d224ff37ddd1328",
+            "fbdd734754b33538",
+            "593b56a6d11eb891",
+            "effa77caa6b7529c",
+            "44176fe9ed6082ce",
+            "3c15cbb8ab79303f",
+            "88696dbcb3784ae8",
+            "45df628a2175eae9",
+            "6e68021e28df7415",
+            "30f76880b2222b0c",
+            "0b306ffd0e80696b"
         ],
         "x": 74,
         "y": 1739,
@@ -652,18 +282,18 @@
         "h": 142
     },
     {
-        "id": "2c36c66f94fbdae7",
+        "id": "a91c36d93e379cd8",
         "type": "group",
-        "z": "9a2bf747674fdc20",
+        "z": "8219857e0a3eace1",
         "name": "Get companies API",
         "style": {
             "label": true
         },
         "nodes": [
-            "30663e9c5eabe2b3",
-            "97033380f710cdfc",
-            "b003a21563576b65",
-            "e9662c89e8dd6dc6"
+            "de014b2560af2df0",
+            "1530587e1363acbe",
+            "f16df29f4d79190e",
+            "793ed2c9e4c33371"
         ],
         "x": 74,
         "y": 1639,
@@ -671,21 +301,21 @@
         "h": 82
     },
     {
-        "id": "7ba207f5eb062908",
+        "id": "ee753d14b2bc38a3",
         "type": "group",
-        "z": "9a2bf747674fdc20",
+        "z": "8219857e0a3eace1",
         "name": "Get config API",
         "style": {
             "label": true
         },
         "nodes": [
-            "60da87eab0a5182a",
-            "1a95b18e38e2b214",
-            "a47112d9864b5a24",
-            "338cde75d6ea5b47",
-            "ad4e2c352fd37fb8",
-            "183d54b8bda99073",
-            "af7a09034d7aa170"
+            "626e9499a913ef74",
+            "0b033e2d07be16bf",
+            "891174a4a6c7baca",
+            "824e786092d11a06",
+            "0596ee404fac2284",
+            "5ccd21c37dcaad65",
+            "daac466b053f29c2"
         ],
         "x": 74,
         "y": 1319,
@@ -693,16 +323,16 @@
         "h": 122
     },
     {
-        "id": "b73f620f1349060f",
+        "id": "9f920d0a3f337276",
         "type": "group",
-        "z": "9a2bf747674fdc20",
+        "z": "8219857e0a3eace1",
         "name": "Delete config",
         "style": {
             "label": true
         },
         "nodes": [
-            "6afb7d79af344729",
-            "a91e320b64f95daf"
+            "34251fea4fa5b2b2",
+            "cdd07a357d6bd6fd"
         ],
         "x": 74,
         "y": 1219,
@@ -710,31 +340,31 @@
         "h": 82
     },
     {
-        "id": "0d815c3f275d16f3",
+        "id": "8b0cd2972f351b79",
         "type": "group",
-        "z": "9a2bf747674fdc20",
+        "z": "8219857e0a3eace1",
         "name": "Clock IN / OUT",
         "style": {
             "label": true
         },
         "nodes": [
-            "8d90805e413d3a99",
-            "f815d5a75fef2a7c",
-            "a8c5b09f63ef7828",
-            "f9daf7b6e601e498",
-            "a302877bd494e562",
-            "29f8fa93f3fa776c",
-            "c4e254c538a58922",
-            "592efc51e1cb6ddf",
-            "53b4b5529bbe53b2",
-            "ea3aa1aee619f26a",
-            "5fd7c9950f792a92",
-            "31e99af210d99079",
-            "db365305ddf18a92",
-            "754355077ad37b7a",
-            "966857fa63bc288c",
-            "5b2552de8aefb820",
-            "48666a595f9e0726"
+            "c0ab4634c8a6d101",
+            "814b5d9df2ddaa51",
+            "3829bbc3949e5e72",
+            "773890801046c586",
+            "95b5cf15288d0c76",
+            "9dfa696a600107a6",
+            "29c4ca8f79332be2",
+            "e9340d345c184cef",
+            "b0aa37ed425ce817",
+            "06f416c35012ee43",
+            "9d276052608ec661",
+            "0268bc530d195124",
+            "892bc7d3e9572de1",
+            "653758332ffe3d19",
+            "63c9c35d1e4a2392",
+            "3eb02f810110a645",
+            "8a6ea28184979833"
         ],
         "x": 74,
         "y": 959,
@@ -742,68 +372,68 @@
         "h": 222
     },
     {
-        "id": "f3f7cfd04fab5a51",
+        "id": "9a57bf6e96f20763",
         "type": "group",
-        "z": "9a2bf747674fdc20",
+        "z": "8219857e0a3eace1",
         "name": "Auth flow",
         "style": {
             "label": true
         },
         "nodes": [
-            "2baf8a25d53f5365",
-            "902e5a1085102866",
-            "653143ae47b47a2d",
-            "698218920368f08d",
-            "cea8863a5cd4f03e",
-            "1fba1e702fbdede6",
-            "9c8d8cd3a1018a75",
-            "103a4fc6c0525604",
-            "b26e5050acc61891",
-            "3102f1700749eed7",
-            "b2c402ed1adaf5ec",
-            "a60033d607273d4c",
-            "857f245f0877de04",
-            "73db1806cd20ca04",
-            "673051e226431d80",
-            "1359c4a5348074ae",
-            "1a301d15398312fb"
+            "6a461d4d86e68315",
+            "8d6af06d6730f531",
+            "9791e6d748860c63",
+            "2aa1e2d8d5cfddcd",
+            "c9807b8757c24e53",
+            "46ca431e1cdcc3ab",
+            "b7d91805ed97a7e3",
+            "73a79b70b9ca3221",
+            "3c935ca9cb93d1b7",
+            "81312757006b9b0a",
+            "74e48a160634aeaf",
+            "9698a7a1d7834a2e",
+            "1b61cbfe8b7a2d1c",
+            "9dd4586d9a60ee2a",
+            "e52f3016c946d8c4",
+            "c40e59554847f706",
+            "c78e7a038d0d11c4"
         ],
-        "x": 74,
+        "x": 54,
         "y": 359,
-        "w": 1412,
+        "w": 1432,
         "h": 202
     },
     {
-        "id": "e94397fcf9f2de97",
+        "id": "9f80e485d7f169fa",
         "type": "group",
-        "z": "9a2bf747674fdc20",
+        "z": "8219857e0a3eace1",
         "name": "Import / Sync users",
         "style": {
             "label": true
         },
         "nodes": [
-            "d9dff1beaf021565",
-            "898646c27c96e810",
-            "712278c17a8dbdbd",
-            "6b4d7f3eaa704b04",
-            "5b4a0d46a70a4a7e",
-            "419460dd6ef49fb1",
-            "6e5a7b9be658944d",
-            "72c4e3a70d452326",
-            "7fb66568623bf46a",
-            "503cc85deeb796c9",
-            "7ea0191200b5db83",
-            "b7ec7d5ce76c1797",
-            "d6c39c38ff4f2360",
-            "10fd76cd95ceba63",
-            "3e3b7a2bda699251",
-            "6b95d235a5185472",
-            "936a33e15124b0b1",
-            "b3d61ead41e2807c",
-            "02e92ac9a34c47dc",
-            "9be4e32b6a530214",
-            "0346ad7c90f5885b",
-            "a1a74423a826f5b8"
+            "2fb21f2201537cf4",
+            "935757870fbc0463",
+            "0804c92f16703fb6",
+            "5980e3752020aa7e",
+            "0754a243049ebfd1",
+            "4e48bea0671f2276",
+            "2697d704472ae52b",
+            "7fec30c5a26c7adc",
+            "610d3ce0d36f714b",
+            "a5019ca6988774fe",
+            "db045ff40f5429bf",
+            "8a2be0c2757b7fa5",
+            "7545dd83dedc2265",
+            "055229f856c65af9",
+            "75429047ba664c41",
+            "cdd343c19e629ac6",
+            "46782170da4c8388",
+            "cd24bd0341ba6821",
+            "a12e4f2cfab59748",
+            "9413f7089ec46dc6",
+            "a2f49e4f81b6dcf7",
+            "f9a232676bdc9fa4"
         ],
         "x": 74,
         "y": 579,
@@ -811,19 +441,19 @@
         "h": 362
     },
     {
-        "id": "42fc4a18d33dda92",
+        "id": "c4fb99509116ba86",
         "type": "group",
-        "z": "9a2bf747674fdc20",
+        "z": "8219857e0a3eace1",
         "name": "Frontend",
         "style": {
             "label": true
         },
         "nodes": [
-            "7e2c9a736c61aa60",
-            "b4e7c9d838495b9a",
-            "8893bdbd01ca01f5",
-            "33d001a43394b6c7",
-            "eda9fa92d2f5d018"
+            "c99561d8e7c70d8b",
+            "f149eb67f4cc73b4",
+            "f83f87a6b1115f02",
+            "deb52037c11e4374",
+            "cb86231123edd055"
         ],
         "x": 74,
         "y": 219,
@@ -831,10 +461,10 @@
         "h": 122
     },
     {
-        "id": "7e2c9a736c61aa60",
+        "id": "c99561d8e7c70d8b",
         "type": "http in",
-        "z": "9a2bf747674fdc20",
-        "g": "42fc4a18d33dda92",
+        "z": "8219857e0a3eace1",
+        "g": "c4fb99509116ba86",
         "name": "login",
         "url": "/sloneek/login",
         "method": "get",
@@ -844,15 +474,15 @@
         "y": 260,
         "wires": [
             [
-                "b4e7c9d838495b9a"
+                "f149eb67f4cc73b4"
             ]
         ]
     },
     {
-        "id": "b4e7c9d838495b9a",
+        "id": "f149eb67f4cc73b4",
         "type": "subflow:e0e1f32e0262e39e",
-        "z": "9a2bf747674fdc20",
-        "g": "42fc4a18d33dda92",
+        "z": "8219857e0a3eace1",
+        "g": "c4fb99509116ba86",
         "name": "",
         "env": [
             {
@@ -875,10 +505,10 @@
         "wires": []
     },
     {
-        "id": "8893bdbd01ca01f5",
+        "id": "f83f87a6b1115f02",
         "type": "http in",
-        "z": "9a2bf747674fdc20",
-        "g": "42fc4a18d33dda92",
+        "z": "8219857e0a3eace1",
+        "g": "c4fb99509116ba86",
         "name": "setup",
         "url": "/sloneek/setup",
         "method": "get",
@@ -888,15 +518,15 @@
         "y": 300,
         "wires": [
             [
-                "33d001a43394b6c7"
+                "deb52037c11e4374"
             ]
         ]
     },
     {
-        "id": "33d001a43394b6c7",
+        "id": "deb52037c11e4374",
         "type": "template",
-        "z": "9a2bf747674fdc20",
-        "g": "42fc4a18d33dda92",
+        "z": "8219857e0a3eace1",
+        "g": "c4fb99509116ba86",
         "name": "",
         "field": "payload",
         "fieldType": "msg",
@@ -908,15 +538,15 @@
         "y": 300,
         "wires": [
             [
-                "eda9fa92d2f5d018"
+                "cb86231123edd055"
             ]
         ]
     },
     {
-        "id": "eda9fa92d2f5d018",
+        "id": "cb86231123edd055",
         "type": "http response",
-        "z": "9a2bf747674fdc20",
-        "g": "42fc4a18d33dda92",
+        "z": "8219857e0a3eace1",
+        "g": "c4fb99509116ba86",
         "name": "",
         "statusCode": "",
         "headers": {},
@@ -925,10 +555,10 @@
         "wires": []
     },
     {
-        "id": "2baf8a25d53f5365",
+        "id": "6a461d4d86e68315",
         "type": "inject",
-        "z": "9a2bf747674fdc20",
-        "g": "f3f7cfd04fab5a51",
+        "z": "8219857e0a3eace1",
+        "g": "9a57bf6e96f20763",
         "name": "",
         "props": [],
         "repeat": "180",
@@ -936,19 +566,19 @@
         "once": true,
         "onceDelay": "1",
         "topic": "",
-        "x": 170,
+        "x": 150,
         "y": 480,
         "wires": [
             [
-                "cea8863a5cd4f03e"
+                "c9807b8757c24e53"
             ]
         ]
     },
     {
-        "id": "902e5a1085102866",
+        "id": "8d6af06d6730f531",
         "type": "http request",
-        "z": "9a2bf747674fdc20",
-        "g": "f3f7cfd04fab5a51",
+        "z": "8219857e0a3eace1",
+        "g": "9a57bf6e96f20763",
         "name": "",
         "method": "use",
         "ret": "obj",
@@ -965,16 +595,16 @@
         "y": 480,
         "wires": [
             [
-                "b26e5050acc61891",
-                "73db1806cd20ca04"
+                "3c935ca9cb93d1b7",
+                "9dd4586d9a60ee2a"
             ]
         ]
     },
     {
-        "id": "653143ae47b47a2d",
+        "id": "9791e6d748860c63",
         "type": "function",
-        "z": "9a2bf747674fdc20",
-        "g": "f3f7cfd04fab5a51",
+        "z": "8219857e0a3eace1",
+        "g": "9a57bf6e96f20763",
         "name": "function 60",
         "func": "const requiredFields = ['companyId', 'clientId', 'clientSecret'];\nconst missingFields = [];\n\n\nif (!msg.payload) {\n    node.error(\"Chybí msg.payload\", msg);\n    return null; // Zastaví flow\n}\n\nrequiredFields.forEach(field => {\n    if (!msg.payload[field]) {\n        missingFields.push(field);\n    }\n});\n\nif (missingFields.length > 0) {\n    node.error(`Chybějící parametry pro Sloneek login: ${missingFields.join(', ')}`, msg);\n    return null;\n}\n\nmsg.companyName = msg.payload.name\nmsg.companyId = msg.payload.companyId;\nmsg.method = \"POST\";\nmsg.url = `https://api2.sloneek.com/auth/client-credential-login`;\n\nmsg.payload = {\n    client_id: msg.payload.clientId,\n    client_secret: msg.payload.clientSecret\n};\n\nreturn msg;",
         "outputs": 1,
@@ -987,15 +617,15 @@
         "y": 480,
         "wires": [
             [
-                "902e5a1085102866"
+                "8d6af06d6730f531"
             ]
         ]
     },
     {
-        "id": "698218920368f08d",
+        "id": "2aa1e2d8d5cfddcd",
         "type": "change",
-        "z": "9a2bf747674fdc20",
-        "g": "f3f7cfd04fab5a51",
+        "z": "8219857e0a3eace1",
+        "g": "9a57bf6e96f20763",
         "name": "",
         "rules": [
             {
@@ -1018,10 +648,10 @@
         ]
     },
     {
-        "id": "d9dff1beaf021565",
+        "id": "2fb21f2201537cf4",
         "type": "inject",
-        "z": "9a2bf747674fdc20",
-        "g": "e94397fcf9f2de97",
+        "z": "8219857e0a3eace1",
+        "g": "9f80e485d7f169fa",
         "name": "",
         "props": [
             {
@@ -1039,15 +669,15 @@
         "y": 640,
         "wires": [
             [
-                "3e3b7a2bda699251"
+                "75429047ba664c41"
             ]
         ]
     },
     {
-        "id": "b3d61ead41e2807c",
+        "id": "cd24bd0341ba6821",
         "type": "function",
-        "z": "9a2bf747674fdc20",
-        "g": "e94397fcf9f2de97",
+        "z": "8219857e0a3eace1",
+        "g": "9f80e485d7f169fa",
         "name": "function 83",
         "func": "if (msg.companyId === undefined || msg.companyId === null) {\n    return null;\n}\n\nif (typeof msg.createMissing !== \"boolean\") {\n    return null;\n}\n\nconst tokens = flow.get(\"access_tokens\") || [];\nconst entry = tokens.find(item => item.companyId == msg.companyId);\n\nif (entry && entry.access_token) {\n    msg.token = entry.access_token;\n    msg.method = \"GET\";\n    msg.headers = {\n        \"Authorization\": `Bearer ${msg.token}`,\n        \"Content-Type\": \"application/json\"\n    };\n\n    const page = msg.page || 1;\n    msg.url = `https://api2.sloneek.com/colleagues/paginated-v2?pivotMode=false&page=${page}`;\n\n    return msg;\n} else {\n    return null;\n}",
         "outputs": 1,
@@ -1060,15 +690,15 @@
         "y": 620,
         "wires": [
             [
-                "02e92ac9a34c47dc"
+                "a12e4f2cfab59748"
             ]
         ]
     },
     {
-        "id": "02e92ac9a34c47dc",
+        "id": "a12e4f2cfab59748",
         "type": "http request",
-        "z": "9a2bf747674fdc20",
-        "g": "e94397fcf9f2de97",
+        "z": "8219857e0a3eace1",
+        "g": "9f80e485d7f169fa",
         "name": "",
         "method": "use",
         "ret": "obj",
@@ -1085,15 +715,15 @@
         "y": 620,
         "wires": [
             [
-                "9be4e32b6a530214"
+                "9413f7089ec46dc6"
             ]
         ]
     },
     {
-        "id": "9be4e32b6a530214",
+        "id": "9413f7089ec46dc6",
         "type": "function",
-        "z": "9a2bf747674fdc20",
-        "g": "e94397fcf9f2de97",
+        "z": "8219857e0a3eace1",
+        "g": "9f80e485d7f169fa",
         "name": "function 85",
         "func": "const response = msg.payload;\nconst statusCode = msg.payload.status_code\nconst errorMessage = response.message;\n\nif (statusCode !== 200) {\n    msg.detail = `User import failed: \\n\\nCompany: ${msg.companyName} (${msg.companyId}) \\n\\nMessage: ${errorMessage} \\n\\nStatus code: ${statusCode}`;\n    node.error(`${statusCode}: ${errorMessage}`, msg);\n    return; \n}\n\nconst data = response.data;\n\nif (msg.allUsers === undefined) {\n    msg.allUsers = [];\n}\n\nif (data.items && Array.isArray(data.items)) {\n    msg.allUsers = msg.allUsers.concat(data.items);\n}\n\nif (data.next_page !== null && data.next_page !== undefined) {\n    msg.page = data.next_page;\n    return [null, msg]; \n} else {\n    msg.payload = msg.allUsers;\n    msg.total_collected = msg.allUsers.length;\n    return [msg, null];\n}",
         "outputs": 2,
@@ -1106,18 +736,18 @@
         "y": 620,
         "wires": [
             [
-                "898646c27c96e810"
+                "935757870fbc0463"
             ],
             [
-                "b3d61ead41e2807c"
+                "cd24bd0341ba6821"
             ]
         ]
     },
     {
-        "id": "898646c27c96e810",
+        "id": "935757870fbc0463",
         "type": "split",
-        "z": "9a2bf747674fdc20",
-        "g": "e94397fcf9f2de97",
+        "z": "8219857e0a3eace1",
+        "g": "9f80e485d7f169fa",
         "name": "",
         "splt": "\\n",
         "spltType": "str",
@@ -1130,15 +760,15 @@
         "y": 740,
         "wires": [
             [
-                "712278c17a8dbdbd"
+                "0804c92f16703fb6"
             ]
         ]
     },
     {
-        "id": "712278c17a8dbdbd",
+        "id": "0804c92f16703fb6",
         "type": "change",
-        "z": "9a2bf747674fdc20",
-        "g": "e94397fcf9f2de97",
+        "z": "8219857e0a3eace1",
+        "g": "9f80e485d7f169fa",
         "name": "",
         "rules": [
             {
@@ -1179,15 +809,15 @@
         "y": 740,
         "wires": [
             [
-                "6b4d7f3eaa704b04"
+                "5980e3752020aa7e"
             ]
         ]
     },
     {
-        "id": "6b4d7f3eaa704b04",
+        "id": "5980e3752020aa7e",
         "type": "delay",
-        "z": "9a2bf747674fdc20",
-        "g": "e94397fcf9f2de97",
+        "z": "8219857e0a3eace1",
+        "g": "9f80e485d7f169fa",
         "name": "",
         "pauseType": "rate",
         "timeout": "5",
@@ -1205,15 +835,15 @@
         "y": 740,
         "wires": [
             [
-                "5b4a0d46a70a4a7e"
+                "0754a243049ebfd1"
             ]
         ]
     },
     {
-        "id": "5b4a0d46a70a4a7e",
+        "id": "0754a243049ebfd1",
         "type": "function",
-        "z": "9a2bf747674fdc20",
-        "g": "e94397fcf9f2de97",
+        "z": "8219857e0a3eace1",
+        "g": "9f80e485d7f169fa",
         "name": "function 73",
         "func": "msg.fullName = msg.name + \" \" + msg.surname;\nmsg.query = `?filter={\"$and\": [{\"Account.Email\": {\"$eq\": \"${msg.email}\"}},{\"Company.Id\": {\"$in\": [${msg.companyId}]}},{\"IsVisitor\": {\"$eq\": false}}]}`\nreturn msg;",
         "outputs": 1,
@@ -1226,15 +856,15 @@
         "y": 740,
         "wires": [
             [
-                "419460dd6ef49fb1"
+                "4e48bea0671f2276"
             ]
         ]
     },
     {
-        "id": "419460dd6ef49fb1",
+        "id": "4e48bea0671f2276",
         "type": "2nac-rest-api",
-        "z": "9a2bf747674fdc20",
-        "g": "e94397fcf9f2de97",
+        "z": "8219857e0a3eace1",
+        "g": "9f80e485d7f169fa",
         "name": "",
         "method": "GET",
         "endpoint": "users",
@@ -1244,15 +874,15 @@
         "y": 740,
         "wires": [
             [
-                "d6c39c38ff4f2360"
+                "7545dd83dedc2265"
             ]
         ]
     },
     {
-        "id": "6e5a7b9be658944d",
+        "id": "2697d704472ae52b",
         "type": "2nac-rest-api",
-        "z": "9a2bf747674fdc20",
-        "g": "e94397fcf9f2de97",
+        "z": "8219857e0a3eace1",
+        "g": "9f80e485d7f169fa",
         "name": "create user",
         "method": "POST",
         "endpoint": "users",
@@ -1262,15 +892,15 @@
         "y": 860,
         "wires": [
             [
-                "7fb66568623bf46a"
+                "610d3ce0d36f714b"
             ]
         ]
     },
     {
-        "id": "72c4e3a70d452326",
+        "id": "7fec30c5a26c7adc",
         "type": "2nac-rest-api",
-        "z": "9a2bf747674fdc20",
-        "g": "e94397fcf9f2de97",
+        "z": "8219857e0a3eace1",
+        "g": "9f80e485d7f169fa",
         "name": "sync user",
         "method": "PATCH",
         "endpoint": "users/{userId}",
@@ -1280,15 +910,15 @@
         "y": 900,
         "wires": [
             [
-                "503cc85deeb796c9"
+                "a5019ca6988774fe"
             ]
         ]
     },
     {
-        "id": "7fb66568623bf46a",
+        "id": "610d3ce0d36f714b",
         "type": "template",
-        "z": "9a2bf747674fdc20",
-        "g": "e94397fcf9f2de97",
+        "z": "8219857e0a3eace1",
+        "g": "9f80e485d7f169fa",
         "name": "",
         "field": "payload",
         "fieldType": "msg",
@@ -1300,15 +930,15 @@
         "y": 860,
         "wires": [
             [
-                "7ea0191200b5db83"
+                "db045ff40f5429bf"
             ]
         ]
     },
     {
-        "id": "503cc85deeb796c9",
+        "id": "a5019ca6988774fe",
         "type": "template",
-        "z": "9a2bf747674fdc20",
-        "g": "e94397fcf9f2de97",
+        "z": "8219857e0a3eace1",
+        "g": "9f80e485d7f169fa",
         "name": "",
         "field": "payload",
         "fieldType": "msg",
@@ -1320,15 +950,15 @@
         "y": 900,
         "wires": [
             [
-                "b7ec7d5ce76c1797"
+                "8a2be0c2757b7fa5"
             ]
         ]
     },
     {
-        "id": "7ea0191200b5db83",
+        "id": "db045ff40f5429bf",
         "type": "debug",
-        "z": "9a2bf747674fdc20",
-        "g": "e94397fcf9f2de97",
+        "z": "8219857e0a3eace1",
+        "g": "9f80e485d7f169fa",
         "name": "created",
         "active": true,
         "tosidebar": true,
@@ -1343,10 +973,10 @@
         "wires": []
     },
     {
-        "id": "b7ec7d5ce76c1797",
+        "id": "8a2be0c2757b7fa5",
         "type": "debug",
-        "z": "9a2bf747674fdc20",
-        "g": "e94397fcf9f2de97",
+        "z": "8219857e0a3eace1",
+        "g": "9f80e485d7f169fa",
         "name": "synced",
         "active": true,
         "tosidebar": true,
@@ -1361,10 +991,10 @@
         "wires": []
     },
     {
-        "id": "d6c39c38ff4f2360",
+        "id": "7545dd83dedc2265",
         "type": "function",
-        "z": "9a2bf747674fdc20",
-        "g": "e94397fcf9f2de97",
+        "z": "8219857e0a3eace1",
+        "g": "9f80e485d7f169fa",
         "name": "function 93",
         "func": "const items = msg.payload;\nconst createMissing = msg.createMissing;\n\nconst isEmpty = !items ||\n    (Array.isArray(items) && items.length === 0) ||\n    (typeof items === 'object' && Object.keys(items).length === 0);\n\nif (isEmpty) {\n    if (createMissing === false) {\n        return [null, null];\n    } else {\n        msg.body = {\n            \"Name\": msg.fullName,\n            \"Account\": { \"Email\": msg.email },\n            \"Company\": { \"Id\": msg.companyId },\n            \"Integration\": { \"ExternalId\": msg.externalId }\n        }\n        return [msg, null];\n    }\n} else {\n    msg.userId = (items[0] && items[0].Id) ? items[0].Id : null;\n    msg.body = [{ \"op\": \"replace\", \"path\": \"/Integration/ExternalId\", \"value\": msg.externalId }]\n    return [null, msg];\n}",
         "outputs": 2,
@@ -1377,34 +1007,18 @@
         "y": 740,
         "wires": [
             [
-                "6e5a7b9be658944d"
+                "2697d704472ae52b"
             ],
             [
-                "72c4e3a70d452326"
+                "7fec30c5a26c7adc"
             ]
         ]
     },
     {
-        "id": "aa09cb93fad5de60",
-        "type": "subflow:a373046b187fbd7e",
-        "z": "9a2bf747674fdc20",
-        "name": "",
-        "env": [
-            {
-                "name": "id",
-                "value": "sloneek-connector",
-                "type": "str"
-            }
-        ],
-        "x": 160,
-        "y": 140,
-        "wires": []
-    },
-    {
-        "id": "10fd76cd95ceba63",
+        "id": "055229f856c65af9",
         "type": "split",
-        "z": "9a2bf747674fdc20",
-        "g": "e94397fcf9f2de97",
+        "z": "8219857e0a3eace1",
+        "g": "9f80e485d7f169fa",
         "name": "",
         "splt": "\\n",
         "spltType": "str",
@@ -1417,15 +1031,15 @@
         "y": 620,
         "wires": [
             [
-                "936a33e15124b0b1"
+                "46782170da4c8388"
             ]
         ]
     },
     {
-        "id": "3e3b7a2bda699251",
+        "id": "75429047ba664c41",
         "type": "file in",
-        "z": "9a2bf747674fdc20",
-        "g": "e94397fcf9f2de97",
+        "z": "8219857e0a3eace1",
+        "g": "9f80e485d7f169fa",
         "name": "readConfig",
         "filename": "/var/2n-ac/nodered-user/sloneek/config.json",
         "filenameType": "str",
@@ -1438,15 +1052,15 @@
         "y": 620,
         "wires": [
             [
-                "6b95d235a5185472"
+                "cdd343c19e629ac6"
             ]
         ]
     },
     {
-        "id": "6b95d235a5185472",
+        "id": "cdd343c19e629ac6",
         "type": "json",
-        "z": "9a2bf747674fdc20",
-        "g": "e94397fcf9f2de97",
+        "z": "8219857e0a3eace1",
+        "g": "9f80e485d7f169fa",
         "name": "",
         "property": "payload",
         "action": "",
@@ -1455,15 +1069,15 @@
         "y": 620,
         "wires": [
             [
-                "10fd76cd95ceba63"
+                "055229f856c65af9"
             ]
         ]
     },
     {
-        "id": "cea8863a5cd4f03e",
+        "id": "c9807b8757c24e53",
         "type": "file in",
-        "z": "9a2bf747674fdc20",
-        "g": "f3f7cfd04fab5a51",
+        "z": "8219857e0a3eace1",
+        "g": "9a57bf6e96f20763",
         "name": "readConfig",
         "filename": "/var/2n-ac/nodered-user/sloneek/config.json",
         "filenameType": "str",
@@ -1476,15 +1090,15 @@
         "y": 480,
         "wires": [
             [
-                "1fba1e702fbdede6"
+                "46ca431e1cdcc3ab"
             ]
         ]
     },
     {
-        "id": "1fba1e702fbdede6",
+        "id": "46ca431e1cdcc3ab",
         "type": "json",
-        "z": "9a2bf747674fdc20",
-        "g": "f3f7cfd04fab5a51",
+        "z": "8219857e0a3eace1",
+        "g": "9a57bf6e96f20763",
         "name": "",
         "property": "payload",
         "action": "",
@@ -1493,15 +1107,15 @@
         "y": 480,
         "wires": [
             [
-                "9c8d8cd3a1018a75"
+                "b7d91805ed97a7e3"
             ]
         ]
     },
     {
-        "id": "9c8d8cd3a1018a75",
+        "id": "b7d91805ed97a7e3",
         "type": "split",
-        "z": "9a2bf747674fdc20",
-        "g": "f3f7cfd04fab5a51",
+        "z": "8219857e0a3eace1",
+        "g": "9a57bf6e96f20763",
         "name": "",
         "splt": "\\n",
         "spltType": "str",
@@ -1514,15 +1128,15 @@
         "y": 480,
         "wires": [
             [
-                "653143ae47b47a2d"
+                "9791e6d748860c63"
             ]
         ]
     },
     {
-        "id": "103a4fc6c0525604",
+        "id": "73a79b70b9ca3221",
         "type": "join",
-        "z": "9a2bf747674fdc20",
-        "g": "f3f7cfd04fab5a51",
+        "z": "8219857e0a3eace1",
+        "g": "9a57bf6e96f20763",
         "name": "",
         "mode": "auto",
         "build": "object",
@@ -1544,15 +1158,15 @@
         "y": 480,
         "wires": [
             [
-                "698218920368f08d"
+                "2aa1e2d8d5cfddcd"
             ]
         ]
     },
     {
-        "id": "b26e5050acc61891",
+        "id": "3c935ca9cb93d1b7",
         "type": "change",
-        "z": "9a2bf747674fdc20",
-        "g": "f3f7cfd04fab5a51",
+        "z": "8219857e0a3eace1",
+        "g": "9a57bf6e96f20763",
         "name": "",
         "rules": [
             {
@@ -1572,15 +1186,15 @@
         "y": 480,
         "wires": [
             [
-                "103a4fc6c0525604"
+                "73a79b70b9ca3221"
             ]
         ]
     },
     {
-        "id": "936a33e15124b0b1",
+        "id": "46782170da4c8388",
         "type": "change",
-        "z": "9a2bf747674fdc20",
-        "g": "e94397fcf9f2de97",
+        "z": "8219857e0a3eace1",
+        "g": "9f80e485d7f169fa",
         "name": "",
         "rules": [
             {
@@ -1614,15 +1228,15 @@
         "y": 620,
         "wires": [
             [
-                "b3d61ead41e2807c"
+                "cd24bd0341ba6821"
             ]
         ]
     },
     {
-        "id": "8d90805e413d3a99",
+        "id": "c0ab4634c8a6d101",
         "type": "2nac-access-log",
-        "z": "9a2bf747674fdc20",
-        "g": "0d815c3f275d16f3",
+        "z": "8219857e0a3eace1",
+        "g": "8b0cd2972f351b79",
         "filter": "{\"category\":\"Granted\", \"deviceId\":\"1,18\"}",
         "name": "",
         "filtertype": "json",
@@ -1630,15 +1244,15 @@
         "y": 1000,
         "wires": [
             [
-                "f9daf7b6e601e498"
+                "773890801046c586"
             ]
         ]
     },
     {
-        "id": "f815d5a75fef2a7c",
+        "id": "814b5d9df2ddaa51",
         "type": "change",
-        "z": "9a2bf747674fdc20",
-        "g": "0d815c3f275d16f3",
+        "z": "8219857e0a3eace1",
+        "g": "8b0cd2972f351b79",
         "name": "",
         "rules": [
             {
@@ -1679,15 +1293,15 @@
         "y": 1000,
         "wires": [
             [
-                "29f8fa93f3fa776c"
+                "9dfa696a600107a6"
             ]
         ]
     },
     {
-        "id": "a8c5b09f63ef7828",
+        "id": "3829bbc3949e5e72",
         "type": "debug",
-        "z": "9a2bf747674fdc20",
-        "g": "0d815c3f275d16f3",
+        "z": "8219857e0a3eace1",
+        "g": "8b0cd2972f351b79",
         "name": "debug 92",
         "active": true,
         "tosidebar": true,
@@ -1702,10 +1316,10 @@
         "wires": []
     },
     {
-        "id": "f9daf7b6e601e498",
+        "id": "773890801046c586",
         "type": "switch",
-        "z": "9a2bf747674fdc20",
-        "g": "0d815c3f275d16f3",
+        "z": "8219857e0a3eace1",
+        "g": "8b0cd2972f351b79",
         "name": "isVisitor?",
         "property": "payload.Person.IsVisitor",
         "propertyType": "msg",
@@ -1721,15 +1335,15 @@
         "y": 1000,
         "wires": [
             [
-                "c4e254c538a58922"
+                "29c4ca8f79332be2"
             ]
         ]
     },
     {
-        "id": "a302877bd494e562",
+        "id": "95b5cf15288d0c76",
         "type": "function",
-        "z": "9a2bf747674fdc20",
-        "g": "0d815c3f275d16f3",
+        "z": "8219857e0a3eace1",
+        "g": "8b0cd2972f351b79",
         "name": "function 57",
         "func": "const tokens = flow.get(\"access_tokens\") || [];\n\nconst entry = tokens.find(item => item.companyId == msg.companyId);\n\nif (entry && entry.access_token) {\n    msg.token = entry.access_token;\n    msg.method = \"POST\";\n    msg.headers = {\n        \"Authorization\": `Bearer ${msg.token}`\n    };\n    if (msg.direction == \"Entry\") {\n        msg.url = `https://api2.sloneek.com/v1/module-attendance-v2/attendance-segment-event`;\n        msg.payload = {\n            user_uuid: msg.externalId\n        }\n    }\n    else if (msg.direction == \"Exit\") {\n        msg.url = `https://api2.sloneek.com/v1/module-attendance-v2/attendance-segment-event/close`;\n        msg.payload = {\n            user_uuid: msg.externalId\n        }\n    }\n    return msg;\n}",
         "outputs": 1,
@@ -1742,15 +1356,15 @@
         "y": 1100,
         "wires": [
             [
-                "592efc51e1cb6ddf"
+                "e9340d345c184cef"
             ]
         ]
     },
     {
-        "id": "29f8fa93f3fa776c",
+        "id": "9dfa696a600107a6",
         "type": "2nac-rest-api",
-        "z": "9a2bf747674fdc20",
-        "g": "0d815c3f275d16f3",
+        "z": "8219857e0a3eace1",
+        "g": "8b0cd2972f351b79",
         "name": "",
         "method": "GET",
         "endpoint": "users/{userId}",
@@ -1760,15 +1374,15 @@
         "y": 1000,
         "wires": [
             [
-                "31e99af210d99079"
+                "0268bc530d195124"
             ]
         ]
     },
     {
-        "id": "c4e254c538a58922",
+        "id": "29c4ca8f79332be2",
         "type": "switch",
-        "z": "9a2bf747674fdc20",
-        "g": "0d815c3f275d16f3",
+        "z": "8219857e0a3eace1",
+        "g": "8b0cd2972f351b79",
         "name": "personAccess?",
         "property": "payload.Person.Id",
         "propertyType": "msg",
@@ -1784,15 +1398,15 @@
         "y": 1000,
         "wires": [
             [
-                "f815d5a75fef2a7c"
+                "814b5d9df2ddaa51"
             ]
         ]
     },
     {
-        "id": "592efc51e1cb6ddf",
+        "id": "e9340d345c184cef",
         "type": "http request",
-        "z": "9a2bf747674fdc20",
-        "g": "0d815c3f275d16f3",
+        "z": "8219857e0a3eace1",
+        "g": "8b0cd2972f351b79",
         "name": "",
         "method": "use",
         "ret": "obj",
@@ -1809,16 +1423,16 @@
         "y": 1100,
         "wires": [
             [
-                "a8c5b09f63ef7828",
-                "ea3aa1aee619f26a"
+                "3829bbc3949e5e72",
+                "06f416c35012ee43"
             ]
         ]
     },
     {
-        "id": "53b4b5529bbe53b2",
+        "id": "b0aa37ed425ce817",
         "type": "2nac-write-system-log",
-        "z": "9a2bf747674fdc20",
-        "g": "0d815c3f275d16f3",
+        "z": "8219857e0a3eace1",
+        "g": "8b0cd2972f351b79",
         "name": "",
         "severity": "Warn",
         "event": "Sloneek error",
@@ -1828,10 +1442,10 @@
         "wires": []
     },
     {
-        "id": "ea3aa1aee619f26a",
+        "id": "06f416c35012ee43",
         "type": "switch",
-        "z": "9a2bf747674fdc20",
-        "g": "0d815c3f275d16f3",
+        "z": "8219857e0a3eace1",
+        "g": "8b0cd2972f351b79",
         "name": "",
         "property": "payload.status_code",
         "propertyType": "msg",
@@ -1849,17 +1463,17 @@
         "y": 1080,
         "wires": [
             [
-                "5fd7c9950f792a92",
-                "5b2552de8aefb820",
-                "48666a595f9e0726"
+                "9d276052608ec661",
+                "3eb02f810110a645",
+                "8a6ea28184979833"
             ]
         ]
     },
     {
-        "id": "5fd7c9950f792a92",
+        "id": "9d276052608ec661",
         "type": "function",
-        "z": "9a2bf747674fdc20",
-        "g": "0d815c3f275d16f3",
+        "z": "8219857e0a3eace1",
+        "g": "8b0cd2972f351b79",
         "name": "function 106",
         "func": "if (msg.direction === \"Exit\") {\n    msg.detail = `Failed to clock out user: \\n\\n${msg.userName} (${msg.userId}) \\n\\nMessage: ${msg.payload.message} \\n\\nStatus code: ${msg.payload.status_code}`;\n    return msg;\n} else if (msg.direction === \"Entry\") {\n    msg.detail = `Failed to clock in user: \\n\\n${msg.userName} (${msg.userId})\\n\\nMessage: ${msg.payload.message} \\n\\nStatus code: ${msg.payload.status_code}`;\n    return msg;\n}\n\n",
         "outputs": 1,
@@ -1872,15 +1486,15 @@
         "y": 1100,
         "wires": [
             [
-                "53b4b5529bbe53b2"
+                "b0aa37ed425ce817"
             ]
         ]
     },
     {
-        "id": "31e99af210d99079",
+        "id": "0268bc530d195124",
         "type": "change",
-        "z": "9a2bf747674fdc20",
-        "g": "0d815c3f275d16f3",
+        "z": "8219857e0a3eace1",
+        "g": "8b0cd2972f351b79",
         "name": "",
         "rules": [
             {
@@ -1900,15 +1514,15 @@
         "y": 1000,
         "wires": [
             [
-                "a302877bd494e562"
+                "95b5cf15288d0c76"
             ]
         ]
     },
     {
-        "id": "30663e9c5eabe2b3",
+        "id": "de014b2560af2df0",
         "type": "http in",
-        "z": "9a2bf747674fdc20",
-        "g": "2c36c66f94fbdae7",
+        "z": "8219857e0a3eace1",
+        "g": "a91c36d93e379cd8",
         "name": "get companies",
         "url": "/sloneek/companies",
         "method": "get",
@@ -1918,15 +1532,15 @@
         "y": 1680,
         "wires": [
             [
-                "97033380f710cdfc"
+                "1530587e1363acbe"
             ]
         ]
     },
     {
-        "id": "60da87eab0a5182a",
+        "id": "626e9499a913ef74",
         "type": "http in",
-        "z": "9a2bf747674fdc20",
-        "g": "7ba207f5eb062908",
+        "z": "8219857e0a3eace1",
+        "g": "ee753d14b2bc38a3",
         "name": "get config",
         "url": "/sloneek/config",
         "method": "get",
@@ -1936,15 +1550,15 @@
         "y": 1400,
         "wires": [
             [
-                "1a95b18e38e2b214"
+                "0b033e2d07be16bf"
             ]
         ]
     },
     {
-        "id": "4d0c9d97cfae5e4b",
+        "id": "7d224ff37ddd1328",
         "type": "http in",
-        "z": "9a2bf747674fdc20",
-        "g": "e725433045928211",
+        "z": "8219857e0a3eace1",
+        "g": "8e4f6e23814eab7b",
         "name": "delete company",
         "url": "/sloneek/companies/:companyId",
         "method": "delete",
@@ -1954,15 +1568,15 @@
         "y": 1820,
         "wires": [
             [
-                "6d4561da2cdf965c"
+                "fbdd734754b33538"
             ]
         ]
     },
     {
-        "id": "1a95b18e38e2b214",
+        "id": "0b033e2d07be16bf",
         "type": "subflow:f76933b40eb15e67",
-        "z": "9a2bf747674fdc20",
-        "g": "7ba207f5eb062908",
+        "z": "8219857e0a3eace1",
+        "g": "ee753d14b2bc38a3",
         "name": "",
         "env": [
             {
@@ -1974,15 +1588,15 @@
         "y": 1400,
         "wires": [
             [
-                "a47112d9864b5a24"
+                "891174a4a6c7baca"
             ]
         ]
     },
     {
-        "id": "97033380f710cdfc",
+        "id": "1530587e1363acbe",
         "type": "subflow:f76933b40eb15e67",
-        "z": "9a2bf747674fdc20",
-        "g": "2c36c66f94fbdae7",
+        "z": "8219857e0a3eace1",
+        "g": "a91c36d93e379cd8",
         "name": "",
         "env": [
             {
@@ -1994,15 +1608,15 @@
         "y": 1680,
         "wires": [
             [
-                "b003a21563576b65"
+                "f16df29f4d79190e"
             ]
         ]
     },
     {
-        "id": "6d4561da2cdf965c",
+        "id": "fbdd734754b33538",
         "type": "subflow:f76933b40eb15e67",
-        "z": "9a2bf747674fdc20",
-        "g": "e725433045928211",
+        "z": "8219857e0a3eace1",
+        "g": "8e4f6e23814eab7b",
         "name": "",
         "env": [
             {
@@ -2014,15 +1628,15 @@
         "y": 1820,
         "wires": [
             [
-                "511143eddcbdc8ef"
+                "593b56a6d11eb891"
             ]
         ]
     },
     {
-        "id": "200f49409fef64a4",
+        "id": "c0055740ab264037",
         "type": "http in",
-        "z": "9a2bf747674fdc20",
-        "g": "aab3d7bd2f5e45b5",
+        "z": "8219857e0a3eace1",
+        "g": "af9a4272edbf380c",
         "name": "post config",
         "url": "/sloneek/config",
         "method": "post",
@@ -2032,15 +1646,15 @@
         "y": 1560,
         "wires": [
             [
-                "77164011e98b6ff4"
+                "bbad3def18ddf240"
             ]
         ]
     },
     {
-        "id": "77164011e98b6ff4",
+        "id": "bbad3def18ddf240",
         "type": "subflow:f76933b40eb15e67",
-        "z": "9a2bf747674fdc20",
-        "g": "aab3d7bd2f5e45b5",
+        "z": "8219857e0a3eace1",
+        "g": "af9a4272edbf380c",
         "name": "",
         "env": [
             {
@@ -2052,15 +1666,15 @@
         "y": 1560,
         "wires": [
             [
-                "d52bc5ead4145e38"
+                "c9301c8b4a0885cc"
             ]
         ]
     },
     {
-        "id": "a47112d9864b5a24",
+        "id": "891174a4a6c7baca",
         "type": "file in",
-        "z": "9a2bf747674fdc20",
-        "g": "7ba207f5eb062908",
+        "z": "8219857e0a3eace1",
+        "g": "ee753d14b2bc38a3",
         "name": "readConfig",
         "filename": "/var/2n-ac/nodered-user/sloneek/config.json",
         "filenameType": "str",
@@ -2073,15 +1687,15 @@
         "y": 1400,
         "wires": [
             [
-                "338cde75d6ea5b47"
+                "824e786092d11a06"
             ]
         ]
     },
     {
-        "id": "338cde75d6ea5b47",
+        "id": "824e786092d11a06",
         "type": "json",
-        "z": "9a2bf747674fdc20",
-        "g": "7ba207f5eb062908",
+        "z": "8219857e0a3eace1",
+        "g": "ee753d14b2bc38a3",
         "name": "",
         "property": "payload",
         "action": "",
@@ -2090,15 +1704,15 @@
         "y": 1400,
         "wires": [
             [
-                "ad4e2c352fd37fb8"
+                "0596ee404fac2284"
             ]
         ]
     },
     {
-        "id": "ad4e2c352fd37fb8",
+        "id": "0596ee404fac2284",
         "type": "function",
-        "z": "9a2bf747674fdc20",
-        "g": "7ba207f5eb062908",
+        "z": "8219857e0a3eace1",
+        "g": "ee753d14b2bc38a3",
         "name": "function 58",
         "func": "const configs = Array.isArray(msg.payload) ? msg.payload : [];\n\nmsg.payload = configs.map(item => ({\n    ...item,\n    clientSecret: \"********\"\n}));\n\nreturn msg;",
         "outputs": 1,
@@ -2111,15 +1725,15 @@
         "y": 1400,
         "wires": [
             [
-                "af7a09034d7aa170"
+                "daac466b053f29c2"
             ]
         ]
     },
     {
-        "id": "6afb7d79af344729",
+        "id": "34251fea4fa5b2b2",
         "type": "inject",
-        "z": "9a2bf747674fdc20",
-        "g": "b73f620f1349060f",
+        "z": "8219857e0a3eace1",
+        "g": "9f920d0a3f337276",
         "name": "",
         "props": [],
         "repeat": "",
@@ -2131,15 +1745,15 @@
         "y": 1260,
         "wires": [
             [
-                "a91e320b64f95daf"
+                "cdd07a357d6bd6fd"
             ]
         ]
     },
     {
-        "id": "a91e320b64f95daf",
+        "id": "cdd07a357d6bd6fd",
         "type": "file",
-        "z": "9a2bf747674fdc20",
-        "g": "b73f620f1349060f",
+        "z": "8219857e0a3eace1",
+        "g": "9f920d0a3f337276",
         "name": "deleteConfig",
         "filename": "/var/2n-ac/nodered-user/sloneek/config.json",
         "filenameType": "str",
@@ -2154,28 +1768,28 @@
         ]
     },
     {
-        "id": "183d54b8bda99073",
+        "id": "5ccd21c37dcaad65",
         "type": "catch",
-        "z": "9a2bf747674fdc20",
-        "g": "7ba207f5eb062908",
+        "z": "8219857e0a3eace1",
+        "g": "ee753d14b2bc38a3",
         "name": "",
         "scope": [
-            "a47112d9864b5a24"
+            "891174a4a6c7baca"
         ],
         "uncaught": false,
         "x": 690,
         "y": 1360,
         "wires": [
             [
-                "ad4e2c352fd37fb8"
+                "0596ee404fac2284"
             ]
         ]
     },
     {
-        "id": "af7a09034d7aa170",
+        "id": "daac466b053f29c2",
         "type": "http response",
-        "z": "9a2bf747674fdc20",
-        "g": "7ba207f5eb062908",
+        "z": "8219857e0a3eace1",
+        "g": "ee753d14b2bc38a3",
         "name": "",
         "statusCode": "",
         "headers": {},
@@ -2184,10 +1798,10 @@
         "wires": []
     },
     {
-        "id": "3102f1700749eed7",
+        "id": "81312757006b9b0a",
         "type": "file",
-        "z": "9a2bf747674fdc20",
-        "g": "f3f7cfd04fab5a51",
+        "z": "8219857e0a3eace1",
+        "g": "9a57bf6e96f20763",
         "name": "storeConfig",
         "filename": "/var/2n-ac/nodered-user/sloneek/config.json",
         "filenameType": "str",
@@ -2199,15 +1813,15 @@
         "y": 400,
         "wires": [
             [
-                "cea8863a5cd4f03e"
+                "c9807b8757c24e53"
             ]
         ]
     },
     {
-        "id": "b2c402ed1adaf5ec",
+        "id": "74e48a160634aeaf",
         "type": "change",
-        "z": "9a2bf747674fdc20",
-        "g": "f3f7cfd04fab5a51",
+        "z": "8219857e0a3eace1",
+        "g": "9a57bf6e96f20763",
         "name": "",
         "rules": [
             {
@@ -2227,33 +1841,33 @@
         "y": 400,
         "wires": [
             [
-                "3102f1700749eed7"
+                "81312757006b9b0a"
             ]
         ]
     },
     {
-        "id": "a60033d607273d4c",
+        "id": "9698a7a1d7834a2e",
         "type": "catch",
-        "z": "9a2bf747674fdc20",
-        "g": "f3f7cfd04fab5a51",
+        "z": "8219857e0a3eace1",
+        "g": "9a57bf6e96f20763",
         "name": "",
         "scope": [
-            "cea8863a5cd4f03e"
+            "c9807b8757c24e53"
         ],
         "uncaught": false,
         "x": 150,
         "y": 400,
         "wires": [
             [
-                "b2c402ed1adaf5ec"
+                "74e48a160634aeaf"
             ]
         ]
     },
     {
-        "id": "bcac46d64628b012",
+        "id": "9459bc0306d2d408",
         "type": "file in",
-        "z": "9a2bf747674fdc20",
-        "g": "aab3d7bd2f5e45b5",
+        "z": "8219857e0a3eace1",
+        "g": "af9a4272edbf380c",
         "name": "readConfig",
         "filename": "/var/2n-ac/nodered-user/sloneek/config.json",
         "filenameType": "str",
@@ -2266,33 +1880,33 @@
         "y": 1540,
         "wires": [
             [
-                "4e1563dbbe84e533"
+                "b7f8639b77365863"
             ]
         ]
     },
     {
-        "id": "bdb12017aa6273e3",
+        "id": "332f1ba72f9a4a79",
         "type": "catch",
-        "z": "9a2bf747674fdc20",
-        "g": "aab3d7bd2f5e45b5",
+        "z": "8219857e0a3eace1",
+        "g": "af9a4272edbf380c",
         "name": "",
         "scope": [
-            "4e1563dbbe84e533"
+            "b7f8639b77365863"
         ],
         "uncaught": false,
         "x": 790,
         "y": 1500,
         "wires": [
             [
-                "34a85ed5338dd638"
+                "febda6a5180c1176"
             ]
         ]
     },
     {
-        "id": "4e1563dbbe84e533",
+        "id": "b7f8639b77365863",
         "type": "json",
-        "z": "9a2bf747674fdc20",
-        "g": "aab3d7bd2f5e45b5",
+        "z": "8219857e0a3eace1",
+        "g": "af9a4272edbf380c",
         "name": "",
         "property": "payload",
         "action": "",
@@ -2301,15 +1915,15 @@
         "y": 1540,
         "wires": [
             [
-                "34a85ed5338dd638"
+                "febda6a5180c1176"
             ]
         ]
     },
     {
-        "id": "b003a21563576b65",
+        "id": "f16df29f4d79190e",
         "type": "2nac-rest-api",
-        "z": "9a2bf747674fdc20",
-        "g": "2c36c66f94fbdae7",
+        "z": "8219857e0a3eace1",
+        "g": "a91c36d93e379cd8",
         "name": "",
         "method": "GET",
         "endpoint": "companies",
@@ -2319,15 +1933,15 @@
         "y": 1680,
         "wires": [
             [
-                "e9662c89e8dd6dc6"
+                "793ed2c9e4c33371"
             ]
         ]
     },
     {
-        "id": "e9662c89e8dd6dc6",
+        "id": "793ed2c9e4c33371",
         "type": "http response",
-        "z": "9a2bf747674fdc20",
-        "g": "2c36c66f94fbdae7",
+        "z": "8219857e0a3eace1",
+        "g": "a91c36d93e379cd8",
         "name": "",
         "statusCode": "",
         "headers": {},
@@ -2336,10 +1950,10 @@
         "wires": []
     },
     {
-        "id": "d52bc5ead4145e38",
+        "id": "c9301c8b4a0885cc",
         "type": "function",
-        "z": "9a2bf747674fdc20",
-        "g": "aab3d7bd2f5e45b5",
+        "z": "8219857e0a3eace1",
+        "g": "af9a4272edbf380c",
         "name": "function 59",
         "func": "const rawData = msg.payload;\nlet errors = [];\n\nconst allowedKeys = [\"companyId\", \"name\", \"clientId\", \"clientSecret\", \"syncPolicy\"];\n\nconst cleanConfig = {};\n\nallowedKeys.forEach(key => {\n    if (rawData[key] !== undefined && rawData[key] !== null && rawData[key] !== \"\") {\n        cleanConfig[key] = rawData[key];\n    } else {\n        errors.push(`Missing or empty field: ${key}`);\n    }\n});\n\nif (cleanConfig.syncPolicy) {\n    const policy = cleanConfig.syncPolicy;\n    cleanConfig.syncPolicy = {\n        createMissingUsers: typeof policy.createMissingUsers === 'boolean' ? policy.createMissingUsers : false\n    };\n}\n\nif (errors.length > 0) {\n    msg.payload = {\n        status: \"error\",\n        message: \"Validation failed - mandatory fields missing\",\n        required: errors\n    };\n    msg.statusCode = 400;\n    return [null, msg];\n}\n\nmsg.config = cleanConfig;\n\nreturn [msg, null];",
         "outputs": 2,
@@ -2352,18 +1966,18 @@
         "y": 1560,
         "wires": [
             [
-                "bcac46d64628b012"
+                "9459bc0306d2d408"
             ],
             [
-                "53544d12a818ba83"
+                "feb6a302fd5007b3"
             ]
         ]
     },
     {
-        "id": "53544d12a818ba83",
+        "id": "feb6a302fd5007b3",
         "type": "http response",
-        "z": "9a2bf747674fdc20",
-        "g": "aab3d7bd2f5e45b5",
+        "z": "8219857e0a3eace1",
+        "g": "af9a4272edbf380c",
         "name": "",
         "statusCode": "",
         "headers": {},
@@ -2372,10 +1986,10 @@
         "wires": []
     },
     {
-        "id": "34a85ed5338dd638",
+        "id": "febda6a5180c1176",
         "type": "function",
-        "z": "9a2bf747674fdc20",
-        "g": "aab3d7bd2f5e45b5",
+        "z": "8219857e0a3eace1",
+        "g": "af9a4272edbf380c",
         "name": "function 107",
         "func": "const newEntry = msg.config;\nconst existingData = Array.isArray(msg.payload) ? msg.payload : [];\n\nconst alreadyExists = existingData.some(item => item.companyId === newEntry.companyId);\n\nif (alreadyExists) {\n    msg.payload = {\n        error: \"Conflict\",\n        message: `Configuration for companyId ${newEntry.companyId} already exists.`\n    };\n    msg.statusCode = 409;\n    return [null, msg];\n}\n\nexistingData.push(newEntry);\n\nmsg.payload = existingData;\n\nreturn [msg, null];",
         "outputs": 2,
@@ -2388,18 +2002,18 @@
         "y": 1540,
         "wires": [
             [
-                "9893868729b9c0b1"
+                "995b6dd1dccd853a"
             ],
             [
-                "7a11a6d5e25abcc4"
+                "87995f4cde019707"
             ]
         ]
     },
     {
-        "id": "7a11a6d5e25abcc4",
+        "id": "87995f4cde019707",
         "type": "http response",
-        "z": "9a2bf747674fdc20",
-        "g": "aab3d7bd2f5e45b5",
+        "z": "8219857e0a3eace1",
+        "g": "af9a4272edbf380c",
         "name": "",
         "statusCode": "",
         "headers": {},
@@ -2408,10 +2022,10 @@
         "wires": []
     },
     {
-        "id": "9893868729b9c0b1",
+        "id": "995b6dd1dccd853a",
         "type": "file",
-        "z": "9a2bf747674fdc20",
-        "g": "aab3d7bd2f5e45b5",
+        "z": "8219857e0a3eace1",
+        "g": "af9a4272edbf380c",
         "name": "storeConfig",
         "filename": "/var/2n-ac/nodered-user/sloneek/config.json",
         "filenameType": "str",
@@ -2423,15 +2037,15 @@
         "y": 1520,
         "wires": [
             [
-                "861a88290fcd8f42"
+                "d23caf46b796f476"
             ]
         ]
     },
     {
-        "id": "1d3d85595a2d5b80",
+        "id": "c9b2210d2cb69616",
         "type": "http response",
-        "z": "9a2bf747674fdc20",
-        "g": "aab3d7bd2f5e45b5",
+        "z": "8219857e0a3eace1",
+        "g": "af9a4272edbf380c",
         "name": "",
         "statusCode": "201",
         "headers": {},
@@ -2440,10 +2054,10 @@
         "wires": []
     },
     {
-        "id": "861a88290fcd8f42",
+        "id": "d23caf46b796f476",
         "type": "change",
-        "z": "9a2bf747674fdc20",
-        "g": "aab3d7bd2f5e45b5",
+        "z": "8219857e0a3eace1",
+        "g": "af9a4272edbf380c",
         "name": "",
         "rules": [
             {
@@ -2461,16 +2075,16 @@
         "y": 1520,
         "wires": [
             [
-                "1d3d85595a2d5b80",
-                "bd5966fcb997566e"
+                "c9b2210d2cb69616",
+                "f9adcc6485bf6acc"
             ]
         ]
     },
     {
-        "id": "511143eddcbdc8ef",
+        "id": "593b56a6d11eb891",
         "type": "change",
-        "z": "9a2bf747674fdc20",
-        "g": "e725433045928211",
+        "z": "8219857e0a3eace1",
+        "g": "8e4f6e23814eab7b",
         "name": "",
         "rules": [
             {
@@ -2490,15 +2104,15 @@
         "y": 1820,
         "wires": [
             [
-                "9defa99ca23b851a"
+                "effa77caa6b7529c"
             ]
         ]
     },
     {
-        "id": "9defa99ca23b851a",
+        "id": "effa77caa6b7529c",
         "type": "file in",
-        "z": "9a2bf747674fdc20",
-        "g": "e725433045928211",
+        "z": "8219857e0a3eace1",
+        "g": "8e4f6e23814eab7b",
         "name": "readConfig",
         "filename": "/var/2n-ac/nodered-user/sloneek/config.json",
         "filenameType": "str",
@@ -2511,15 +2125,15 @@
         "y": 1820,
         "wires": [
             [
-                "69646f26c049bc29"
+                "44176fe9ed6082ce"
             ]
         ]
     },
     {
-        "id": "69646f26c049bc29",
+        "id": "44176fe9ed6082ce",
         "type": "json",
-        "z": "9a2bf747674fdc20",
-        "g": "e725433045928211",
+        "z": "8219857e0a3eace1",
+        "g": "8e4f6e23814eab7b",
         "name": "",
         "property": "payload",
         "action": "",
@@ -2528,33 +2142,33 @@
         "y": 1820,
         "wires": [
             [
-                "a1d3fd74e224dbdc"
+                "88696dbcb3784ae8"
             ]
         ]
     },
     {
-        "id": "eeb4fabc15081a18",
+        "id": "3c15cbb8ab79303f",
         "type": "catch",
-        "z": "9a2bf747674fdc20",
-        "g": "e725433045928211",
+        "z": "8219857e0a3eace1",
+        "g": "8e4f6e23814eab7b",
         "name": "",
         "scope": [
-            "69646f26c049bc29"
+            "44176fe9ed6082ce"
         ],
         "uncaught": false,
         "x": 930,
         "y": 1780,
         "wires": [
             [
-                "a1d3fd74e224dbdc"
+                "88696dbcb3784ae8"
             ]
         ]
     },
     {
-        "id": "a1d3fd74e224dbdc",
+        "id": "88696dbcb3784ae8",
         "type": "function",
-        "z": "9a2bf747674fdc20",
-        "g": "e725433045928211",
+        "z": "8219857e0a3eace1",
+        "g": "8e4f6e23814eab7b",
         "name": "function 109",
         "func": "const targetId = parseInt(msg.companyId);\nconst existingData = msg.payload;\n\nif (!Array.isArray(existingData)) {\n    msg.payload = { error: \"Configuration file is empty or corrupted.\" };\n    msg.statusCode = 404;\n    return [null, msg];\n}\n\nconst initialLength = existingData.length;\nconst updatedData = existingData.filter(item => item.companyId !== targetId);\n\nif (updatedData.length === initialLength) {\n    msg.payload = {\n        status: \"error\",\n        message: `Configuration with companyId ${targetId} not found.`\n    };\n    msg.statusCode = 404;\n    return [null, msg];\n}\n\nmsg.payload = updatedData;\n\nreturn [msg, null];\n",
         "outputs": 2,
@@ -2567,18 +2181,18 @@
         "y": 1820,
         "wires": [
             [
-                "8da7132a59a08945"
+                "6e68021e28df7415"
             ],
             [
-                "ecc40d4f69ad1f48"
+                "45df628a2175eae9"
             ]
         ]
     },
     {
-        "id": "ecc40d4f69ad1f48",
+        "id": "45df628a2175eae9",
         "type": "http response",
-        "z": "9a2bf747674fdc20",
-        "g": "e725433045928211",
+        "z": "8219857e0a3eace1",
+        "g": "8e4f6e23814eab7b",
         "name": "",
         "statusCode": "",
         "headers": {},
@@ -2587,10 +2201,10 @@
         "wires": []
     },
     {
-        "id": "8da7132a59a08945",
+        "id": "6e68021e28df7415",
         "type": "file",
-        "z": "9a2bf747674fdc20",
-        "g": "e725433045928211",
+        "z": "8219857e0a3eace1",
+        "g": "8e4f6e23814eab7b",
         "name": "storeConfig",
         "filename": "/var/2n-ac/nodered-user/sloneek/config.json",
         "filenameType": "str",
@@ -2602,15 +2216,15 @@
         "y": 1800,
         "wires": [
             [
-                "cbb3f4db2736d767"
+                "30f76880b2222b0c"
             ]
         ]
     },
     {
-        "id": "cbb3f4db2736d767",
+        "id": "30f76880b2222b0c",
         "type": "change",
-        "z": "9a2bf747674fdc20",
-        "g": "e725433045928211",
+        "z": "8219857e0a3eace1",
+        "g": "8e4f6e23814eab7b",
         "name": "",
         "rules": [
             {
@@ -2628,15 +2242,15 @@
         "y": 1800,
         "wires": [
             [
-                "62d70cc2301d1796"
+                "0b306ffd0e80696b"
             ]
         ]
     },
     {
-        "id": "62d70cc2301d1796",
+        "id": "0b306ffd0e80696b",
         "type": "http response",
-        "z": "9a2bf747674fdc20",
-        "g": "e725433045928211",
+        "z": "8219857e0a3eace1",
+        "g": "8e4f6e23814eab7b",
         "name": "",
         "statusCode": "204",
         "headers": {},
@@ -2645,10 +2259,10 @@
         "wires": []
     },
     {
-        "id": "db365305ddf18a92",
+        "id": "892bc7d3e9572de1",
         "type": "function",
-        "z": "9a2bf747674fdc20",
-        "g": "0d815c3f275d16f3",
+        "z": "8219857e0a3eace1",
+        "g": "8b0cd2972f351b79",
         "name": "function 108",
         "func": "const tokens = flow.get(\"access_tokens\") || [];\n\nconst entry = tokens.find(item => item.companyId == msg.companyId);\n\nif (entry && entry.access_token) {\n    msg.token = entry.access_token;\n    msg.method = \"POST\";\n    msg.headers = {\n        \"Authorization\": `Bearer ${msg.token}`\n    };\n    if (msg.direction == \"Entry\") {\n        msg.url = `https://api2.sloneek.com/v1/module-attendance-v2/attendance-segment-event`;\n        msg.payload = {\n            user_uuid: msg.externalId\n        }\n    }\n    else if (msg.direction == \"Exit\") {\n        msg.url = `https://api2.sloneek.com/v1/module-attendance-v2/attendance-segment-event/close`;\n        msg.payload = {\n            user_uuid: msg.externalId\n        }\n    }\n    return msg;\n}",
         "outputs": 1,
@@ -2661,15 +2275,15 @@
         "y": 1140,
         "wires": [
             [
-                "754355077ad37b7a"
+                "653758332ffe3d19"
             ]
         ]
     },
     {
-        "id": "754355077ad37b7a",
+        "id": "653758332ffe3d19",
         "type": "http request",
-        "z": "9a2bf747674fdc20",
-        "g": "0d815c3f275d16f3",
+        "z": "8219857e0a3eace1",
+        "g": "8b0cd2972f351b79",
         "name": "",
         "method": "use",
         "ret": "obj",
@@ -2686,15 +2300,15 @@
         "y": 1140,
         "wires": [
             [
-                "966857fa63bc288c"
+                "63c9c35d1e4a2392"
             ]
         ]
     },
     {
-        "id": "966857fa63bc288c",
+        "id": "63c9c35d1e4a2392",
         "type": "debug",
-        "z": "9a2bf747674fdc20",
-        "g": "0d815c3f275d16f3",
+        "z": "8219857e0a3eace1",
+        "g": "8b0cd2972f351b79",
         "name": "debug 65",
         "active": true,
         "tosidebar": true,
@@ -2709,10 +2323,10 @@
         "wires": []
     },
     {
-        "id": "5b2552de8aefb820",
+        "id": "3eb02f810110a645",
         "type": "delay",
-        "z": "9a2bf747674fdc20",
-        "g": "0d815c3f275d16f3",
+        "z": "8219857e0a3eace1",
+        "g": "8b0cd2972f351b79",
         "name": "",
         "pauseType": "delay",
         "timeout": "65",
@@ -2730,87 +2344,33 @@
         "y": 1140,
         "wires": [
             [
-                "db365305ddf18a92"
+                "892bc7d3e9572de1"
             ]
         ]
     },
     {
-        "id": "0e221c146eae0e1d",
-        "type": "change",
-        "z": "9a2bf747674fdc20",
-        "name": "",
-        "rules": [
-            {
-                "t": "set",
-                "p": "access_tokens",
-                "pt": "flow",
-                "to": "[{\"companyId\":108,\"access_token\":\"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzINiJ9.eyJpc3MiOiJTbG9uZWVrIEV1cm9wZSBzLnIuby4iLCJpYXQiOjE3NzQyNzM0NjQsImV4cCI6MTc3NDI3Mzc2NCwidXVpZCI6IjJhNzFiMjIxLWZmMDgtNGEwYy1hMWRmLTgzNTFjODU5YzYyOCIsInR5cGUiOiJUWVBFX0FDQ0VTUyIsImhhc2giOiIkMnkkMTAkSEo0a3RYZXpyTC42LmlNNjQzai5DdXZyclZPbS5VcEdCN1hxY3B2RGZsWEtFTEJ5U0ZFbW0iLCJsb2dpbl9tZXRob2QiOiJjbGllbnRfY3JlZGVudGlhbHMiLCJhZG1pbl91dWlkIjpudWxsLCJhZG1pbl9sb2dpbl9tZXRob2QiOm51bGwsImhvbGRpbmdfbG9naW5fbWV0aG9kIjpudWxsfQ.3JC6z5WnjnAbtdtzbVwHnLRW2dsBZyaw5FHFkJtoa0A\"}]",
-                "tot": "jsonata"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 1700,
-        "y": 240,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "343d650e72517a1c",
-        "type": "inject",
-        "z": "9a2bf747674fdc20",
-        "name": "",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "x": 1510,
-        "y": 240,
-        "wires": [
-            [
-                "0e221c146eae0e1d"
-            ]
-        ]
-    },
-    {
-        "id": "857f245f0877de04",
+        "id": "1b61cbfe8b7a2d1c",
         "type": "catch",
-        "z": "9a2bf747674fdc20",
-        "g": "f3f7cfd04fab5a51",
+        "z": "8219857e0a3eace1",
+        "g": "9a57bf6e96f20763",
         "name": "",
         "scope": [
-            "48666a595f9e0726"
+            "8a6ea28184979833"
         ],
         "uncaught": false,
         "x": 150,
         "y": 440,
         "wires": [
             [
-                "cea8863a5cd4f03e"
+                "c9807b8757c24e53"
             ]
         ]
     },
     {
-        "id": "48666a595f9e0726",
+        "id": "8a6ea28184979833",
         "type": "function",
-        "z": "9a2bf747674fdc20",
-        "g": "0d815c3f275d16f3",
+        "z": "8219857e0a3eace1",
+        "g": "8b0cd2972f351b79",
         "name": "catch error 401",
         "func": "if (msg.payload.status_code){\n    node.error(\"Unathorized\", msg);\n}\n\n",
         "outputs": 0,
@@ -2824,10 +2384,10 @@
         "wires": []
     },
     {
-        "id": "73db1806cd20ca04",
+        "id": "9dd4586d9a60ee2a",
         "type": "switch",
-        "z": "9a2bf747674fdc20",
-        "g": "f3f7cfd04fab5a51",
+        "z": "8219857e0a3eace1",
+        "g": "9a57bf6e96f20763",
         "name": "",
         "property": "payload.status_code",
         "propertyType": "msg",
@@ -2845,15 +2405,15 @@
         "y": 440,
         "wires": [
             [
-                "673051e226431d80"
+                "e52f3016c946d8c4"
             ]
         ]
     },
     {
-        "id": "673051e226431d80",
+        "id": "e52f3016c946d8c4",
         "type": "function",
-        "z": "9a2bf747674fdc20",
-        "g": "f3f7cfd04fab5a51",
+        "z": "8219857e0a3eace1",
+        "g": "9a57bf6e96f20763",
         "name": "function 110",
         "func": "msg.detail = `Connection with Sloneek failed: \\n\\nCompany: ${msg.companyName} (${msg.companyId}) \\n\\nMessage: ${msg.payload.message} \\n\\nStatus code: ${msg.payload.status_code}`;\nreturn msg;",
         "outputs": 1,
@@ -2866,15 +2426,15 @@
         "y": 440,
         "wires": [
             [
-                "1359c4a5348074ae"
+                "c40e59554847f706"
             ]
         ]
     },
     {
-        "id": "1359c4a5348074ae",
+        "id": "c40e59554847f706",
         "type": "2nac-write-system-log",
-        "z": "9a2bf747674fdc20",
-        "g": "f3f7cfd04fab5a51",
+        "z": "8219857e0a3eace1",
+        "g": "9a57bf6e96f20763",
         "name": "",
         "severity": "Warn",
         "event": "Sloneek login error",
@@ -2884,10 +2444,10 @@
         "wires": []
     },
     {
-        "id": "95329230a119bc39",
+        "id": "83b188b077ca5c36",
         "type": "debug",
-        "z": "9a2bf747674fdc20",
-        "g": "32fafc9fe711e035",
+        "z": "8219857e0a3eace1",
+        "g": "e9a30b727ff443b1",
         "name": "setup page",
         "active": true,
         "tosidebar": true,
@@ -2902,10 +2462,10 @@
         "wires": []
     },
     {
-        "id": "43dad8bbc08edd8f",
+        "id": "714b1ee8e0ed2033",
         "type": "inject",
-        "z": "9a2bf747674fdc20",
-        "g": "32fafc9fe711e035",
+        "z": "8219857e0a3eace1",
+        "g": "e9a30b727ff443b1",
         "name": "",
         "props": [],
         "repeat": "",
@@ -2917,15 +2477,15 @@
         "y": 300,
         "wires": [
             [
-                "9dd2acb1d628a738"
+                "9a3f663a2072f4df"
             ]
         ]
     },
     {
-        "id": "7731230aa44d92fe",
+        "id": "dbd350d19f2ccac1",
         "type": "function",
-        "z": "9a2bf747674fdc20",
-        "g": "32fafc9fe711e035",
+        "z": "8219857e0a3eace1",
+        "g": "e9a30b727ff443b1",
         "name": "setup page",
         "func": "msg.host = msg.payload?.IpAddress || \"ip_address\";\n\nconst baseUrl = `https://${msg.host}/nodered`;\n\nconst path = \"/api/sloneek/setup\"\n\nconst setupUrl = baseUrl + path\n\nnode.status({\n    fill: \"blue\",\n    shape: \"dot\",\n    text: path\n});\n\nmsg.payload = setupUrl\n\nreturn msg;",
         "outputs": 1,
@@ -2938,15 +2498,15 @@
         "y": 300,
         "wires": [
             [
-                "95329230a119bc39"
+                "83b188b077ca5c36"
             ]
         ]
     },
     {
-        "id": "9dd2acb1d628a738",
+        "id": "9a3f663a2072f4df",
         "type": "2nac-rest-api",
-        "z": "9a2bf747674fdc20",
-        "g": "32fafc9fe711e035",
+        "z": "8219857e0a3eace1",
+        "g": "e9a30b727ff443b1",
         "name": "",
         "method": "GET",
         "endpoint": "settings/network",
@@ -2956,33 +2516,33 @@
         "y": 300,
         "wires": [
             [
-                "7731230aa44d92fe"
+                "dbd350d19f2ccac1"
             ]
         ]
     },
     {
-        "id": "4dc1fd8f4bfcbdb3",
+        "id": "d3ca39429efddb41",
         "type": "catch",
-        "z": "9a2bf747674fdc20",
-        "g": "32fafc9fe711e035",
+        "z": "8219857e0a3eace1",
+        "g": "e9a30b727ff443b1",
         "name": "",
         "scope": [
-            "9dd2acb1d628a738"
+            "9a3f663a2072f4df"
         ],
         "uncaught": false,
         "x": 650,
         "y": 260,
         "wires": [
             [
-                "d08ae5dda335aac9"
+                "3c0bc9b62cb84035"
             ]
         ]
     },
     {
-        "id": "d08ae5dda335aac9",
+        "id": "3c0bc9b62cb84035",
         "type": "delay",
-        "z": "9a2bf747674fdc20",
-        "g": "32fafc9fe711e035",
+        "z": "8219857e0a3eace1",
+        "g": "e9a30b727ff443b1",
         "name": "",
         "pauseType": "delay",
         "timeout": "7",
@@ -3000,15 +2560,15 @@
         "y": 260,
         "wires": [
             [
-                "9dd2acb1d628a738"
+                "9a3f663a2072f4df"
             ]
         ]
     },
     {
-        "id": "0346ad7c90f5885b",
+        "id": "a2f49e4f81b6dcf7",
         "type": "catch",
-        "z": "9a2bf747674fdc20",
-        "g": "e94397fcf9f2de97",
+        "z": "8219857e0a3eace1",
+        "g": "9f80e485d7f169fa",
         "name": "",
         "scope": "group",
         "uncaught": false,
@@ -3016,15 +2576,15 @@
         "y": 880,
         "wires": [
             [
-                "a1a74423a826f5b8"
+                "f9a232676bdc9fa4"
             ]
         ]
     },
     {
-        "id": "a1a74423a826f5b8",
+        "id": "f9a232676bdc9fa4",
         "type": "2nac-write-system-log",
-        "z": "9a2bf747674fdc20",
-        "g": "e94397fcf9f2de97",
+        "z": "8219857e0a3eace1",
+        "g": "9f80e485d7f169fa",
         "name": "",
         "severity": "Error",
         "event": "Sloneek import error",
@@ -3034,34 +2594,42 @@
         "wires": []
     },
     {
-        "id": "bd5966fcb997566e",
+        "id": "f9adcc6485bf6acc",
         "type": "link out",
-        "z": "9a2bf747674fdc20",
-        "g": "aab3d7bd2f5e45b5",
+        "z": "8219857e0a3eace1",
+        "g": "af9a4272edbf380c",
         "name": "link out 1",
         "mode": "link",
         "links": [
-            "1a301d15398312fb"
+            "c78e7a038d0d11c4"
         ],
         "x": 1495,
         "y": 1560,
         "wires": []
     },
     {
-        "id": "1a301d15398312fb",
+        "id": "c78e7a038d0d11c4",
         "type": "link in",
-        "z": "9a2bf747674fdc20",
-        "g": "f3f7cfd04fab5a51",
+        "z": "8219857e0a3eace1",
+        "g": "9a57bf6e96f20763",
         "name": "link in 2",
         "links": [
-            "bd5966fcb997566e"
+            "f9adcc6485bf6acc"
         ],
         "x": 195,
         "y": 520,
         "wires": [
             [
-                "cea8863a5cd4f03e"
+                "c9807b8757c24e53"
             ]
         ]
+    },
+    {
+        "id": "8b850c896721ddae",
+        "type": "global-config",
+        "env": [],
+        "modules": {
+            "node-red-nodes": "1.0.0"
+        }
     }
 ]

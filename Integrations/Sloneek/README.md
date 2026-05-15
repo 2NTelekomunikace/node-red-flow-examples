@@ -2,7 +2,7 @@
 
 ### Description
 
-This flow enables automated user synchronization between HR system [Sloneek](https://www.sloneek.com/) and 2N Access Commander and real-time clock-in/out attednance monitoring via existing 2N devices.
+This flow enables automated user synchronization between HR system [Sloneek](https://www.sloneek.com/) and 2N Access Commander and real-time clock-in/out attendance monitoring via existing 2N devices.
 
 ![The video shows how the flow operates](how_it_works.gif)
 
@@ -98,21 +98,6 @@ Ensure that modules are correctly configured in 2N OS devices to monitor `Entry`
 * To track attendance, both systems must be up and running; any discrepancies must be resolved manually in Sloneek.
 
 * The system only captures **clock-in/out** timestamps without support for specifying exit reasons, such as medical leave or personal appointments.
-
-## Usage Statistics (beta)
-
-This flow includes a **Usage Statistics** subflow designed to help us improve our product and understand which features are most valuable to our users.
-
-### What data is collected?
-
-* **Flow Name & Version:** To see which versions are currently in the wild.
-
-* **Installation ID:** A unique identifier from your 2N Access Commander, this identifier is never tied to actual users.
-
-* **System Version:** The version of the 2N Access Commander you are running.
-
-> [!NOTE]  
-> No personal data, IP addresses, credentials, or specific configuration values (like passwords or device names) are ever collected or stored.
 
 ### How to Opt-Out
 
