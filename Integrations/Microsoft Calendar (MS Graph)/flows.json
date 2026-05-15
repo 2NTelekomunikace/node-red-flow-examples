@@ -1,377 +1,5 @@
 [
     {
-        "id": "a373046b187fbd7e",
-        "type": "subflow",
-        "name": "Usage statistics",
-        "info": "",
-        "category": "Access Commander",
-        "in": [],
-        "out": [],
-        "env": [
-            {
-                "name": "send_stats",
-                "type": "bool",
-                "value": "true",
-                "ui": {
-                    "label": {
-                        "en-US": "Send Anonymous Statistics Data"
-                    },
-                    "type": "checkbox"
-                }
-            },
-            {
-                "name": "version",
-                "type": "str",
-                "value": "1.0.0",
-                "ui": {
-                    "label": {
-                        "en-US": "Version"
-                    },
-                    "type": "input",
-                    "opts": {
-                        "types": [
-                            "str"
-                        ]
-                    }
-                }
-            },
-            {
-                "name": "id",
-                "type": "str",
-                "value": "",
-                "ui": {
-                    "label": {
-                        "en-US": "ID"
-                    },
-                    "type": "input",
-                    "opts": {
-                        "types": [
-                            "str"
-                        ]
-                    }
-                }
-            }
-        ],
-        "meta": {
-            "license": "MIT"
-        },
-        "color": "#C0DEED",
-        "icon": "node-red/status.svg",
-        "status": {
-            "x": 340,
-            "y": 300,
-            "wires": [
-                {
-                    "id": "0df99417dc07b3f0",
-                    "port": 0
-                }
-            ]
-        }
-    },
-    {
-        "id": "bacbd1a28c00272e",
-        "type": "inject",
-        "z": "a373046b187fbd7e",
-        "name": "",
-        "props": [],
-        "repeat": "",
-        "crontab": "",
-        "once": true,
-        "onceDelay": 0.1,
-        "topic": "",
-        "x": 230,
-        "y": 180,
-        "wires": [
-            [
-                "19079c56eb824bfb"
-            ]
-        ]
-    },
-    {
-        "id": "19079c56eb824bfb",
-        "type": "switch",
-        "z": "a373046b187fbd7e",
-        "name": "consent?",
-        "property": "send_stats",
-        "propertyType": "env",
-        "rules": [
-            {
-                "t": "true"
-            }
-        ],
-        "checkall": "true",
-        "repair": false,
-        "outputs": 1,
-        "x": 360,
-        "y": 180,
-        "wires": [
-            [
-                "d3a3dfa9600ade7b"
-            ]
-        ]
-    },
-    {
-        "id": "6fdf970d19e99bbc",
-        "type": "http request",
-        "z": "a373046b187fbd7e",
-        "name": "",
-        "method": "POST",
-        "ret": "txt",
-        "paytoqs": "ignore",
-        "url": "https://stats.sync-io.com/api/public/deployed",
-        "tls": "",
-        "persist": false,
-        "proxy": "",
-        "insecureHTTPParser": false,
-        "authType": "",
-        "senderr": false,
-        "headers": [],
-        "x": 1190,
-        "y": 180,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "f91180e036178a8e",
-        "type": "change",
-        "z": "a373046b187fbd7e",
-        "name": "",
-        "rules": [
-            {
-                "t": "set",
-                "p": "headers.user-agent",
-                "pt": "msg",
-                "to": "2n-node-red",
-                "tot": "str"
-            },
-            {
-                "t": "set",
-                "p": "headers.x-node-id",
-                "pt": "msg",
-                "to": "NR_NODE_ID",
-                "tot": "env"
-            },
-            {
-                "t": "set",
-                "p": "headers.x-node-name",
-                "pt": "msg",
-                "to": "NR_FLOW_NAME",
-                "tot": "env"
-            },
-            {
-                "t": "set",
-                "p": "headers.x-node-token",
-                "pt": "msg",
-                "to": "b3b233a3-d18a-494b-a692-59657eecc69c",
-                "tot": "str"
-            },
-            {
-                "t": "set",
-                "p": "headers.Content-Type",
-                "pt": "msg",
-                "to": "application/json",
-                "tot": "str"
-            },
-            {
-                "t": "set",
-                "p": "payload",
-                "pt": "msg",
-                "to": "{\t  \"flow_name\": $env(\"NR_FLOW_NAME\"),\t  \"flow_id\": $env(\"id\") ? $env(\"id\") : \"unknown\",\t  \"version\": $env(\"version\") ? $env(\"version\") : \"unknown\",\t  \"timestamp\": $now(),\t  \"ac_version\": msg.ac_version,\t  \"installation_id\": msg.payload.Features.InstallationId ? msg.payload.Features.InstallationId : \"unknown\"\t}",
-                "tot": "jsonata"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 1000,
-        "y": 180,
-        "wires": [
-            [
-                "6fdf970d19e99bbc",
-                "898251a3d2638836"
-            ]
-        ]
-    },
-    {
-        "id": "898251a3d2638836",
-        "type": "function",
-        "z": "a373046b187fbd7e",
-        "name": "version",
-        "func": "node.status({ fill: \"blue\", shape: \"dot\", text: msg.payload.version });\nreturn null;",
-        "outputs": 0,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 1200,
-        "y": 240,
-        "wires": []
-    },
-    {
-        "id": "0df99417dc07b3f0",
-        "type": "status",
-        "z": "a373046b187fbd7e",
-        "name": "",
-        "scope": [
-            "898251a3d2638836"
-        ],
-        "x": 240,
-        "y": 300,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "d3a3dfa9600ade7b",
-        "type": "2nac-rest-api",
-        "z": "a373046b187fbd7e",
-        "name": "",
-        "method": "GET",
-        "endpoint": "system/version",
-        "query": "",
-        "senderr": true,
-        "x": 500,
-        "y": 180,
-        "wires": [
-            [
-                "2c4ff609afaa5315"
-            ]
-        ]
-    },
-    {
-        "id": "b0925db91797c497",
-        "type": "catch",
-        "z": "a373046b187fbd7e",
-        "name": "",
-        "scope": [
-            "d3a3dfa9600ade7b",
-            "257581c88883db1f"
-        ],
-        "uncaught": false,
-        "x": 90,
-        "y": 140,
-        "wires": [
-            [
-                "843bbda14865acce"
-            ]
-        ]
-    },
-    {
-        "id": "843bbda14865acce",
-        "type": "delay",
-        "z": "a373046b187fbd7e",
-        "name": "",
-        "pauseType": "delay",
-        "timeout": "5",
-        "timeoutUnits": "seconds",
-        "rate": "1",
-        "nbRateUnits": "1",
-        "rateUnits": "second",
-        "randomFirst": "1",
-        "randomLast": "5",
-        "randomUnits": "seconds",
-        "drop": false,
-        "allowrate": false,
-        "outputs": 1,
-        "x": 220,
-        "y": 140,
-        "wires": [
-            [
-                "19079c56eb824bfb"
-            ]
-        ]
-    },
-    {
-        "id": "2c4ff609afaa5315",
-        "type": "change",
-        "z": "a373046b187fbd7e",
-        "name": "",
-        "rules": [
-            {
-                "t": "set",
-                "p": "ac_version",
-                "pt": "msg",
-                "to": "msg.payload.Version ? msg.payload.Version : \"unknown\"",
-                "tot": "jsonata"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 670,
-        "y": 180,
-        "wires": [
-            [
-                "257581c88883db1f"
-            ]
-        ]
-    },
-    {
-        "id": "257581c88883db1f",
-        "type": "2nac-rest-api",
-        "z": "a373046b187fbd7e",
-        "name": "",
-        "method": "GET",
-        "endpoint": "system/license",
-        "query": "",
-        "senderr": true,
-        "x": 840,
-        "y": 180,
-        "wires": [
-            [
-                "f91180e036178a8e"
-            ]
-        ]
-    },
-    {
-        "id": "9f4c63567b2beeca",
-        "type": "catch",
-        "z": "a373046b187fbd7e",
-        "name": "",
-        "scope": [
-            "6fdf970d19e99bbc"
-        ],
-        "uncaught": false,
-        "x": 90,
-        "y": 100,
-        "wires": [
-            [
-                "6ab19b11246c616c"
-            ]
-        ]
-    },
-    {
-        "id": "6ab19b11246c616c",
-        "type": "delay",
-        "z": "a373046b187fbd7e",
-        "name": "",
-        "pauseType": "random",
-        "timeout": "5",
-        "timeoutUnits": "seconds",
-        "rate": "1",
-        "nbRateUnits": "1",
-        "rateUnits": "second",
-        "randomFirst": "5",
-        "randomLast": "10",
-        "randomUnits": "minutes",
-        "drop": false,
-        "allowrate": false,
-        "outputs": 1,
-        "x": 220,
-        "y": 100,
-        "wires": [
-            [
-                "19079c56eb824bfb"
-            ]
-        ]
-    },
-    {
         "id": "f76933b40eb15e67",
         "type": "subflow",
         "name": "Verify JWT or API key",
@@ -427,7 +55,7 @@
         "type": "function",
         "z": "f76933b40eb15e67",
         "name": "Verify JWT token or API key",
-        "func": "// Load JWT SECRET and API token\nconst SECRET = global.get('JWT_SECRET'); \nconst API_KEY = env.get(\"API_KEY\");\nconst TOKEN_COOKIE_NAME = 'auth_token';\n\n// Initialization\nlet isAuthorized = false;\nlet authMessage = \"Missing Authorization (Neither Bearer Token nor JWT Cookie found)\"; // Default message, no token or JWT provided\nlet token = null;\n\n\n// First, try API token\nconst authHeader = msg.req.headers.authorization;\n\nif (API_KEY && authHeader && authHeader.startsWith('Bearer ')) {\n    const receivedKey = authHeader.substring(7).trim();\n\n    if (receivedKey === API_KEY) {\n        // API key is valid\n        isAuthorized = true;\n    } else {\n        authMessage = \"Invalid Bearer Token (API Key)\";\n    }\n}\n\n// Second, try JWT cookie\nif (!isAuthorized) {\n    token = msg.req.cookies ? msg.req.cookies[TOKEN_COOKIE_NAME] : null;\n\n    if (token) {\n        // Only now do we care if the SECRET exists\n        if (!SECRET) {\n            node.warn(\"JWT Secret is missing, but a cookie was presented.\");\n            authMessage = \"Server configuration error: JWT Secret missing.\";\n        } else {\n            try {\n                // Verify JWT token\n                jsonwebtoken.verify(token, SECRET);\n                isAuthorized = true;\n            } catch (err) {\n                // Invalidate the cookie if not valid\n                const deleteCookie = `${TOKEN_COOKIE_NAME}=; Path=/; HttpOnly; Secure; Max-Age=0`;\n                msg.headers = { 'Set-Cookie': deleteCookie };\n                authMessage = `JWT Error: ${err.message}`;\n            }\n        }\n    }\n}\n\nif (isAuthorized) {\n\n    // Set headers \n    msg.headers = { \n        'Cache-Control': 'no-cache, no-store, must-revalidate',\n        'Pragma': 'no-cache',\n        'Expires': '0',\n        'X-Content-Type-Options': 'nosniff',\n        'X-Frame-Options': 'DENY'\n    };\n    \n    return [msg, null];\n\n} else {\n\n    // Unauthorized\n    msg.statusCode = 401;\n    msg.headers = {\n        'Cache-Control': 'no-store',\n        ...(msg.headers || {}) \n    };\n    \n    msg.payload = {\n        success: false,\n        message: authMessage \n    };\n\n    return [null, msg];\n}",
+        "func": "const SECRET = global.get('JWT_SECRET');\nconst API_KEY = env.get(\"API_KEY\");\nconst FLOW_USER = flow.get(\"$parent.authorized_user\");\n\n// 1. API KEY CHECK (Bearer Token)\nconst auth = msg.req.headers.authorization;\nif (API_KEY && auth === `Bearer ${API_KEY}`) {\n    return [msg, null]; \n}\n\n// 2. JWT COOKIE CHECK\nif (FLOW_USER && SECRET) {\n    const tokenName = `auth_token_${FLOW_USER.replace(/\\s+/g, '_')}`;\n    const token = msg.req.cookies?.[tokenName];\n\n    if (token) {\n        try {\n            const decoded = jsonwebtoken.verify(token, SECRET);\n            // Verify the token belongs to the user assigned to this specific tab\n            if (decoded.sub === FLOW_USER) {\n                return [msg, null];\n            }\n        } catch (err) {\n            // Token expired or tampered with - fall through to 401\n        }\n    }\n}\n\n// 3. UNAUTHORIZED\nmsg.statusCode = 401;\nmsg.payload = { error: \"Unauthorized\", message: \"Invalid or missing credentials\" };\nreturn [null, msg];",
         "outputs": 2,
         "timeout": 0,
         "noerr": 0,
@@ -486,7 +114,8 @@
                     "type": "input",
                     "opts": {
                         "types": [
-                            "str"
+                            "str",
+                            "env"
                         ]
                     }
                 }
@@ -515,7 +144,8 @@
                     "type": "input",
                     "opts": {
                         "types": [
-                            "str"
+                            "str",
+                            "env"
                         ]
                     }
                 }
@@ -530,7 +160,7 @@
         "type": "function",
         "z": "e0e1f32e0262e39e",
         "name": "Basic Auth + JWT",
-        "func": "const USERNAME = env.get(\"Username\");\nconst PASSWORD = env.get(\"Password\");\nconst SECRET = global.get('JWT_SECRET');\nconst REDIRECT_URL = env.get(\"Redirect\"); \n\n// Check basic variables for authentication\nif (!USERNAME || !PASSWORD || !SECRET || !REDIRECT_URL) { \n    node.warn(\"Subflow is not properly configured. Username, password and redirect must be set\");\n    msg.statusCode = 500;\n    msg.payload = {\n        success: false,\n        message: \"Flow configuration error, please check if username, password and redirect are set\"\n    };\n    return msg;\n}\n\n// Get auth header\nconst authHeader = msg.req.headers.authorization;\n\n// Basic auth\nif (!authHeader || !authHeader.startsWith('Basic ')) {\n    msg.statusCode = 401;\n    msg.headers = { 'WWW-Authenticate': 'Basic realm=\"Secure Area\"' };\n    msg.payload = {\n        success: false,\n        message: \"Authentication Required\"\n    };\n    return msg;\n}\n\n// Extract and decode the username and password\nconst encoded = authHeader.substring(6);\nconst [clientUsername, clientPassword] = Buffer.from(encoded, 'base64').toString().split(':');\n\n// Verify the username and password\nif (clientUsername === USERNAME && clientPassword === PASSWORD) {\n\n    const payload = {\n        sub: clientUsername,\n        id: 1,\n        role: 'system_client'\n    };\n\n    // Sign JWT token\n    const token = jsonwebtoken.sign(payload, SECRET, { expiresIn: '1h' });\n\n    // Set JWT token as cookie\n    msg.cookies = {\n        auth_token: {\n            value: token,\n            maxAge: 3600000,\n            httpOnly: true,\n            secure: true,\n            sameSite: 'Strict',\n            path: '/'\n        }\n    }\n\n    // Redirect browser\n    msg.statusCode = 302;\n    msg.headers = {\n        'Location': REDIRECT_URL\n    };\n\n    return msg;\n\n}\n\n// Wrong username or password\nelse {\n    msg.statusCode = 401;\n    msg.headers = { 'WWW-Authenticate': 'Basic realm=\"Secure Area\"' };\n    msg.payload = {\n        success: false,\n        message: \"Invalid Credentials\"\n    };\n    return msg;\n}",
+        "func": "const USER = env.get(\"Username\");\nconst PASS = env.get(\"Password\");\nconst SECRET = global.get('JWT_SECRET');\nconst REDIRECT = env.get(\"Redirect\");\n\n// 1. SYSTEM CHECK: Ensure subflow is properly configured\nif (!USER || !PASS || !SECRET || !REDIRECT) {\n    node.error(\"Subflow configuration error: Missing Username, Password, Secret, or Redirect.\");\n    msg.statusCode = 500;\n    msg.payload = { error: \"Internal Server Error\", message: \"Module misconfigured\" };\n    return msg; \n}\n\n// Set identity for the 'Verify' node on this flow tab\nflow.set(\"$parent.authorized_user\", USER);\n\nconst auth = msg.req.headers.authorization;\n\n// 2. AUTHENTICATION LOGIC\nif (auth?.startsWith('Basic ')) {\n    const encoded = auth.substring(6);\n    const [u, p] = Buffer.from(encoded, 'base64').toString().split(':');\n    \n    // Verify credentials\n    if (u === USER && p === PASS) {\n        // Create token (1 hour expiry)\n        const token = jsonwebtoken.sign({ sub: u }, SECRET, { expiresIn: '1h' });\n        \n        // Scope cookie name to the user to allow multiple logins\n        const cookieName = `auth_token_${u.replace(/\\s+/g, '_')}`;\n\n        msg.cookies = { \n            [cookieName]: { \n                value: token, \n                httpOnly: true, \n                path: '/',\n                sameSite: 'Strict'\n            } \n        };\n        \n        // redirect if successful\n        msg.statusCode = 302;\n        msg.headers = { 'Location': REDIRECT };\n        return msg;\n    }\n}\n\n// 3. UNAUTHORIZED\nmsg.statusCode = 401;\nmsg.headers = { 'WWW-Authenticate': 'Basic realm=\"Restricted Area\"' };\nmsg.payload = { error: \"Unauthorized\", message: \"Authentication required\" };\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -569,7 +199,7 @@
         "wires": []
     },
     {
-        "id": "1fbdd7bcdb3287b4",
+        "id": "722d4e1d6c43ed43",
         "type": "tab",
         "label": "MS Graph",
         "disabled": false,
@@ -577,19 +207,19 @@
         "env": []
     },
     {
-        "id": "1b4e99923ffa34ed",
+        "id": "a591ee401d311dcb",
         "type": "group",
-        "z": "1fbdd7bcdb3287b4",
+        "z": "722d4e1d6c43ed43",
         "name": "Frontend",
         "style": {
             "label": true
         },
         "nodes": [
-            "4b5d38aa3c86db14",
-            "9ce06ecde68d57cc",
-            "e2ab5994c9b22ec8",
-            "6c0e49260fa07513",
-            "fcf7e35c795144f4"
+            "9a047ee45a84fec3",
+            "9b5372b008e2fce0",
+            "b3d5c8a72022d807",
+            "3a69f1c46c026270",
+            "0a7377afb5f8f764"
         ],
         "x": 794,
         "y": 619,
@@ -597,21 +227,21 @@
         "h": 122
     },
     {
-        "id": "6d898b77b13f166b",
+        "id": "0c458ec10d3d1975",
         "type": "group",
-        "z": "1fbdd7bcdb3287b4",
+        "z": "722d4e1d6c43ed43",
         "name": "Logout",
         "style": {
             "label": true
         },
         "nodes": [
-            "3dc86b7f86e5ab87",
-            "0889fc22e2db2ba7",
-            "ac282acec187f42a",
-            "6d7da95fdbcb0358",
-            "5eb80f11744c7755",
-            "260c89c69d298a0d",
-            "1bafaef11910936a"
+            "c19ce7509e9e65c3",
+            "65b670d2398bbfaa",
+            "5d3ffd95a9b22c43",
+            "031ab634df4e61be",
+            "f02fd8ced6c70deb",
+            "dc380d5fe2bd5eb5",
+            "215732f50111ee6f"
         ],
         "x": 94,
         "y": 759,
@@ -619,19 +249,19 @@
         "h": 162
     },
     {
-        "id": "e9c207d76268fead",
+        "id": "76d0fa43b57f17d5",
         "type": "group",
-        "z": "1fbdd7bcdb3287b4",
+        "z": "722d4e1d6c43ed43",
         "name": "Login link",
         "style": {
             "label": true
         },
         "nodes": [
-            "3d0596f197d5cf91",
-            "ddb07bb28ab119d5",
-            "996a46e580946b23",
-            "1fd8bd39fbce69a1",
-            "2df2a63cfe7416f1"
+            "6c7a9ed98cf349b9",
+            "9c3be68edf160153",
+            "1387080567b1d946",
+            "c5577cda5fc00a09",
+            "93aa2f61e3dd7291"
         ],
         "x": 94,
         "y": 239,
@@ -639,19 +269,19 @@
         "h": 82
     },
     {
-        "id": "e40b855910389819",
+        "id": "a7fc0b3baf9e9ef3",
         "type": "group",
-        "z": "1fbdd7bcdb3287b4",
+        "z": "722d4e1d6c43ed43",
         "name": "OAuth resposne",
         "style": {
             "label": true
         },
         "nodes": [
-            "53e27bb5eecdde52",
-            "091588205ef7098a",
-            "bf84c867deead7de",
-            "3e8a509647ae9731",
-            "95ce88415263efaf"
+            "d3b1956ab0a8d185",
+            "fb54eef69239a086",
+            "ade7bad3afd4f064",
+            "e4dcd7362ecbdc47",
+            "e96844f4b55030d2"
         ],
         "x": 94,
         "y": 619,
@@ -659,27 +289,27 @@
         "h": 122
     },
     {
-        "id": "27860bf48d8e7bc0",
+        "id": "bf82fcc3c8bfdf54",
         "type": "group",
-        "z": "1fbdd7bcdb3287b4",
+        "z": "722d4e1d6c43ed43",
         "name": "Connection status",
         "style": {
             "label": true
         },
         "nodes": [
-            "2b4af6c29f31b660",
-            "a80d030fda055404",
-            "0398558e149cc5ae",
-            "113bde47c6c17205",
-            "ea1c50259a91aefe",
-            "d998a8d1068b0775",
-            "30f64b2bd1e56043",
-            "8a2d8b516dacb616",
-            "1eb4b500f80f59f1",
-            "dfd1d7395816051c",
-            "b00135dff5c648ee",
-            "0b941aaac0af4008",
-            "396f505afef51c2b"
+            "82e8d281f4f3ab7b",
+            "4401d55e9471577b",
+            "f0cb52eff9469acf",
+            "12223bdc371e7361",
+            "39f90e1e78a9e8c2",
+            "574f2deb2eb562c8",
+            "921c0497e7a13b99",
+            "a4526efe909ec6a5",
+            "28d1aa8f7a56ed64",
+            "ad88305f79cc5162",
+            "bd404af6ee6a5b8f",
+            "9bd54350558b4cfe",
+            "a09e8b77f5827cdd"
         ],
         "x": 94,
         "y": 339,
@@ -687,21 +317,21 @@
         "h": 262
     },
     {
-        "id": "a167402833b8b30c",
+        "id": "f1a92118c6e28a9d",
         "type": "group",
-        "z": "1fbdd7bcdb3287b4",
+        "z": "722d4e1d6c43ed43",
         "name": "Init status",
         "style": {
             "label": true
         },
         "nodes": [
-            "4a3d413370790ec6",
-            "69ca58ad966aeaac",
-            "b1749630574b6195",
-            "18d7e9d19a1476ad",
-            "86b8f673b33d2b85",
-            "7ca291173c7be277",
-            "22075ed16ba28297"
+            "4fb7ac1ae2dedeab",
+            "fabf1fa92c596ca6",
+            "9f368b5768b8b609",
+            "ae7e5d8378bb6a48",
+            "69c09877858da2b9",
+            "31313e0760ed92b9",
+            "981224762ff43c33"
         ],
         "x": 794,
         "y": 759,
@@ -709,38 +339,38 @@
         "h": 162
     },
     {
-        "id": "f592373cf669c1fe",
+        "id": "9100a7d3e944c31e",
         "type": "group",
-        "z": "1fbdd7bcdb3287b4",
+        "z": "722d4e1d6c43ed43",
         "name": "Sync logic",
         "style": {
             "label": true
         },
         "nodes": [
-            "62c9ad924f77f6a7",
-            "b5b466a4057ec34e",
-            "dd0a98a343a78a5f",
-            "283f0199ba61ff1b",
-            "5acf7641ef9149e0",
-            "0061394415bae2fb",
-            "a6086548b8a5c422",
-            "9554b137d197c15a",
-            "38996048232f754a",
-            "0f19a7614750504a",
-            "35e197d04246857f",
-            "e989a5c18e7b21bc",
-            "f0c1e6888e4e2ae4",
-            "44c4e5dc5404acc3",
-            "7d3bf839c5a11eef",
-            "42096c6e2e85e982",
-            "aeb4c3962cb74d9c",
-            "11be3a7544ae28dd",
-            "c077e4d8dc5b85f2",
-            "af6efeb33791deb7",
-            "66585599b741767c",
-            "a81915c04390048b",
-            "be4123205ec9d846",
-            "6bd725dc10f02d4f"
+            "3d7fb8d34f84403d",
+            "eb881666f2ecf652",
+            "0bbe2c60cdddb201",
+            "4e704c4fd4456314",
+            "ab750e362961985d",
+            "074c17b2f8ad43d0",
+            "57c431aba647e3ec",
+            "d13d11facbecea72",
+            "9f113d3cfd8bdd6b",
+            "2cecd5cc7a1ae1fb",
+            "ed50ee1220a27187",
+            "5c5d8b608fdbe769",
+            "23bcd3e1d31ad245",
+            "8ddabe04e2587fc2",
+            "d2309705a766031f",
+            "e2e2e1e8a4799705",
+            "eb2db294ed75eb2c",
+            "344b75ede9b6eb73",
+            "b635f57f1352da1e",
+            "3a31e195d1c5f26c",
+            "5b40252e3b435d4a",
+            "1bda637a892366ce",
+            "bbcba67c4b3a2cfd",
+            "8c105f93b0b95bbc"
         ],
         "x": 94,
         "y": 939,
@@ -748,45 +378,20 @@
         "h": 388
     },
     {
-        "id": "6bd725dc10f02d4f",
+        "id": "2d33b512f32aa8dc",
         "type": "group",
-        "z": "1fbdd7bcdb3287b4",
-        "g": "f592373cf669c1fe",
-        "name": "Canceled meeting logic",
-        "style": {
-            "label": true
-        },
-        "nodes": [
-            "b1eeb8fb4e39c46f",
-            "115674be25d4af0a",
-            "c12249204a0f5dce",
-            "a16462706be768d3",
-            "80c6387778e24711",
-            "f0e1ed24087634b6",
-            "2ab3bdd91aac1c1f",
-            "f2587f3741ca04ec",
-            "7b31e94ad8588be2"
-        ],
-        "x": 154,
-        "y": 1159,
-        "w": 1252,
-        "h": 142
-    },
-    {
-        "id": "b8c5a8c85a9a0a70",
-        "type": "group",
-        "z": "1fbdd7bcdb3287b4",
+        "z": "722d4e1d6c43ed43",
         "name": "Setup page info",
         "style": {
             "label": true
         },
         "nodes": [
-            "335c8fcb1bfb7f49",
-            "a24eeb8bbee219bc",
-            "a286d64ecfdf57aa",
-            "efba08fedc045e16",
-            "c5bc11990f0bd844",
-            "310e6a531178d78a"
+            "0170a1264665f33e",
+            "f59ab4fb376416f7",
+            "6f6bba8e9b807d15",
+            "50a9ddd57351f916",
+            "a1af706f83450fa3",
+            "2f4110c26edbbccc"
         ],
         "x": 94,
         "y": 99,
@@ -794,40 +399,65 @@
         "h": 122
     },
     {
-        "id": "ddb07bb28ab119d5",
+        "id": "8c105f93b0b95bbc",
+        "type": "group",
+        "z": "722d4e1d6c43ed43",
+        "g": "9100a7d3e944c31e",
+        "name": "Canceled meeting logic",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "4f9ef1c84563217f",
+            "dd43301cdd963d04",
+            "b5950455bae433e9",
+            "e2e25533af5e226f",
+            "861839452a7c82b4",
+            "8be553d49b373cf2",
+            "9677f3154791ab15",
+            "c028fdbe1eaa3040",
+            "254befaa64e34d25"
+        ],
+        "x": 154,
+        "y": 1159,
+        "w": 1252,
+        "h": 142
+    },
+    {
+        "id": "9c3be68edf160153",
         "type": "log in",
-        "z": "1fbdd7bcdb3287b4",
-        "g": "e9c207d76268fead",
+        "z": "722d4e1d6c43ed43",
+        "g": "76d0fa43b57f17d5",
         "client": "dbaa645779d59529",
         "x": 510,
         "y": 280,
         "wires": [
             [
-                "2df2a63cfe7416f1"
+                "93aa2f61e3dd7291"
             ]
         ]
     },
     {
-        "id": "3dc86b7f86e5ab87",
+        "id": "c19ce7509e9e65c3",
         "type": "log out",
-        "z": "1fbdd7bcdb3287b4",
-        "g": "6d898b77b13f166b",
+        "z": "722d4e1d6c43ed43",
+        "g": "0c458ec10d3d1975",
         "client": "dbaa645779d59529",
         "x": 530,
         "y": 840,
         "wires": [
             [
-                "ac282acec187f42a",
-                "5eb80f11744c7755",
-                "1bafaef11910936a"
+                "5d3ffd95a9b22c43",
+                "f02fd8ced6c70deb",
+                "215732f50111ee6f"
             ]
         ]
     },
     {
-        "id": "0889fc22e2db2ba7",
+        "id": "65b670d2398bbfaa",
         "type": "inject",
-        "z": "1fbdd7bcdb3287b4",
-        "g": "6d898b77b13f166b",
+        "z": "722d4e1d6c43ed43",
+        "g": "0c458ec10d3d1975",
         "name": "log out",
         "props": [],
         "repeat": "",
@@ -839,15 +469,15 @@
         "y": 880,
         "wires": [
             [
-                "3dc86b7f86e5ab87"
+                "c19ce7509e9e65c3"
             ]
         ]
     },
     {
-        "id": "ac282acec187f42a",
+        "id": "5d3ffd95a9b22c43",
         "type": "debug",
-        "z": "1fbdd7bcdb3287b4",
-        "g": "6d898b77b13f166b",
+        "z": "722d4e1d6c43ed43",
+        "g": "0c458ec10d3d1975",
         "name": "debug 75",
         "active": true,
         "tosidebar": true,
@@ -862,24 +492,24 @@
         "wires": []
     },
     {
-        "id": "091588205ef7098a",
+        "id": "fb54eef69239a086",
         "type": "log in response",
-        "z": "1fbdd7bcdb3287b4",
-        "g": "e40b855910389819",
+        "z": "722d4e1d6c43ed43",
+        "g": "a7fc0b3baf9e9ef3",
         "client": "dbaa645779d59529",
         "x": 320,
         "y": 660,
         "wires": [
             [
-                "3e8a509647ae9731"
+                "e4dcd7362ecbdc47"
             ]
         ]
     },
     {
-        "id": "bf84c867deead7de",
+        "id": "ade7bad3afd4f064",
         "type": "http in",
-        "z": "1fbdd7bcdb3287b4",
-        "g": "e40b855910389819",
+        "z": "722d4e1d6c43ed43",
+        "g": "a7fc0b3baf9e9ef3",
         "name": "redirect",
         "url": "/calendar/redirect",
         "method": "get",
@@ -889,15 +519,15 @@
         "y": 660,
         "wires": [
             [
-                "091588205ef7098a"
+                "fb54eef69239a086"
             ]
         ]
     },
     {
-        "id": "53e27bb5eecdde52",
+        "id": "d3b1956ab0a8d185",
         "type": "http response",
-        "z": "1fbdd7bcdb3287b4",
-        "g": "e40b855910389819",
+        "z": "722d4e1d6c43ed43",
+        "g": "a7fc0b3baf9e9ef3",
         "name": "",
         "statusCode": "",
         "headers": {},
@@ -906,10 +536,10 @@
         "wires": []
     },
     {
-        "id": "996a46e580946b23",
+        "id": "1387080567b1d946",
         "type": "http in",
-        "z": "1fbdd7bcdb3287b4",
-        "g": "e9c207d76268fead",
+        "z": "722d4e1d6c43ed43",
+        "g": "76d0fa43b57f17d5",
         "name": "ms/auth",
         "url": "/calendar/ms/auth",
         "method": "get",
@@ -919,15 +549,15 @@
         "y": 280,
         "wires": [
             [
-                "1fd8bd39fbce69a1"
+                "c5577cda5fc00a09"
             ]
         ]
     },
     {
-        "id": "4b5d38aa3c86db14",
+        "id": "9a047ee45a84fec3",
         "type": "template",
-        "z": "1fbdd7bcdb3287b4",
-        "g": "1b4e99923ffa34ed",
+        "z": "722d4e1d6c43ed43",
+        "g": "a591ee401d311dcb",
         "name": "",
         "field": "payload",
         "fieldType": "msg",
@@ -939,15 +569,15 @@
         "y": 700,
         "wires": [
             [
-                "9ce06ecde68d57cc"
+                "9b5372b008e2fce0"
             ]
         ]
     },
     {
-        "id": "9ce06ecde68d57cc",
+        "id": "9b5372b008e2fce0",
         "type": "http response",
-        "z": "1fbdd7bcdb3287b4",
-        "g": "1b4e99923ffa34ed",
+        "z": "722d4e1d6c43ed43",
+        "g": "a591ee401d311dcb",
         "name": "",
         "statusCode": "",
         "headers": {},
@@ -956,10 +586,10 @@
         "wires": []
     },
     {
-        "id": "e2ab5994c9b22ec8",
+        "id": "b3d5c8a72022d807",
         "type": "http in",
-        "z": "1fbdd7bcdb3287b4",
-        "g": "1b4e99923ffa34ed",
+        "z": "722d4e1d6c43ed43",
+        "g": "a591ee401d311dcb",
         "name": "login",
         "url": "/calendar/login",
         "method": "get",
@@ -969,15 +599,15 @@
         "y": 660,
         "wires": [
             [
-                "6c0e49260fa07513"
+                "3a69f1c46c026270"
             ]
         ]
     },
     {
-        "id": "6c0e49260fa07513",
+        "id": "3a69f1c46c026270",
         "type": "subflow:e0e1f32e0262e39e",
-        "z": "1fbdd7bcdb3287b4",
-        "g": "1b4e99923ffa34ed",
+        "z": "722d4e1d6c43ed43",
+        "g": "a591ee401d311dcb",
         "name": "",
         "env": [
             {
@@ -1013,10 +643,10 @@
         "wires": []
     },
     {
-        "id": "fcf7e35c795144f4",
+        "id": "0a7377afb5f8f764",
         "type": "http in",
-        "z": "1fbdd7bcdb3287b4",
-        "g": "1b4e99923ffa34ed",
+        "z": "722d4e1d6c43ed43",
+        "g": "a591ee401d311dcb",
         "name": "setup",
         "url": "/calendar/setup",
         "method": "get",
@@ -1026,15 +656,15 @@
         "y": 700,
         "wires": [
             [
-                "4b5d38aa3c86db14"
+                "9a047ee45a84fec3"
             ]
         ]
     },
     {
-        "id": "1fd8bd39fbce69a1",
+        "id": "c5577cda5fc00a09",
         "type": "subflow:f76933b40eb15e67",
-        "z": "1fbdd7bcdb3287b4",
-        "g": "e9c207d76268fead",
+        "z": "722d4e1d6c43ed43",
+        "g": "76d0fa43b57f17d5",
         "name": "",
         "env": [
             {
@@ -1046,15 +676,15 @@
         "y": 280,
         "wires": [
             [
-                "ddb07bb28ab119d5"
+                "9c3be68edf160153"
             ]
         ]
     },
     {
-        "id": "3d0596f197d5cf91",
+        "id": "6c7a9ed98cf349b9",
         "type": "http response",
-        "z": "1fbdd7bcdb3287b4",
-        "g": "e9c207d76268fead",
+        "z": "722d4e1d6c43ed43",
+        "g": "76d0fa43b57f17d5",
         "name": "",
         "statusCode": "",
         "headers": {},
@@ -1063,10 +693,10 @@
         "wires": []
     },
     {
-        "id": "a80d030fda055404",
+        "id": "4401d55e9471577b",
         "type": "http in",
-        "z": "1fbdd7bcdb3287b4",
-        "g": "27860bf48d8e7bc0",
+        "z": "722d4e1d6c43ed43",
+        "g": "bf82fcc3c8bfdf54",
         "name": "ms/status",
         "url": "/calendar/ms/status",
         "method": "get",
@@ -1076,31 +706,31 @@
         "y": 500,
         "wires": [
             [
-                "dfd1d7395816051c"
+                "ad88305f79cc5162"
             ]
         ]
     },
     {
-        "id": "0398558e149cc5ae",
+        "id": "f0cb52eff9469acf",
         "type": "query",
-        "z": "1fbdd7bcdb3287b4",
-        "g": "27860bf48d8e7bc0",
+        "z": "722d4e1d6c43ed43",
+        "g": "bf82fcc3c8bfdf54",
         "client": "dbaa645779d59529",
         "x": 690,
         "y": 500,
         "wires": [
             [
-                "ea1c50259a91aefe",
-                "1eb4b500f80f59f1",
-                "396f505afef51c2b"
+                "39f90e1e78a9e8c2",
+                "28d1aa8f7a56ed64",
+                "a09e8b77f5827cdd"
             ]
         ]
     },
     {
-        "id": "113bde47c6c17205",
+        "id": "12223bdc371e7361",
         "type": "function",
-        "z": "1fbdd7bcdb3287b4",
-        "g": "27860bf48d8e7bc0",
+        "z": "722d4e1d6c43ed43",
+        "g": "bf82fcc3c8bfdf54",
         "name": "function 14",
         "func": "msg.payload = {\n    \n    \"method\": \"GET\", // HTTP method for the API request\n    \"endpoint\": \"/me/calendar\", // API endpoint to be queried\n}\nreturn msg;",
         "outputs": 1,
@@ -1113,15 +743,15 @@
         "y": 500,
         "wires": [
             [
-                "0398558e149cc5ae"
+                "f0cb52eff9469acf"
             ]
         ]
     },
     {
-        "id": "ea1c50259a91aefe",
+        "id": "39f90e1e78a9e8c2",
         "type": "debug",
-        "z": "1fbdd7bcdb3287b4",
-        "g": "27860bf48d8e7bc0",
+        "z": "722d4e1d6c43ed43",
+        "g": "bf82fcc3c8bfdf54",
         "name": "debug 80",
         "active": true,
         "tosidebar": true,
@@ -1136,10 +766,10 @@
         "wires": []
     },
     {
-        "id": "d998a8d1068b0775",
+        "id": "574f2deb2eb562c8",
         "type": "http response",
-        "z": "1fbdd7bcdb3287b4",
-        "g": "27860bf48d8e7bc0",
+        "z": "722d4e1d6c43ed43",
+        "g": "bf82fcc3c8bfdf54",
         "name": "",
         "statusCode": "",
         "headers": {},
@@ -1148,28 +778,28 @@
         "wires": []
     },
     {
-        "id": "30f64b2bd1e56043",
+        "id": "921c0497e7a13b99",
         "type": "catch",
-        "z": "1fbdd7bcdb3287b4",
-        "g": "27860bf48d8e7bc0",
+        "z": "722d4e1d6c43ed43",
+        "g": "bf82fcc3c8bfdf54",
         "name": "",
         "scope": [
-            "0398558e149cc5ae"
+            "f0cb52eff9469acf"
         ],
         "uncaught": false,
         "x": 690,
         "y": 560,
         "wires": [
             [
-                "8a2d8b516dacb616"
+                "a4526efe909ec6a5"
             ]
         ]
     },
     {
-        "id": "2b4af6c29f31b660",
+        "id": "82e8d281f4f3ab7b",
         "type": "debug",
-        "z": "1fbdd7bcdb3287b4",
-        "g": "27860bf48d8e7bc0",
+        "z": "722d4e1d6c43ed43",
+        "g": "bf82fcc3c8bfdf54",
         "name": "debug 81",
         "active": true,
         "tosidebar": true,
@@ -1184,10 +814,10 @@
         "wires": []
     },
     {
-        "id": "8a2d8b516dacb616",
+        "id": "a4526efe909ec6a5",
         "type": "function",
-        "z": "1fbdd7bcdb3287b4",
-        "g": "27860bf48d8e7bc0",
+        "z": "722d4e1d6c43ed43",
+        "g": "bf82fcc3c8bfdf54",
         "name": "function 16",
         "func": "if (msg.statusCode == 500){\n    msg.statusCode = 409\n    msg.payload = \"Access token not available. Please sign in first.\"\n}\nreturn msg;",
         "outputs": 1,
@@ -1200,16 +830,16 @@
         "y": 560,
         "wires": [
             [
-                "2b4af6c29f31b660",
-                "d998a8d1068b0775"
+                "82e8d281f4f3ab7b",
+                "574f2deb2eb562c8"
             ]
         ]
     },
     {
-        "id": "1eb4b500f80f59f1",
+        "id": "28d1aa8f7a56ed64",
         "type": "function",
-        "z": "1fbdd7bcdb3287b4",
-        "g": "27860bf48d8e7bc0",
+        "z": "722d4e1d6c43ed43",
+        "g": "bf82fcc3c8bfdf54",
         "name": "function 19",
         "func": "msg.headers = {\n    \"Cache-Control\": \"no-store, no-cache, must-revalidate, proxy-revalidate\",\n    \"Pragma\": \"no-cache\",\n    \"Expires\": \"0\"\n};\nreturn msg;",
         "outputs": 1,
@@ -1222,15 +852,15 @@
         "y": 500,
         "wires": [
             [
-                "d998a8d1068b0775"
+                "574f2deb2eb562c8"
             ]
         ]
     },
     {
-        "id": "dfd1d7395816051c",
+        "id": "ad88305f79cc5162",
         "type": "subflow:f76933b40eb15e67",
-        "z": "1fbdd7bcdb3287b4",
-        "g": "27860bf48d8e7bc0",
+        "z": "722d4e1d6c43ed43",
+        "g": "bf82fcc3c8bfdf54",
         "name": "",
         "env": [
             {
@@ -1242,15 +872,15 @@
         "y": 500,
         "wires": [
             [
-                "113bde47c6c17205"
+                "12223bdc371e7361"
             ]
         ]
     },
     {
-        "id": "3e8a509647ae9731",
+        "id": "e4dcd7362ecbdc47",
         "type": "function",
-        "z": "1fbdd7bcdb3287b4",
-        "g": "e40b855910389819",
+        "z": "722d4e1d6c43ed43",
+        "g": "a7fc0b3baf9e9ef3",
         "name": "function 24",
         "func": "msg.statusCode = 302\nmsg.headers = {\n    Location: \"./setup\"\n}\nreturn msg;",
         "outputs": 1,
@@ -1263,29 +893,29 @@
         "y": 660,
         "wires": [
             [
-                "53e27bb5eecdde52"
+                "d3b1956ab0a8d185"
             ]
         ]
     },
     {
-        "id": "62c9ad924f77f6a7",
+        "id": "3d7fb8d34f84403d",
         "type": "query",
-        "z": "1fbdd7bcdb3287b4",
-        "g": "f592373cf669c1fe",
+        "z": "722d4e1d6c43ed43",
+        "g": "9100a7d3e944c31e",
         "client": "dbaa645779d59529",
         "x": 630,
         "y": 980,
         "wires": [
             [
-                "283f0199ba61ff1b"
+                "4e704c4fd4456314"
             ]
         ]
     },
     {
-        "id": "b5b466a4057ec34e",
+        "id": "eb881666f2ecf652",
         "type": "function",
-        "z": "1fbdd7bcdb3287b4",
-        "g": "f592373cf669c1fe",
+        "z": "722d4e1d6c43ed43",
+        "g": "9100a7d3e944c31e",
         "name": "function 25",
         "func": "if (msg.isActive === false) {\n    node.warn(\"User is not signed in\")\n    return null;\n}\n\nfunction getCalendarUrl() {\n    const now = new Date();\n    \n    // Start: před 0 dny (00:00)\n    const startDate = new Date(now);\n    startDate.setDate(now.getDate());\n    startDate.setHours(0, 0, 0, 0);\n\n    // End: za 5 dní (23:59)\n    const endDate = new Date(now);\n    endDate.setDate(now.getDate() + 5);\n    endDate.setHours(23, 59, 59, 999);\n\n    const startISO = startDate.toISOString();\n    const endISO = endDate.toISOString();\n\n    const selectFields = \"subject,start,end,attendees,lastModifiedDateTime,organizer\";\n    \n    return `/me/calendarView?startDateTime=${startISO}&endDateTime=${endISO}&$select=${selectFields}`;\n}\n\nmsg.payload = {\n    \n    \"method\": \"GET\",\n    \"endpoint\": getCalendarUrl()\n}\nreturn msg;\n",
         "outputs": 1,
@@ -1298,15 +928,15 @@
         "y": 980,
         "wires": [
             [
-                "62c9ad924f77f6a7"
+                "3d7fb8d34f84403d"
             ]
         ]
     },
     {
-        "id": "dd0a98a343a78a5f",
+        "id": "0bbe2c60cdddb201",
         "type": "inject",
-        "z": "1fbdd7bcdb3287b4",
-        "g": "f592373cf669c1fe",
+        "z": "722d4e1d6c43ed43",
+        "g": "9100a7d3e944c31e",
         "name": "Query",
         "props": [],
         "repeat": "300",
@@ -1318,34 +948,34 @@
         "y": 980,
         "wires": [
             [
-                "0061394415bae2fb",
-                "115674be25d4af0a"
+                "074c17b2f8ad43d0",
+                "dd43301cdd963d04"
             ]
         ]
     },
     {
-        "id": "95ce88415263efaf",
+        "id": "e96844f4b55030d2",
         "type": "catch",
-        "z": "1fbdd7bcdb3287b4",
-        "g": "e40b855910389819",
+        "z": "722d4e1d6c43ed43",
+        "g": "a7fc0b3baf9e9ef3",
         "name": "",
         "scope": [
-            "091588205ef7098a"
+            "fb54eef69239a086"
         ],
         "uncaught": false,
         "x": 350,
         "y": 700,
         "wires": [
             [
-                "3e8a509647ae9731"
+                "e4dcd7362ecbdc47"
             ]
         ]
     },
     {
-        "id": "6d7da95fdbcb0358",
+        "id": "031ab634df4e61be",
         "type": "http in",
-        "z": "1fbdd7bcdb3287b4",
-        "g": "6d898b77b13f166b",
+        "z": "722d4e1d6c43ed43",
+        "g": "0c458ec10d3d1975",
         "name": "ms/logout",
         "url": "/calendar/ms/logout",
         "method": "get",
@@ -1355,15 +985,15 @@
         "y": 840,
         "wires": [
             [
-                "260c89c69d298a0d"
+                "dc380d5fe2bd5eb5"
             ]
         ]
     },
     {
-        "id": "5eb80f11744c7755",
+        "id": "f02fd8ced6c70deb",
         "type": "http response",
-        "z": "1fbdd7bcdb3287b4",
-        "g": "6d898b77b13f166b",
+        "z": "722d4e1d6c43ed43",
+        "g": "0c458ec10d3d1975",
         "name": "",
         "statusCode": "",
         "headers": {},
@@ -1372,10 +1002,10 @@
         "wires": []
     },
     {
-        "id": "260c89c69d298a0d",
+        "id": "dc380d5fe2bd5eb5",
         "type": "subflow:f76933b40eb15e67",
-        "z": "1fbdd7bcdb3287b4",
-        "g": "6d898b77b13f166b",
+        "z": "722d4e1d6c43ed43",
+        "g": "0c458ec10d3d1975",
         "name": "",
         "env": [
             {
@@ -1387,15 +1017,15 @@
         "y": 840,
         "wires": [
             [
-                "3dc86b7f86e5ab87"
+                "c19ce7509e9e65c3"
             ]
         ]
     },
     {
-        "id": "283f0199ba61ff1b",
+        "id": "4e704c4fd4456314",
         "type": "split",
-        "z": "1fbdd7bcdb3287b4",
-        "g": "f592373cf669c1fe",
+        "z": "722d4e1d6c43ed43",
+        "g": "9100a7d3e944c31e",
         "name": "split events",
         "splt": "\\n",
         "spltType": "str",
@@ -1408,15 +1038,15 @@
         "y": 980,
         "wires": [
             [
-                "5acf7641ef9149e0"
+                "ab750e362961985d"
             ]
         ]
     },
     {
-        "id": "5acf7641ef9149e0",
+        "id": "ab750e362961985d",
         "type": "split",
-        "z": "1fbdd7bcdb3287b4",
-        "g": "f592373cf669c1fe",
+        "z": "722d4e1d6c43ed43",
+        "g": "9100a7d3e944c31e",
         "name": "split attendees",
         "splt": "\\n",
         "spltType": "str",
@@ -1429,15 +1059,15 @@
         "y": 980,
         "wires": [
             [
-                "9554b137d197c15a"
+                "d13d11facbecea72"
             ]
         ]
     },
     {
-        "id": "4a3d413370790ec6",
+        "id": "4fb7ac1ae2dedeab",
         "type": "inject",
-        "z": "1fbdd7bcdb3287b4",
-        "g": "a167402833b8b30c",
+        "z": "722d4e1d6c43ed43",
+        "g": "f1a92118c6e28a9d",
         "name": "configuration",
         "props": [
             {
@@ -1455,15 +1085,15 @@
         "y": 860,
         "wires": [
             [
-                "18d7e9d19a1476ad"
+                "ae7e5d8378bb6a48"
             ]
         ]
     },
     {
-        "id": "0061394415bae2fb",
+        "id": "074c17b2f8ad43d0",
         "type": "change",
-        "z": "1fbdd7bcdb3287b4",
-        "g": "f592373cf669c1fe",
+        "z": "722d4e1d6c43ed43",
+        "g": "9100a7d3e944c31e",
         "name": "get config",
         "rules": [
             {
@@ -1504,15 +1134,15 @@
         "y": 980,
         "wires": [
             [
-                "b5b466a4057ec34e"
+                "eb881666f2ecf652"
             ]
         ]
     },
     {
-        "id": "a6086548b8a5c422",
+        "id": "57c431aba647e3ec",
         "type": "2nac-rest-api",
-        "z": "1fbdd7bcdb3287b4",
-        "g": "f592373cf669c1fe",
+        "z": "722d4e1d6c43ed43",
+        "g": "9100a7d3e944c31e",
         "name": "create visitor",
         "method": "POST",
         "endpoint": "visitors",
@@ -1522,15 +1152,15 @@
         "y": 1100,
         "wires": [
             [
-                "35e197d04246857f"
+                "ed50ee1220a27187"
             ]
         ]
     },
     {
-        "id": "9554b137d197c15a",
+        "id": "d13d11facbecea72",
         "type": "function",
-        "z": "1fbdd7bcdb3287b4",
-        "g": "f592373cf669c1fe",
+        "z": "722d4e1d6c43ed43",
+        "g": "9100a7d3e944c31e",
         "name": "main function",
         "func": "let start = new Date(msg.payload.value.start.dateTime + \"Z\");\nlet end = new Date(msg.payload.value.end.dateTime + \"Z\");\n\n// start a konec posunout o hodinu (návštěvník přijde několik minut před naplánovou schůzkou a několik minut po ní)\nstart.setHours(start.getHours() - 1);\nend.setHours(end.getHours() + 1);\n\n// převést čas na lokální\nmsg.accessStartTime = start.toLocaleString();\nmsg.accessEndTime = end.toLocaleString();\n\n// nastav proměnné\nmsg.organizerEmail = msg.payload.value.organizer.emailAddress.address\nmsg.organizerName = msg.payload.value.organizer.emailAddress.name\n\nmsg.eventId = \"ms_graph|\" + msg.payload.value.id;\nmsg.email = msg.payload.value.attendees.emailAddress.address\nmsg.fullName = msg.payload.value.attendees.emailAddress.name\n\n\n// Odfiltruj uživatele se stejnou doménou\nconst organizerDomain = msg.organizerEmail.split('@')[1];\nconst attendeeDomain = msg.email.split('@')[1];\n\nif (organizerDomain === attendeeDomain) {\n    return null;\n}\n\n// najdi existující uživatele\nmsg.query = `?filter={\"$and\":[{\"Email\":{\"$eq\":\"${msg.email}\"}},{\"Note\":{\"$eq\":\"${msg.eventId}\"}}]}`\n\nreturn msg;",
         "outputs": 1,
@@ -1543,15 +1173,15 @@
         "y": 980,
         "wires": [
             [
-                "0f19a7614750504a"
+                "2cecd5cc7a1ae1fb"
             ]
         ]
     },
     {
-        "id": "38996048232f754a",
+        "id": "9f113d3cfd8bdd6b",
         "type": "switch",
-        "z": "1fbdd7bcdb3287b4",
-        "g": "f592373cf669c1fe",
+        "z": "722d4e1d6c43ed43",
+        "g": "9100a7d3e944c31e",
         "name": "update or create",
         "property": "payload",
         "propertyType": "msg",
@@ -1570,18 +1200,18 @@
         "y": 1080,
         "wires": [
             [
-                "7d3bf839c5a11eef"
+                "d2309705a766031f"
             ],
             [
-                "aeb4c3962cb74d9c"
+                "eb2db294ed75eb2c"
             ]
         ]
     },
     {
-        "id": "0f19a7614750504a",
+        "id": "2cecd5cc7a1ae1fb",
         "type": "2nac-rest-api",
-        "z": "1fbdd7bcdb3287b4",
-        "g": "f592373cf669c1fe",
+        "z": "722d4e1d6c43ed43",
+        "g": "9100a7d3e944c31e",
         "name": "Get visitors",
         "method": "GET",
         "endpoint": "visitors",
@@ -1591,15 +1221,15 @@
         "y": 1080,
         "wires": [
             [
-                "38996048232f754a"
+                "9f113d3cfd8bdd6b"
             ]
         ]
     },
     {
-        "id": "35e197d04246857f",
+        "id": "ed50ee1220a27187",
         "type": "change",
-        "z": "1fbdd7bcdb3287b4",
-        "g": "f592373cf669c1fe",
+        "z": "722d4e1d6c43ed43",
+        "g": "9100a7d3e944c31e",
         "name": "get ID & email",
         "rules": [
             {
@@ -1626,15 +1256,15 @@
         "y": 1100,
         "wires": [
             [
-                "e989a5c18e7b21bc"
+                "5c5d8b608fdbe769"
             ]
         ]
     },
     {
-        "id": "e989a5c18e7b21bc",
+        "id": "5c5d8b608fdbe769",
         "type": "2nac-rest-api",
-        "z": "1fbdd7bcdb3287b4",
-        "g": "f592373cf669c1fe",
+        "z": "722d4e1d6c43ed43",
+        "g": "9100a7d3e944c31e",
         "name": "createQR",
         "method": "POST",
         "endpoint": "visitors/{visitorId}/qrcode",
@@ -1644,15 +1274,15 @@
         "y": 1100,
         "wires": [
             [
-                "be4123205ec9d846"
+                "bbcba67c4b3a2cfd"
             ]
         ]
     },
     {
-        "id": "f0c1e6888e4e2ae4",
+        "id": "23bcd3e1d31ad245",
         "type": "function",
-        "z": "1fbdd7bcdb3287b4",
-        "g": "f592373cf669c1fe",
+        "z": "722d4e1d6c43ed43",
+        "g": "9100a7d3e944c31e",
         "name": "update visitor",
         "func": "msg.groupIds = msg.payload.VisitorSettings.PredefinedVisitorGroups\n\nmsg.body = [\n  { \"op\": \"replace\", \"path\": \"/Name\", \"value\": msg.fullName },\n  { \"op\": \"replace\", \"path\": \"/Email\", \"value\": msg.email },\n  { \"op\": \"replace\", \"path\": \"/IsSuspended\", \"value\": false },\n  { \"op\": \"replace\", \"path\": \"/VisitFrom\", \"value\": msg.accessStartTime },\n  { \"op\": \"replace\", \"path\": \"/VisitTo\", \"value\": msg.accessEndTime },\n  { \"op\": \"replace\", \"path\": \"/Groups\", \"value\": msg.groupIds},\n]\n \nreturn msg;",
         "outputs": 1,
@@ -1665,15 +1295,15 @@
         "y": 1060,
         "wires": [
             [
-                "44c4e5dc5404acc3"
+                "8ddabe04e2587fc2"
             ]
         ]
     },
     {
-        "id": "44c4e5dc5404acc3",
+        "id": "8ddabe04e2587fc2",
         "type": "2nac-rest-api",
-        "z": "1fbdd7bcdb3287b4",
-        "g": "f592373cf669c1fe",
+        "z": "722d4e1d6c43ed43",
+        "g": "9100a7d3e944c31e",
         "name": "update visitor",
         "method": "PATCH",
         "endpoint": "visitors/{visitorId}",
@@ -1686,10 +1316,10 @@
         ]
     },
     {
-        "id": "7d3bf839c5a11eef",
+        "id": "d2309705a766031f",
         "type": "split",
-        "z": "1fbdd7bcdb3287b4",
-        "g": "f592373cf669c1fe",
+        "z": "722d4e1d6c43ed43",
+        "g": "9100a7d3e944c31e",
         "name": "",
         "splt": "\\n",
         "spltType": "str",
@@ -1702,15 +1332,15 @@
         "y": 1060,
         "wires": [
             [
-                "11be3a7544ae28dd"
+                "344b75ede9b6eb73"
             ]
         ]
     },
     {
-        "id": "42096c6e2e85e982",
+        "id": "e2e2e1e8a4799705",
         "type": "2nac-rest-api",
-        "z": "1fbdd7bcdb3287b4",
-        "g": "f592373cf669c1fe",
+        "z": "722d4e1d6c43ed43",
+        "g": "9100a7d3e944c31e",
         "name": "find organizer",
         "method": "GET",
         "endpoint": "users",
@@ -1720,15 +1350,15 @@
         "y": 1100,
         "wires": [
             [
-                "66585599b741767c"
+                "5b40252e3b435d4a"
             ]
         ]
     },
     {
-        "id": "aeb4c3962cb74d9c",
+        "id": "eb2db294ed75eb2c",
         "type": "function",
-        "z": "1fbdd7bcdb3287b4",
-        "g": "f592373cf669c1fe",
+        "z": "722d4e1d6c43ed43",
+        "g": "9100a7d3e944c31e",
         "name": "find organizer",
         "func": "msg.query = `?filter={\"Account.Email\":{\"$eq\":\"${msg.organizerEmail}\"}}`\nreturn msg;",
         "outputs": 1,
@@ -1741,15 +1371,15 @@
         "y": 1100,
         "wires": [
             [
-                "42096c6e2e85e982"
+                "e2e2e1e8a4799705"
             ]
         ]
     },
     {
-        "id": "11be3a7544ae28dd",
+        "id": "344b75ede9b6eb73",
         "type": "function",
-        "z": "1fbdd7bcdb3287b4",
-        "g": "f592373cf669c1fe",
+        "z": "722d4e1d6c43ed43",
+        "g": "9100a7d3e944c31e",
         "name": "function 33",
         "func": "msg.visitorId = msg.payload.Id\nmsg.companyId = msg.payload.Company.Id\nreturn msg;",
         "outputs": 1,
@@ -1762,33 +1392,33 @@
         "y": 1060,
         "wires": [
             [
-                "a81915c04390048b"
+                "1bda637a892366ce"
             ]
         ]
     },
     {
-        "id": "69ca58ad966aeaac",
+        "id": "fabf1fa92c596ca6",
         "type": "catch",
-        "z": "1fbdd7bcdb3287b4",
-        "g": "a167402833b8b30c",
+        "z": "722d4e1d6c43ed43",
+        "g": "f1a92118c6e28a9d",
         "name": "",
         "scope": [
-            "18d7e9d19a1476ad"
+            "ae7e5d8378bb6a48"
         ],
         "uncaught": false,
         "x": 870,
         "y": 800,
         "wires": [
             [
-                "b1749630574b6195"
+                "9f368b5768b8b609"
             ]
         ]
     },
     {
-        "id": "b1749630574b6195",
+        "id": "9f368b5768b8b609",
         "type": "delay",
-        "z": "1fbdd7bcdb3287b4",
-        "g": "a167402833b8b30c",
+        "z": "722d4e1d6c43ed43",
+        "g": "f1a92118c6e28a9d",
         "name": "",
         "pauseType": "delay",
         "timeout": "5",
@@ -1806,29 +1436,29 @@
         "y": 800,
         "wires": [
             [
-                "18d7e9d19a1476ad"
+                "ae7e5d8378bb6a48"
             ]
         ]
     },
     {
-        "id": "18d7e9d19a1476ad",
+        "id": "ae7e5d8378bb6a48",
         "type": "query",
-        "z": "1fbdd7bcdb3287b4",
-        "g": "a167402833b8b30c",
+        "z": "722d4e1d6c43ed43",
+        "g": "f1a92118c6e28a9d",
         "client": "dbaa645779d59529",
         "x": 1150,
         "y": 860,
         "wires": [
             [
-                "86b8f673b33d2b85"
+                "69c09877858da2b9"
             ]
         ]
     },
     {
-        "id": "86b8f673b33d2b85",
+        "id": "69c09877858da2b9",
         "type": "switch",
-        "z": "1fbdd7bcdb3287b4",
-        "g": "a167402833b8b30c",
+        "z": "722d4e1d6c43ed43",
+        "g": "f1a92118c6e28a9d",
         "name": "",
         "property": "statusCode",
         "propertyType": "msg",
@@ -1849,18 +1479,18 @@
         "y": 860,
         "wires": [
             [
-                "7ca291173c7be277"
+                "31313e0760ed92b9"
             ],
             [
-                "22075ed16ba28297"
+                "981224762ff43c33"
             ]
         ]
     },
     {
-        "id": "7ca291173c7be277",
+        "id": "31313e0760ed92b9",
         "type": "change",
-        "z": "1fbdd7bcdb3287b4",
-        "g": "a167402833b8b30c",
+        "z": "722d4e1d6c43ed43",
+        "g": "f1a92118c6e28a9d",
         "name": "activated",
         "rules": [
             {
@@ -1883,10 +1513,10 @@
         ]
     },
     {
-        "id": "22075ed16ba28297",
+        "id": "981224762ff43c33",
         "type": "change",
-        "z": "1fbdd7bcdb3287b4",
-        "g": "a167402833b8b30c",
+        "z": "722d4e1d6c43ed43",
+        "g": "f1a92118c6e28a9d",
         "name": "deactivated",
         "rules": [
             {
@@ -1909,10 +1539,10 @@
         ]
     },
     {
-        "id": "1bafaef11910936a",
+        "id": "215732f50111ee6f",
         "type": "change",
-        "z": "1fbdd7bcdb3287b4",
-        "g": "6d898b77b13f166b",
+        "z": "722d4e1d6c43ed43",
+        "g": "0c458ec10d3d1975",
         "name": "deactivated",
         "rules": [
             {
@@ -1935,10 +1565,10 @@
         ]
     },
     {
-        "id": "b00135dff5c648ee",
+        "id": "bd404af6ee6a5b8f",
         "type": "change",
-        "z": "1fbdd7bcdb3287b4",
-        "g": "27860bf48d8e7bc0",
+        "z": "722d4e1d6c43ed43",
+        "g": "bf82fcc3c8bfdf54",
         "name": "deactivated",
         "rules": [
             {
@@ -1961,10 +1591,10 @@
         ]
     },
     {
-        "id": "0b941aaac0af4008",
+        "id": "9bd54350558b4cfe",
         "type": "change",
-        "z": "1fbdd7bcdb3287b4",
-        "g": "27860bf48d8e7bc0",
+        "z": "722d4e1d6c43ed43",
+        "g": "bf82fcc3c8bfdf54",
         "name": "activated",
         "rules": [
             {
@@ -1987,10 +1617,10 @@
         ]
     },
     {
-        "id": "396f505afef51c2b",
+        "id": "a09e8b77f5827cdd",
         "type": "switch",
-        "z": "1fbdd7bcdb3287b4",
-        "g": "27860bf48d8e7bc0",
+        "z": "722d4e1d6c43ed43",
+        "g": "bf82fcc3c8bfdf54",
         "name": "",
         "property": "statusCode",
         "propertyType": "msg",
@@ -2011,18 +1641,18 @@
         "y": 400,
         "wires": [
             [
-                "0b941aaac0af4008"
+                "9bd54350558b4cfe"
             ],
             [
-                "b00135dff5c648ee"
+                "bd404af6ee6a5b8f"
             ]
         ]
     },
     {
-        "id": "2df2a63cfe7416f1",
+        "id": "93aa2f61e3dd7291",
         "type": "function",
-        "z": "1fbdd7bcdb3287b4",
-        "g": "e9c207d76268fead",
+        "z": "722d4e1d6c43ed43",
+        "g": "76d0fa43b57f17d5",
         "name": "function 26",
         "func": "// funkce, která upraví link pro správnou funkčnost s resource accountem\n\nlet urlString = msg.payload.authUrl;\n\nif (urlString) {\n    try {\n        let y = new url.URL(urlString)\n        y.searchParams.set(\"prompt\", \"select_account\");\n        msg.payload.authUrl = y.toString();\n    } catch (e) {\n        node.error(\"Neplatná URL v payloadu: \" + e.message);\n    }\n}\n\nreturn msg;",
         "outputs": 1,
@@ -2040,15 +1670,15 @@
         "y": 280,
         "wires": [
             [
-                "3d0596f197d5cf91"
+                "6c7a9ed98cf349b9"
             ]
         ]
     },
     {
-        "id": "c077e4d8dc5b85f2",
+        "id": "b635f57f1352da1e",
         "type": "2nac-rest-api",
-        "z": "1fbdd7bcdb3287b4",
-        "g": "f592373cf669c1fe",
+        "z": "722d4e1d6c43ed43",
+        "g": "9100a7d3e944c31e",
         "name": "get company",
         "method": "GET",
         "endpoint": "companies/{companyId}",
@@ -2058,15 +1688,15 @@
         "y": 1100,
         "wires": [
             [
-                "af6efeb33791deb7"
+                "3a31e195d1c5f26c"
             ]
         ]
     },
     {
-        "id": "af6efeb33791deb7",
+        "id": "3a31e195d1c5f26c",
         "type": "function",
-        "z": "1fbdd7bcdb3287b4",
-        "g": "f592373cf669c1fe",
+        "z": "722d4e1d6c43ed43",
+        "g": "9100a7d3e944c31e",
         "name": "create visitor",
         "func": "msg.groupIds = msg.payload.VisitorSettings.PredefinedVisitorGroups\n\nmsg.body = {\n    \"Name\": msg.fullName,\n    \"Note\": msg.eventId,\n    \"Company\": { \"Id\": msg.companyId },\n    \"Groups\": msg.groupIds,\n    \"VisitFrom\": msg.accessStartTime,\n    \"VisitTo\": msg.accessEndTime,\n    \"Email\": msg.email,\n    \"VisitedPersonId\": msg.visitedPersonId\n};\n\nreturn msg;",
         "outputs": 1,
@@ -2079,15 +1709,15 @@
         "y": 1100,
         "wires": [
             [
-                "a6086548b8a5c422"
+                "57c431aba647e3ec"
             ]
         ]
     },
     {
-        "id": "66585599b741767c",
+        "id": "5b40252e3b435d4a",
         "type": "function",
-        "z": "1fbdd7bcdb3287b4",
-        "g": "f592373cf669c1fe",
+        "z": "722d4e1d6c43ed43",
+        "g": "9100a7d3e944c31e",
         "name": "function 34",
         "func": "if (Array.isArray(msg.payload) && msg.payload.length > 0) {\n    msg.companyId = msg.payload[0].Company.Id\n    msg.visitedPersonId = msg.payload[0].Id\n    return msg;\n}\n\nelse {\n    node.warn(`Organizer with email \"${msg.organizerEmail}\" does not exists in 2N Access Commander, skipping creation!`);\n}",
         "outputs": 1,
@@ -2100,15 +1730,15 @@
         "y": 1100,
         "wires": [
             [
-                "c077e4d8dc5b85f2"
+                "b635f57f1352da1e"
             ]
         ]
     },
     {
-        "id": "a81915c04390048b",
+        "id": "1bda637a892366ce",
         "type": "2nac-rest-api",
-        "z": "1fbdd7bcdb3287b4",
-        "g": "f592373cf669c1fe",
+        "z": "722d4e1d6c43ed43",
+        "g": "9100a7d3e944c31e",
         "name": "get company",
         "method": "GET",
         "endpoint": "companies/{companyId}",
@@ -2118,16 +1748,16 @@
         "y": 1060,
         "wires": [
             [
-                "f0c1e6888e4e2ae4"
+                "23bcd3e1d31ad245"
             ]
         ]
     },
     {
-        "id": "be4123205ec9d846",
+        "id": "bbcba67c4b3a2cfd",
         "type": "2nac-rest-api",
-        "z": "1fbdd7bcdb3287b4",
+        "z": "722d4e1d6c43ed43",
         "d": true,
-        "g": "f592373cf669c1fe",
+        "g": "9100a7d3e944c31e",
         "name": "sendQR",
         "method": "PUT",
         "endpoint": "visitors/{visitorId}/sendcredentials",
@@ -2140,10 +1770,10 @@
         ]
     },
     {
-        "id": "b1eeb8fb4e39c46f",
+        "id": "4f9ef1c84563217f",
         "type": "2nac-rest-api",
-        "z": "1fbdd7bcdb3287b4",
-        "g": "6bd725dc10f02d4f",
+        "z": "722d4e1d6c43ed43",
+        "g": "8c105f93b0b95bbc",
         "name": "Get visitors",
         "method": "GET",
         "endpoint": "visitors",
@@ -2153,15 +1783,15 @@
         "y": 1200,
         "wires": [
             [
-                "a16462706be768d3"
+                "e2e25533af5e226f"
             ]
         ]
     },
     {
-        "id": "115674be25d4af0a",
+        "id": "dd43301cdd963d04",
         "type": "function",
-        "z": "1fbdd7bcdb3287b4",
-        "g": "6bd725dc10f02d4f",
+        "z": "722d4e1d6c43ed43",
+        "g": "8c105f93b0b95bbc",
         "name": "filter visitors",
         "func": "if (msg.isActive === false) {\n    node.warn(\"User is not signed in\")\n    return null;\n}\n\nmsg.query = `?filter={\"$and\":[{\"$or\":[{\"State\":{\"$eq\":\"Planned\"}},{\"State\":{\"$eq\":\"Active\"}}]},{\"Note\":{\"$cti\":\"ms_graph|\"}}]}`\n\nreturn msg;",
         "outputs": 1,
@@ -2174,15 +1804,15 @@
         "y": 1200,
         "wires": [
             [
-                "b1eeb8fb4e39c46f"
+                "4f9ef1c84563217f"
             ]
         ]
     },
     {
-        "id": "c12249204a0f5dce",
+        "id": "b5950455bae433e9",
         "type": "debug",
-        "z": "1fbdd7bcdb3287b4",
-        "g": "6bd725dc10f02d4f",
+        "z": "722d4e1d6c43ed43",
+        "g": "8c105f93b0b95bbc",
         "name": "debug 27",
         "active": true,
         "tosidebar": true,
@@ -2197,10 +1827,10 @@
         "wires": []
     },
     {
-        "id": "a16462706be768d3",
+        "id": "e2e25533af5e226f",
         "type": "split",
-        "z": "1fbdd7bcdb3287b4",
-        "g": "6bd725dc10f02d4f",
+        "z": "722d4e1d6c43ed43",
+        "g": "8c105f93b0b95bbc",
         "name": "",
         "splt": "\\n",
         "spltType": "str",
@@ -2213,29 +1843,29 @@
         "y": 1200,
         "wires": [
             [
-                "f0e1ed24087634b6"
+                "8be553d49b373cf2"
             ]
         ]
     },
     {
-        "id": "80c6387778e24711",
+        "id": "861839452a7c82b4",
         "type": "query",
-        "z": "1fbdd7bcdb3287b4",
-        "g": "6bd725dc10f02d4f",
+        "z": "722d4e1d6c43ed43",
+        "g": "8c105f93b0b95bbc",
         "client": "dbaa645779d59529",
         "x": 830,
         "y": 1200,
         "wires": [
             [
-                "f2587f3741ca04ec"
+                "c028fdbe1eaa3040"
             ]
         ]
     },
     {
-        "id": "f0e1ed24087634b6",
+        "id": "8be553d49b373cf2",
         "type": "function",
-        "z": "1fbdd7bcdb3287b4",
-        "g": "6bd725dc10f02d4f",
+        "z": "722d4e1d6c43ed43",
+        "g": "8c105f93b0b95bbc",
         "name": "get eventId",
         "func": "msg.eventId = msg.payload.Note;\nmsg.visitorId = msg.payload.Id;\n\nfunction getEventUrl(storedId) {\n    const parts = storedId.split('|');\n    const eventId = parts[1];\n    \n    return `/me/events/${eventId}`;\n}\n\nmsg.payload = {\n    \"method\": \"GET\",\n    \"endpoint\": getEventUrl(msg.eventId)\n};\n\nreturn msg;",
         "outputs": 1,
@@ -2248,15 +1878,15 @@
         "y": 1200,
         "wires": [
             [
-                "80c6387778e24711"
+                "861839452a7c82b4"
             ]
         ]
     },
     {
-        "id": "2ab3bdd91aac1c1f",
+        "id": "9677f3154791ab15",
         "type": "2nac-rest-api",
-        "z": "1fbdd7bcdb3287b4",
-        "g": "6bd725dc10f02d4f",
+        "z": "722d4e1d6c43ed43",
+        "g": "8c105f93b0b95bbc",
         "name": "update visitor",
         "method": "PATCH",
         "endpoint": "visitors/{visitorId}",
@@ -2266,15 +1896,15 @@
         "y": 1200,
         "wires": [
             [
-                "c12249204a0f5dce"
+                "b5950455bae433e9"
             ]
         ]
     },
     {
-        "id": "f2587f3741ca04ec",
+        "id": "c028fdbe1eaa3040",
         "type": "function",
-        "z": "1fbdd7bcdb3287b4",
-        "g": "6bd725dc10f02d4f",
+        "z": "722d4e1d6c43ed43",
+        "g": "8c105f93b0b95bbc",
         "name": "suspend visitor",
         "func": "if (msg.statusCode == 404){\n    msg.body = [\n        {\"op\":\"replace\",\"path\":\"/IsSuspended\",\"value\": true}\n    ]\n    return msg;\n}\n",
         "outputs": 1,
@@ -2287,54 +1917,33 @@
         "y": 1200,
         "wires": [
             [
-                "2ab3bdd91aac1c1f"
+                "9677f3154791ab15"
             ]
         ]
     },
     {
-        "id": "7b31e94ad8588be2",
+        "id": "254befaa64e34d25",
         "type": "catch",
-        "z": "1fbdd7bcdb3287b4",
-        "g": "6bd725dc10f02d4f",
+        "z": "722d4e1d6c43ed43",
+        "g": "8c105f93b0b95bbc",
         "name": "",
         "scope": [
-            "80c6387778e24711"
+            "861839452a7c82b4"
         ],
         "uncaught": false,
         "x": 830,
         "y": 1260,
         "wires": [
             [
-                "f2587f3741ca04ec"
+                "c028fdbe1eaa3040"
             ]
         ]
     },
     {
-        "id": "4ebb567e254617e0",
-        "type": "subflow:a373046b187fbd7e",
-        "z": "1fbdd7bcdb3287b4",
-        "name": "",
-        "env": [
-            {
-                "name": "version",
-                "value": "1.0.1",
-                "type": "str"
-            },
-            {
-                "name": "id",
-                "value": "msgraph-outlook-calendar",
-                "type": "str"
-            }
-        ],
-        "x": 180,
-        "y": 60,
-        "wires": []
-    },
-    {
-        "id": "335c8fcb1bfb7f49",
+        "id": "0170a1264665f33e",
         "type": "debug",
-        "z": "1fbdd7bcdb3287b4",
-        "g": "b8c5a8c85a9a0a70",
+        "z": "722d4e1d6c43ed43",
+        "g": "2d33b512f32aa8dc",
         "name": "setup page",
         "active": true,
         "tosidebar": true,
@@ -2349,10 +1958,10 @@
         "wires": []
     },
     {
-        "id": "a24eeb8bbee219bc",
+        "id": "f59ab4fb376416f7",
         "type": "inject",
-        "z": "1fbdd7bcdb3287b4",
-        "g": "b8c5a8c85a9a0a70",
+        "z": "722d4e1d6c43ed43",
+        "g": "2d33b512f32aa8dc",
         "name": "",
         "props": [],
         "repeat": "",
@@ -2364,15 +1973,15 @@
         "y": 180,
         "wires": [
             [
-                "efba08fedc045e16"
+                "50a9ddd57351f916"
             ]
         ]
     },
     {
-        "id": "a286d64ecfdf57aa",
+        "id": "6f6bba8e9b807d15",
         "type": "function",
-        "z": "1fbdd7bcdb3287b4",
-        "g": "b8c5a8c85a9a0a70",
+        "z": "722d4e1d6c43ed43",
+        "g": "2d33b512f32aa8dc",
         "name": "setup page",
         "func": "msg.host = msg.payload?.IpAddress || \"ip_address\";\n\nconst baseUrl = `https://${msg.host}/nodered`;\n\nconst path = \"/api/calendar/setup\"\n\nconst setupUrl = baseUrl + path\n\nnode.status({\n    fill: \"blue\",\n    shape: \"dot\",\n    text: path\n});\n\nmsg.payload = setupUrl\n\nreturn msg;",
         "outputs": 1,
@@ -2385,15 +1994,15 @@
         "y": 180,
         "wires": [
             [
-                "335c8fcb1bfb7f49"
+                "0170a1264665f33e"
             ]
         ]
     },
     {
-        "id": "efba08fedc045e16",
+        "id": "50a9ddd57351f916",
         "type": "2nac-rest-api",
-        "z": "1fbdd7bcdb3287b4",
-        "g": "b8c5a8c85a9a0a70",
+        "z": "722d4e1d6c43ed43",
+        "g": "2d33b512f32aa8dc",
         "name": "",
         "method": "GET",
         "endpoint": "settings/network",
@@ -2403,33 +2012,33 @@
         "y": 180,
         "wires": [
             [
-                "a286d64ecfdf57aa"
+                "6f6bba8e9b807d15"
             ]
         ]
     },
     {
-        "id": "c5bc11990f0bd844",
+        "id": "a1af706f83450fa3",
         "type": "catch",
-        "z": "1fbdd7bcdb3287b4",
-        "g": "b8c5a8c85a9a0a70",
+        "z": "722d4e1d6c43ed43",
+        "g": "2d33b512f32aa8dc",
         "name": "",
         "scope": [
-            "efba08fedc045e16"
+            "50a9ddd57351f916"
         ],
         "uncaught": false,
         "x": 170,
         "y": 140,
         "wires": [
             [
-                "310e6a531178d78a"
+                "2f4110c26edbbccc"
             ]
         ]
     },
     {
-        "id": "310e6a531178d78a",
+        "id": "2f4110c26edbbccc",
         "type": "delay",
-        "z": "1fbdd7bcdb3287b4",
-        "g": "b8c5a8c85a9a0a70",
+        "z": "722d4e1d6c43ed43",
+        "g": "2d33b512f32aa8dc",
         "name": "",
         "pauseType": "delay",
         "timeout": "7",
@@ -2447,7 +2056,7 @@
         "y": 140,
         "wires": [
             [
-                "efba08fedc045e16"
+                "50a9ddd57351f916"
             ]
         ]
     },
@@ -2459,5 +2068,14 @@
         "tenantId": "",
         "clientSecret": "",
         "redirectUri": "https://acom.local/nodered/api/calendar/redirect"
+    },
+    {
+        "id": "1673eccc8d675940",
+        "type": "global-config",
+        "env": [],
+        "modules": {
+            "node-red-contrib-msgraph": "1.3.0",
+            "node-red-nodes": "1.0.0"
+        }
     }
 ]

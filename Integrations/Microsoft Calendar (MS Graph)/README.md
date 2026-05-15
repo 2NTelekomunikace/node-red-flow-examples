@@ -56,7 +56,7 @@ If you haven't already installed the required palettes, you can do so via the No
 
 1. Register your [Single Tenant Microsoft application](https://learn.microsoft.com/en-us/entra/identity-platform/quickstart-register-app).
 
-2. Add web [Redirect Uri](https://learn.microsoft.com/en-us/entra/identity-platform/how-to-add-redirect-uri), in this format `https://access_commander_address/nodered/api/calendar/redirect` . 
+2. Add web [Redirect Uri](https://learn.microsoft.com/en-us/entra/identity-platform/how-to-add-redirect-uri), in this format `https://access_commander_address/nodered/api/calendar/redirect`.
 
 3. Create [client secret credentials](https://learn.microsoft.com/en-us/entra/identity-platform/how-to-add-credentials?tabs=client-secret) for your app, do not forget to copy the secret; you will not be able to view it anymore.
 
@@ -131,21 +131,6 @@ You can also set the flow to automatically send the QR code once the user is cre
 * If an invitee is not in your Outlook contacts (their name will not auto-populate), the visitor will be created in 2N Access Commander using their **email address as their name.**
 
 * The visitor cannot be created if the meeting organizer’s email address is **not** present in the 2N Access Commander (stored under the user). Without this match, the system cannot **determine** which **company** to assign the visitor to.
-
-## Usage Statistics (beta)
-
-This flow includes a **Usage Statistics** subflow designed to help us improve our product and understand which features are most valuable to our users.
-
-### What data is collected?
-
-* **Flow Name & Version:** To see which versions are currently in the wild.
-
-* **Installation ID:** A unique identifier from your 2N Access Commander, this identifier is never tied to actual users.
-
-* **System Version:** The version of the 2N Access Commander you are running.
-
-> [!NOTE]  
-> No personal data, IP addresses, credentials, or specific configuration values (like passwords or device names) are ever collected or stored.
 
 ### How to Opt-Out
 
